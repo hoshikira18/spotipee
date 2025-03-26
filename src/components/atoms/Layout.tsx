@@ -1,6 +1,8 @@
 import { nprogress } from "@mantine/nprogress";
 import { useEffect } from "react";
 import { Outlet, useNavigation } from "react-router-dom";
+import Header from "../organisms/Header";
+import SideBar from "../organisms/SideBar";
 
 const Layout = () => {
     const navigation = useNavigation();
@@ -15,8 +17,14 @@ const Layout = () => {
     }, [isLoading]);
 
     return (
-        <div className={"bg-gray-200 h-screen p-10"}>
-            <Outlet />
+        <div className={"h-screen bg-black"}>
+            <Header />
+            <div>
+                <SideBar />
+                <main>
+                    <Outlet />
+                </main>
+            </div>
         </div>
     );
 };

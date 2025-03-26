@@ -1,8 +1,8 @@
-import { useRouteError } from "react-router-dom";
+import { Button } from "@mantine/core";
+import { Link, useRouteError } from "react-router-dom";
 
 const ErrorPage = () => {
     const error = useRouteError();
-    console.log(error);
 
     return (
         <div id="error-page" className="flex flex-col gap-8 justify-center items-center h-screen">
@@ -11,6 +11,9 @@ const ErrorPage = () => {
             <p className="text-slate-400">
                 <i>{(error as Error)?.message || (error as { statusText?: string })?.statusText}</i>
             </p>
+            <Button component={Link} to={"/"}>
+                Back to HomePage
+            </Button>
         </div>
     );
 };

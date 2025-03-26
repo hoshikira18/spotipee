@@ -1,22 +1,35 @@
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
-import Layout from "./components/Layout";
-import Home from "./pages/Home";
-import Redux from "./pages/Redux";
-import UseReducer from "./pages/UseReducer";
+import Layout from "./components/atoms/Layout";
 import "@mantine/core/styles.css";
 import "@mantine/nprogress/styles.css";
-import { MantineProvider, createTheme } from "@mantine/core";
+import { Button, MantineProvider, createTheme } from "@mantine/core";
 import { NavigationProgress } from "@mantine/nprogress";
-import ActionPractice, { action } from "./pages/ActionPractice";
-import CompoundComponent from "./pages/CompoundComponent";
-import ErrorPage from "./pages/ErrorPage";
-import LoaderPractice, { loader } from "./pages/LoaderPractice";
-import ModalPractice from "./pages/ModalPractice";
-import ReactHookFormPractice from "./pages/ReactHookFormPractice";
-import ReactQueryPractice from "./pages/ReactQueryPractice";
+import ErrorPage from "./components/pages/ErrorPage";
+import HomePage from "./components/pages/HomePage";
 
 const theme = createTheme({
-    /** Put your mantine theme override here */
+    colors: {
+        cGreen: [
+            "#e8f5e9",
+            "#c8e6c9",
+            "#a5d6a7",
+            "#81c784",
+            "#4caf50",
+            "#1DB954",
+            "#18a74d",
+            "#12813a",
+            "#0c5b27",
+            "#063214",
+        ],
+    },
+    primaryColor: "cGreen",
+    components: {
+        Button: Button.extend({
+            defaultProps: {
+                radius: "xl",
+            },
+        }),
+    },
 });
 
 const router = createBrowserRouter([
@@ -26,41 +39,7 @@ const router = createBrowserRouter([
         children: [
             {
                 path: "/",
-                element: <Home />,
-            },
-            {
-                path: "/use-reducer",
-                element: <UseReducer />,
-            },
-            {
-                path: "/redux",
-                element: <Redux />,
-            },
-            {
-                path: "/loader",
-                element: <LoaderPractice />,
-                loader: loader,
-            },
-            {
-                path: "/action",
-                element: <ActionPractice />,
-                action: action,
-            },
-            {
-                path: "/react-query",
-                element: <ReactQueryPractice />,
-            },
-            {
-                path: "/react-hook-form",
-                element: <ReactHookFormPractice />,
-            },
-            {
-                path: "/compound-components",
-                element: <CompoundComponent />,
-            },
-            {
-                path: "/modal",
-                element: <ModalPractice />,
+                element: <HomePage />,
             },
         ],
     },
@@ -68,7 +47,7 @@ const router = createBrowserRouter([
 
 function App() {
     return (
-        <MantineProvider theme={theme}>
+        <MantineProvider theme={theme} defaultColorScheme="dark">
             <NavigationProgress />
             <RouterProvider router={router} />
         </MantineProvider>
