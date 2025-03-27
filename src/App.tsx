@@ -1,14 +1,15 @@
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
-import Layout from "./components/atoms/Layout";
 import "@mantine/core/styles.css";
 import "@mantine/nprogress/styles.css";
 import { Button, MantineProvider, createTheme } from "@mantine/core";
 import { NavigationProgress } from "@mantine/nprogress";
 import ErrorPage from "./components/pages/ErrorPage";
 import HomePage from "./components/pages/HomePage";
+import Layout from "./components/templates/Layout";
 
 const theme = createTheme({
     colors: {
+        // cGreen = custom green
         cGreen: [
             "#e8f5e9",
             "#c8e6c9",

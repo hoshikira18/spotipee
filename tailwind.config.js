@@ -6,9 +6,12 @@ export default {
             colors: {
                 customGray: {
                     100: "#9f9f9f",
-                    500: "#484848",
+                    500: "#393939",
                     900: "#353535",
                 },
+            },
+            fontFamily: {
+                spotify: ["CircularSpotify", "sans-serif"],
             },
         },
     },
