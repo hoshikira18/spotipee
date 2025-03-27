@@ -3,9 +3,11 @@ import "@mantine/core/styles.css";
 import "@mantine/nprogress/styles.css";
 import { Button, MantineProvider, createTheme } from "@mantine/core";
 import { NavigationProgress } from "@mantine/nprogress";
+import { useEffect } from "react";
 import ErrorPage from "./components/pages/ErrorPage";
 import HomePage from "./components/pages/HomePage";
 import Layout from "./components/templates/Layout";
+import { generateRandomString } from "./utils/auth";
 
 const theme = createTheme({
     colors: {
@@ -47,6 +49,14 @@ const router = createBrowserRouter([
 ]);
 
 function App() {
+    useEffect(() => {
+        const code = localStorage.getItem("code_verifier");
+        if (!code) {
+            const codeVerifier = generateRandomString(64);
+            localStorage.setItem("code_verifier", codeVerifier);
+            console.log(codeVerifier);
+        }
+    }, []);
     return (
         <MantineProvider theme={theme} defaultColorScheme="dark">
             <NavigationProgress />

@@ -1,5 +1,6 @@
+import { Button } from "@mantine/core";
 import { Spotify } from "iconsax-react";
-import AccountButton from "../molecules/AccountButton";
+import { AUTH_URL } from "../../constants/auth";
 import SearchBar from "../molecules/SearchBar";
 
 function Header() {
@@ -11,7 +12,9 @@ function Header() {
 
             <SearchBar />
 
-            <AccountButton />
+            <Button size="lg" fz={"md"} bg="white" c={"dark"} component={"a"} href={AUTH_URL}>
+                Log in
+            </Button>
         </div>
     );
 }
