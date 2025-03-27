@@ -12,6 +12,7 @@ export const useAuth = (code: string | null) => {
         localStorage.setItem("code", code || "");
     }, [code]);
 
+    // get access_token
     useEffect(() => {
         if (!code) return;
 
@@ -55,6 +56,7 @@ export const useAuth = (code: string | null) => {
         fetchToken();
     }, [code]);
 
+    // get refresh_token
     useEffect(() => {
         if (!refreshToken || !expiresIn) return;
         const timeout = setTimeout(async () => {
