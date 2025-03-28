@@ -16,6 +16,11 @@ const base64encode = (input: number) => {
         .replace(/\//g, "_");
 };
 
+// get codeVerifier from localStorage
 const codeVerifier = localStorage.getItem("code_verifier") as string;
+
 const hashed = await sha256(codeVerifier);
 export const codeChallenge = base64encode(hashed);
+
+// set codeChallenge to use in login url
+localStorage.setItem("code_challenge", codeChallenge);

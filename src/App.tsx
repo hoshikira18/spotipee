@@ -49,12 +49,12 @@ const router = createBrowserRouter([
 ]);
 
 function App() {
+    // generate code_verifier for auth PKEC
     useEffect(() => {
         const code = localStorage.getItem("code_verifier");
         if (!code) {
             const codeVerifier = generateRandomString(64);
             localStorage.setItem("code_verifier", codeVerifier);
-            console.log(codeVerifier);
         }
     }, []);
     return (
