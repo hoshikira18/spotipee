@@ -1,24 +1,19 @@
 import axios from "axios";
+import Cookies from "js-cookie";
 import { useEffect, useState } from "react";
 import { CLIENT_ID, CLIENT_SECRET, REDIRECT_URI } from "../constants/auth";
-interface SpotifyTokenResponse {
-    access_token: string;
-    token_type: string;
-    expires_in: number;
-    refresh_token?: string;
-    scope?: string;
-}
 
 export const useAuth = (code: string | null) => {
-    const [accessToken, setAccessToken] = useState<string | null>(null);
-    const [refreshToken, setRefreshToken] = useState<string | null>(
-        localStorage.getItem("refresh_token"),
+    const [accessToken, setAccessToken] = useState<string | null>(
+        Cookies.get("access_token") || null,
     );
-    const [expiresIn, setExpiresIn] = useState<number | null>(null);
+    const [refreshToken, setRefreshToken] = useState<string | null>(
+        Cookies.get("refresh_token") || null,
+    );
 
     // get access_token
     useEffect(() => {
-        if (!code) return;
+        if (!code || accessToken) return;
 
         const fetchToken = async () => {
             try {
@@ -47,13 +42,19 @@ export const useAuth = (code: string | null) => {
                     headers,
                 );
 
-                // set value for AT, RT, Expires time
-                setAccessToken(data?.access_token || null);
-                setRefreshToken(data?.refresh_token || null);
-                setExpiresIn(data?.expires_in || null);
+                Cookies.set("access_token", data.access_token, {
+                    // js-cookie use days for expire time, not miliseconds
+                    expires: data?.expires_in ? data.expires_in / (3600 * 24) : 0,
+                    secure: true,
+                });
+                setAccessToken(data.access_token);
 
-                // refresh_token will exist forever =))
-                localStorage.setItem("refresh_token", data?.refresh_token);
+                Cookies.set("refresh_token", data?.refresh_token, {
+                    // refresh_token will be expire in a month
+                    expires: 30,
+                    secure: true,
+                });
+                setRefreshToken(data.refresh_token);
 
                 // clear url
                 window.history.pushState({}, "", "/");
@@ -64,52 +65,6 @@ export const useAuth = (code: string | null) => {
 
         fetchToken();
     }, [code]);
-
-    // handle get refresh token function
-    const handleRefreshToken = async (): Promise<SpotifyTokenResponse | undefined> => {
-        try {
-            const { data } = await axios.post(
-                "https://accounts.spotify.com/api/token",
-                new URLSearchParams({
-                    grant_type: "refresh_token",
-                    refresh_token: refreshToken || "",
-                    client_id: CLIENT_ID,
-                }),
-                {
-                    headers: {
-                        "Content-Type": "application/x-www-form-urlencoded",
-                    },
-                },
-            );
-
-            setAccessToken(data?.access_token || null);
-            setRefreshToken(data?.refresh_token || null);
-            setExpiresIn(data?.expires_in || null);
-
-            // after refresh, a new refresh_token will be returned
-            localStorage.setItem("refresh_token", data?.refresh_token);
-            return data;
-        } catch (error) {
-            console.error(error);
-        }
-    };
-
-    // auto refresh_token before expires 1m
-    useEffect(() => {
-        if (!refreshToken || !expiresIn) return;
-        const timeout = setTimeout(
-            handleRefreshToken,
-            // get refresh token before expires 1m
-            (expiresIn - 60) * 1000,
-        );
-        return () => clearTimeout(timeout);
-    }, [refreshToken, expiresIn]);
-
-    // refresh token when access/reload page
-    useEffect(() => {
-        if (!refreshToken) return;
-        handleRefreshToken();
-    }, []);
 
     return {
         accessToken,
