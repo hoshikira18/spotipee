@@ -1,21 +1,20 @@
-# Pets
+# 🎵 Spotify Clone with Vite
 
-This repository contains a collection of small projects I created to review and reinforce my knowledge of ReactJS.
+This project is a **Spotify Clone** built using **Vite.js**, **Mantine UI**, **TailwindCSS**, and **TanStack Query**. The application is deployed on **Vercel**.
 
-## Pages
+## 🚀 Features
 
-1. **useReducer Hook Practice**  
-A project designed to explore and practice the useReducer hook in ReactJS.   
-[View Project](https://pets-39o.pages.dev/use-reducer)
+- 🎧 **Spotify-like UI** with responsive design  
+- 🔍 **Search & Browse** music content  
+- 📌 **User authentication** (Spotify OAuth or custom auth)  
+- 🎵 **Play music** with a custom audio player  
+- 🗄 **Data fetching** using **TanStack Query**  
+- 🎨 **Beautiful UI** powered by **Mantine UI & TailwindCSS**  
+- ⚡ **Fast & optimized** with Vite  
+- 🌍 **Deployed on Vercel**  
 
-2. **Redux practice**  
-A project designed to explore and practice Redux library.
-[View Project](https://pets-39o.pages.dev/redux)
+## 🛠 Tech Stack
 
-## Technologies Used
-
-- **Vite.js**
-- **ReactJS**
-- **TailwindCSS**
-- **Mantine UI**
-
+- **Frontend:** Vite.js, React, Mantine UI, TailwindCSS  
+- **State & Data Fetching:** TanStack Query  
+- **Deployment:** Vercel  
