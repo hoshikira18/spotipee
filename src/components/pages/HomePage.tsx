@@ -1,24 +1,25 @@
 import { Button } from "@mantine/core";
+import Cookies from "js-cookie";
 import { useEffect, useState } from "react";
-import { instance } from "../../lib/axios";
+import UserServices from "../../services/UserServices";
 
 function HomePage() {
-    const [data, setData] = useState([]);
-    const [key, setKey] = useState(false);
+    const [data, setData] = useState(null);
 
     const fetchData = async () => {
-        const data = await instance.get("/albums/4aawyAB9vmqN3uQ7FjRGTy").then(({ data }) => data);
+        const data = await UserServices.getCurrentUser();
         setData(data);
     };
 
     useEffect(() => {
         fetchData();
-    }, [key]);
+    }, []);
 
     return (
         <div>
-            <Button onClick={fetchData}>Fetch Data</Button>
-            {JSON.stringify(data)}
+            <Button onClick={fetchData}>FetchData</Button>
+            <Button onClick={() => Cookies.remove("access_token")}>Remove Token</Button>
+            <div>{JSON.stringify(data)}</div>
         </div>
     );
 }
