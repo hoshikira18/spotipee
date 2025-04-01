@@ -17,6 +17,8 @@ export const instance = axios.create({
     baseURL: BASE_URL,
 });
 
+let abortController = new AbortController(); // Global AbortController
+
 // Attach Access Token to Requests
 instance.interceptors.request.use((request: InternalAxiosRequestConfig) => {
     const accessToken = Cookies.get("access_token");
@@ -25,12 +27,18 @@ instance.interceptors.request.use((request: InternalAxiosRequestConfig) => {
         request.headers.set("Authorization", `Bearer ${accessToken}`);
     }
 
+    request.signal = abortController.signal;
+
     return request;
 });
 
 const handleRefreshToken = async (): Promise<SpotifyTokenResponse | undefined> => {
     try {
         const refreshToken = Cookies.get("refresh_token");
+
+        // Abort all ongoing requests
+        abortController.abort("Aborted ongoing requests due to token refresh.");
+        abortController = new AbortController();
 
         const { data } = await axios.post(
             "https://accounts.spotify.com/api/token",
@@ -47,13 +55,11 @@ const handleRefreshToken = async (): Promise<SpotifyTokenResponse | undefined> =
         );
 
         Cookies.set("access_token", data.access_token, {
-            // js-cookie use days for expire time, not miliseconds
             expires: data?.expires_in ? data.expires_in / (3600 * 24) : 0,
             secure: true,
         });
 
         Cookies.set("refresh_token", data?.refresh_token, {
-            // refresh_token will be expire in a month
             expires: 30,
             secure: true,
         });
@@ -64,15 +70,20 @@ const handleRefreshToken = async (): Promise<SpotifyTokenResponse | undefined> =
     }
 };
 
-// refresh token
-axios.interceptors.response.use(
+// Refresh token
+instance.interceptors.response.use(
     (response) => response,
     async (error) => {
         if (error.response?.status === 401) {
-            const data = await handleRefreshToken();
-            if (data) {
-                error.config.headers.Authorization = `Bearer ${data.access_token}`;
-                return instance(error.config);
+            try {
+                const data = await handleRefreshToken();
+                if (data) {
+                    error.config.headers.Authorization = `Bearer ${data.access_token}`;
+                    error.config.signal = abortController.signal; // Attach the new signal
+                    return instance(error.config);
+                }
+            } catch (error) {
+                console.error(error);
             }
         }
         return Promise.reject(error);
