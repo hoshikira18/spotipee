@@ -24,10 +24,10 @@ const Layout = () => {
 
     return (
         <div className={"h-screen bg-black"}>
-            <div className="h-[80px]">
+            <div className="h-[65px]">
                 <Header />
             </div>
-            <div className="max-h-[calc(100vh-170px)] flex p-2 space-x-2">
+            <div className="max-h-[calc(100vh-145px)] h-full flex p-2 space-x-2">
                 <SideBar />
                 <main className="min-w-60">
                     <Outlet />

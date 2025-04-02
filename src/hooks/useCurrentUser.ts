@@ -7,3 +7,10 @@ export const useCurrentUser = () => {
         queryFn: () => UserServices.getCurrentUser(),
     });
 };
+
+export const useFollowedArtists = () => {
+    return useQuery({
+        queryKey: ["followed-artists"],
+        queryFn: () => UserServices.getFollowedArtists(),
+    });
+};

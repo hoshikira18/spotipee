@@ -10,20 +10,24 @@
 }
 
 ::-webkit-scrollbar {
-    width: 5px;
-}
-
-::-webkit-scrollbar-track {
-    background: var(--color-zinc-900);
-    border-bottom-right-radius: var(--radius-md);
-    border-top-right-radius: var(--radius-md);
+    width: 8px;
+    position: absolute;
+    right: 0;
 }
 
 ::-webkit-scrollbar-thumb {
     background: var(--color-zinc-700);
-    border-radius: 200px;
+    border-radius: 4px;
 }
 
-::-webkit-scrollbar-thumb:hover {
-    background: var(--color-zinc-600)
+::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+:not(:hover)::-webkit-scrollbar-thumb {
+    background: transparent;
+}
+
+button {
+    cursor: pointer;
 }
