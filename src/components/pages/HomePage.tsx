@@ -1,26 +1,19 @@
-import { Button } from "@mantine/core";
-import Cookies from "js-cookie";
-import { useEffect, useState } from "react";
-import UserServices from "../../services/UserServices";
-
 function HomePage() {
-    const [data, setData] = useState(null);
-
-    const fetchData = async () => {
-        const data = await UserServices.getCurrentUser();
-        setData(data);
-    };
-
-    useEffect(() => {
-        fetchData();
-    }, []);
-
-    return (
-        <div>
-            <Button onClick={fetchData}>FetchData</Button>
-            <Button onClick={() => Cookies.remove("access_token")}>Remove Token</Button>
-        </div>
-    );
+    const data = [
+        {
+            title: "Playlist 1",
+            image: "/image.webp",
+        },
+        {
+            title: "Playlist 1",
+            image: "/image.webp",
+        },
+        {
+            title: "Playlist 1",
+            image: "/image.webp",
+        },
+    ];
+    return <div className="bg-amber-50 w-full h-full rounded-md p-3">TEST</div>;
 }
 
 export default HomePage;

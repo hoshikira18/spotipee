@@ -8,3 +8,26 @@
 @theme {
     --font-spotify: CircularSpotify, "sans-serif";
 }
+
+::-webkit-scrollbar {
+    width: 8px;
+    position: absolute;
+    right: 0;
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--color-zinc-700);
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+:not(:hover)::-webkit-scrollbar-thumb {
+    background: transparent;
+}
+
+button {
+    cursor: pointer;
+}

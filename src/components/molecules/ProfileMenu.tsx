@@ -5,7 +5,6 @@ import ProfileButton from "../atoms/ProfileButton";
 
 function ProfileMenu() {
     const { data: currentUser } = useCurrentUser();
-    console.log(currentUser);
 
     return (
         <Menu shadow="md" width={200}>

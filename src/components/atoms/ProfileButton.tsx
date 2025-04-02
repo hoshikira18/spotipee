@@ -6,7 +6,7 @@ type ProfileButton = {
 };
 
 function ProfileButton({ currentUser }: ProfileButton) {
-    const image = getImage(64, currentUser);
+    const image = getImage(64, currentUser?.images);
     return (
         <div className="bg-purple-800 w-full aspect-square rounded-full flex items-center justify-center overflow-hidden">
             {image ? (
