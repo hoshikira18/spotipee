@@ -57,6 +57,7 @@ function App() {
             localStorage.setItem("code_verifier", codeVerifier);
         }
     }, []);
+
     return (
         <MantineProvider theme={theme} defaultColorScheme="dark">
             <NavigationProgress />

@@ -17,11 +17,11 @@ function SearchBar() {
     });
 
     return (
-        <div className="bg-zinc-900 px-3 rounded-3xl hover:bg-zinc-800 focus-within:bg-zinc-800 cursor-text flex items-center justify-around transition-all duration-150 focus-within:outline-2 focus-within:outline-gray-50 font-spotify">
+        <div className="bg-zinc-900 px-5 rounded-4xl hover:bg-zinc-800 focus-within:bg-zinc-800 cursor-text flex items-center justify-around transition-all duration-150 focus-within:outline-2 focus-within:outline-gray-50 font-spotify">
             <SearchNormal />
             <input
                 ref={ref}
-                className="bg-transparent px-3 py-2 outline-none font-medium text-gray-100"
+                className="bg-transparent px-3 outline-none font-medium text-gray-100"
                 placeholder="What do you want to play?"
             />
         </div>

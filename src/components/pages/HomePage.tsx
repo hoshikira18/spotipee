@@ -19,7 +19,6 @@ function HomePage() {
         <div>
             <Button onClick={fetchData}>FetchData</Button>
             <Button onClick={() => Cookies.remove("access_token")}>Remove Token</Button>
-            <div>{JSON.stringify(data)}</div>
         </div>
     );
 }
