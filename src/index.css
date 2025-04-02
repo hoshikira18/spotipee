@@ -8,3 +8,22 @@
 @theme {
     --font-spotify: CircularSpotify, "sans-serif";
 }
+
+::-webkit-scrollbar {
+    width: 5px;
+}
+
+::-webkit-scrollbar-track {
+    background: var(--color-zinc-900);
+    border-bottom-right-radius: var(--radius-md);
+    border-top-right-radius: var(--radius-md);
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--color-zinc-700);
+    border-radius: 200px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: var(--color-zinc-600)
+}
