@@ -1,7 +1,6 @@
 import ReactDOM from "react-dom/client";
 import "./index.css";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import App from "./App.js";
 
 const root = ReactDOM.createRoot(document.getElementById("root") as HTMLElement);
@@ -17,6 +16,5 @@ const reactQuery = new QueryClient({
 root.render(
     <QueryClientProvider client={reactQuery}>
         <App />
-        <ReactQueryDevtools initialIsOpen={false} />
     </QueryClientProvider>,
 );

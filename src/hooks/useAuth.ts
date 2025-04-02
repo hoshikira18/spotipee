@@ -29,6 +29,7 @@ export const useAuth = (code: string | null) => {
                         Authorization: `Basic ${basicAuth}`,
                     },
                 };
+
                 const body = {
                     grant_type: "authorization_code",
                     code,
@@ -66,8 +67,7 @@ export const useAuth = (code: string | null) => {
         fetchToken();
     }, [code]);
 
-    return {
-        accessToken,
-        refreshToken,
-    };
+    const isAuth = Boolean(accessToken);
+
+    return { accessToken, refreshToken, isAuth };
 };
