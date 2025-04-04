@@ -18,7 +18,7 @@ function LeftSideBar() {
 
     // Close the sidebar if the screen width is less than 768px
     useEffect(() => {
-        if (width > 0 && width < 768) {
+        if (width > 0 && width < 768 && isAuth) {
             leftSideBarClose();
         }
         if (width > 0 && width > 768) {
@@ -35,7 +35,11 @@ function LeftSideBar() {
                 <div className="inline-flex items-center space-x-2 px-2">
                     <button
                         type="button"
-                        onClick={leftSideBarToggle}
+                        onClick={() => {
+                            if (isAuth) {
+                                leftSideBarToggle();
+                            }
+                        }}
                         className="min-w-12 h-12 flex items-center justify-center hover:text-green-600 transition-all duration-150"
                     >
                         <Category2 size={30} />
