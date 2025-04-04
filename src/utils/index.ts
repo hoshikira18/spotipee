@@ -4,6 +4,6 @@ type Image = {
     width: number;
 };
 
-export const getImage = (size: number, images: Image[]) => {
+export const getImage = (size: number, images?: Image[]) => {
     return images?.find((img) => img.height === size)?.url;
 };

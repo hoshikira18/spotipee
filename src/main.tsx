@@ -7,8 +7,9 @@ const root = ReactDOM.createRoot(document.getElementById("root") as HTMLElement)
 const reactQuery = new QueryClient({
     defaultOptions: {
         queries: {
-            staleTime: Number.POSITIVE_INFINITY,
+            staleTime: 5 * 60 * 1000, // 5 minutes
             cacheTime: Number.POSITIVE_INFINITY,
+            refetchOnWindowFocus: false,
         },
     },
 });

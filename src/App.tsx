@@ -1,12 +1,14 @@
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import "@mantine/core/styles.css";
 import "@mantine/nprogress/styles.css";
-import { Button, MantineProvider, createTheme } from "@mantine/core";
-import { NavigationProgress } from "@mantine/nprogress";
+import { Button, Loader, MantineProvider, createTheme } from "@mantine/core";
+import { NavigationProgress, nprogress } from "@mantine/nprogress";
 import { useEffect } from "react";
 import ErrorPage from "./components/pages/ErrorPage";
 import HomePage from "./components/pages/HomePage";
 import Layout from "./components/templates/Layout";
+import { useAuth } from "./hooks/useAuth";
+import { useCurrentUser } from "./hooks/useCurrentUser";
 import { generateRandomString } from "./utils/auth";
 
 const theme = createTheme({
@@ -57,6 +59,16 @@ function App() {
             localStorage.setItem("code_verifier", codeVerifier);
         }
     }, []);
+
+    const { data: currentUser, isFetching: isLoadingUser } = useCurrentUser();
+    useEffect(() => {
+        if (isLoadingUser) {
+            nprogress.start();
+        } else {
+            nprogress.complete();
+        }
+        console.log(isLoadingUser);
+    }, [isLoadingUser]);
 
     return (
         <MantineProvider theme={theme} defaultColorScheme="dark">

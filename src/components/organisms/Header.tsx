@@ -1,45 +1,36 @@
 import { Button } from "@mantine/core";
-import { Home, Spotify } from "iconsax-react";
+import { Spotify, User } from "iconsax-react";
 import { Link } from "react-router-dom";
 import { AUTH_URL } from "../../constants/auth";
-import { useAuth } from "../../hooks/useAuth";
-import ProfileMenu from "../molecules/ProfileMenu";
+import { useCurrentUser } from "../../hooks/useCurrentUser";
+import ProfileButton from "../atoms/ProfileButton";
 import SearchBar from "../molecules/SearchBar";
 
 function Header() {
-    const { isAuth } = useAuth(null);
+    const { data: currentUser, isLoading } = useCurrentUser();
 
     return (
-        <div className="sticky top-0 flex items-center md:justify-between py-1">
-            <Link to={"/"} className="p-3">
-                <Spotify size="40" color="#fff" variant="Bold" />
+        <header className="h-16 flex items-center md:justify-between p-2">
+            <Link to={"/"} className="px-2">
+                <Spotify size={45} variant="Bold" />
             </Link>
-
-            <div className="flex space-x-3">
-                <Link to={"/"} className="p-3 bg-zinc-800 rounded-full">
-                    <Home size="25" color="#fff" variant="Bold" />
-                </Link>
-
-                <SearchBar />
-            </div>
-
-            <div className="absolute md:relative right-0">
-                {isAuth ? (
-                    <ProfileMenu />
-                ) : (
-                    <Button
-                        size="lg"
-                        fz={"md"}
-                        bg="white"
-                        c={"dark"}
-                        component={"a"}
-                        href={AUTH_URL}
-                    >
-                        Log in
-                    </Button>
-                )}
-            </div>
-        </div>
+            <SearchBar />
+            {isLoading ? (
+                <div className="absolute md:relative right-0 flex items-center gap-2">
+                    <User />
+                </div>
+            ) : (
+                <div className="absolute md:relative right-0 flex items-center gap-2">
+                    {currentUser ? (
+                        <ProfileButton currentUser={currentUser} />
+                    ) : (
+                        <Button component={"a"} href={AUTH_URL} size="md">
+                            Log in
+                        </Button>
+                    )}
+                </div>
+            )}
+        </header>
     );
 }
 

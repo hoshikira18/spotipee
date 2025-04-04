@@ -2,8 +2,11 @@ import axios from "axios";
 import Cookies from "js-cookie";
 import { useEffect, useState } from "react";
 import { CLIENT_ID, CLIENT_SECRET, REDIRECT_URI } from "../constants/auth";
+import { useCurrentUser } from "./useCurrentUser";
 
 export const useAuth = (code: string | null) => {
+    const { data: currentUser, isLoading } = useCurrentUser();
+
     const [accessToken, setAccessToken] = useState<string | null>(
         Cookies.get("access_token") || null,
     );
@@ -13,7 +16,9 @@ export const useAuth = (code: string | null) => {
 
     // get access_token
     useEffect(() => {
-        if (!code || accessToken) return;
+        if (!code || accessToken) {
+            return;
+        }
 
         const fetchToken = async () => {
             try {
@@ -67,7 +72,15 @@ export const useAuth = (code: string | null) => {
         fetchToken();
     }, [code]);
 
-    const isAuth = Boolean(accessToken);
+    const logout = () => {
+        Cookies.remove("access_token");
+        Cookies.remove("refresh_token");
+        setAccessToken(null);
+        setRefreshToken(null);
+        window.location.reload();
+    };
 
-    return { accessToken, refreshToken, isAuth };
+    const isAuth = Boolean(currentUser);
+
+    return { accessToken, refreshToken, logout, isAuth, isLoading };
 };
