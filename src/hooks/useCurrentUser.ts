@@ -4,6 +4,7 @@ import UserServices from "../services/UserServices";
 export const useCurrentUser = () => {
     return useQuery({
         queryKey: ["current-user"],
+        retry: 1,
         queryFn: () => UserServices.getCurrentUser(),
     });
 };
