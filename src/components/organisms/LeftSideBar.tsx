@@ -1,4 +1,4 @@
-import { Button, Loader } from "@mantine/core";
+import { Button } from "@mantine/core";
 import { useDisclosure, useViewportSize } from "@mantine/hooks";
 import { Add, Category2 } from "iconsax-react";
 import { useEffect } from "react";
@@ -11,13 +11,18 @@ function LeftSideBar() {
     const { isAuth, isLoading } = useAuth(null);
 
     const { width } = useViewportSize();
-    const [leftSideBarOpened, { toggle: leftSideBarToggle, close: leftSideBarClose }] =
-        useDisclosure(true);
+    const [
+        leftSideBarOpened,
+        { toggle: leftSideBarToggle, close: leftSideBarClose, open: leftSideBarOpen },
+    ] = useDisclosure(true);
 
     // Close the sidebar if the screen width is less than 768px
     useEffect(() => {
         if (width > 0 && width < 768) {
             leftSideBarClose();
+        }
+        if (width > 0 && width > 768) {
+            leftSideBarOpen();
         }
     }, [width]);
 
