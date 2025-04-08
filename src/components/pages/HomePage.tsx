@@ -1,5 +1,6 @@
 import { Loader } from "@mantine/core";
 import { useCurrentUser } from "../../hooks/useCurrentUser";
+import MediaCard from "../molecules/MediaCard";
 import UnAuthHomePage from "./UnAuthHomePage";
 
 function HomePage() {
@@ -11,7 +12,15 @@ function HomePage() {
             </div>
         );
     if (!isLoading && !data) return <UnAuthHomePage />;
-    return <div className="bg-zinc-800/60 w-full h-full rounded-md p-3">TEST</div>;
+    return (
+        <div className="w-full h-full bg-zinc-800/60 rounded-md p-3 ">
+            <div className="grid grid-cols-2">
+                {Array.from({ length: 4 }).map((_, i) => (
+                    <MediaCard key={i} size="md" title="Artist" subtitle="Artist" />
+                ))}
+            </div>
+        </div>
+    );
 }
 
 export default HomePage;
