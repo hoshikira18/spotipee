@@ -10,13 +10,13 @@ const Layout = () => {
     useAuth(code);
 
     return (
-        <div className="bg-black fixed inset-0 h-screen text-white font-spotify px-2 space-y-2">
+        <div className="bg-black fixed inset-0 h-screen text-white font-spotify px-2">
             <Header />
 
             {/* LeftSideBar */}
             <div className="flex h-[calc(100vh-160px)] overflow-hidden">
                 <LeftSideBar />
-                <div className="flex-1 bg-black px-3">
+                <div className="flex-1 bg-black px-3 overflow-hidden">
                     <Outlet />
                 </div>
                 <RightSideBar />

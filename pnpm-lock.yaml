@@ -47,6 +47,9 @@ importers:
       axios:
         specifier: ^1.8.4
         version: 1.8.4
+      clsx:
+        specifier: ^2.1.1
+        version: 2.1.1
       iconsax-react:
         specifier: ^0.0.8
         version: 0.0.8(react@18.3.1)
