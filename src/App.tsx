@@ -60,14 +60,13 @@ function App() {
         }
     }, []);
 
-    const { data: currentUser, isFetching: isLoadingUser } = useCurrentUser();
+    const { isFetching: isLoadingUser } = useCurrentUser();
     useEffect(() => {
         if (isLoadingUser) {
             nprogress.start();
         } else {
             nprogress.complete();
         }
-        console.log(isLoadingUser);
     }, [isLoadingUser]);
 
     return (

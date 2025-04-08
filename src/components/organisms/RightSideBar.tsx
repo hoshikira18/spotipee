@@ -3,7 +3,7 @@ import { useEffect } from "react";
 
 function RightSideBar() {
     const { width } = useViewportSize();
-    const [rightSideBarOpened, { close: rightSideBarClose }] = useDisclosure(true);
+    const [rightSideBarOpened, { close: rightSideBarClose }] = useDisclosure(false);
 
     // Close the sidebar if the screen width is less than 768px
     useEffect(() => {

@@ -12,29 +12,42 @@ function Header() {
 
     return (
         <header className="h-16 flex items-center justify-between p-2">
-            <div className="h-full flex items-center">
+            {/* Left section */}
+            <div className="h-full flex items-center lg:w-1/3">
                 <Link to={"/"} className="px-2 flex-none">
                     <Spotify size={40} variant="Bold" />
                 </Link>
-                <div className="h-full flex items-center space-x-2">
-                    <Link
-                        to={"/"}
-                        className="p-3 bg-zinc-800 h-full aspect-square flex items-center justify-center rounded-full"
-                    >
-                        <svg
-                            fill="white"
-                            data-encore-id="icon"
-                            role="img"
-                            aria-hidden="true"
-                            viewBox="0 0 24 24"
-                        >
-                            <path d="M13.5 1.515a3 3 0 0 0-3 0L3 5.845a2 2 0 0 0-1 1.732V21a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1v-6h4v6a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V7.577a2 2 0 0 0-1-1.732l-7.5-4.33z" />
-                        </svg>
-                    </Link>
-                    <SearchBar />
-                </div>
+                <SearchBar className="lg:hidden" />
             </div>
+
+            <SearchBar className="hidden lg:flex w-1/3" />
+
+            {/* Right section */}
             <div className="flex items-center gap-2 flex-none">
+                <Group c={"gray.6"}>
+                    <ul
+                        color="gray.6"
+                        className="hidden lg:flex items-center justify-between border-r-2 border-white/80 pr-2 space-x-2 font-spotify font-semibold"
+                    >
+                        <li className="hover:scale-105 transition-all duration-150">
+                            <Link to={"/"}>Premium</Link>
+                        </li>
+                        <li className="hover:scale-105 transition-all duration-150">
+                            <Link to={"/"}>Support</Link>
+                        </li>
+                        <li className="hover:scale-105 transition-all duration-150">
+                            <Link to={"/"}>Download</Link>
+                        </li>
+                    </ul>
+                </Group>
+                <Button
+                    variant="transparent"
+                    c={"gray.6"}
+                    leftSection={<ArrowCircleDown2 size={20} />}
+                    className="hover:scale-105 transition-all duration-150"
+                >
+                    Install App
+                </Button>
                 {isLoading ? (
                     <User />
                 ) : (
@@ -43,30 +56,6 @@ function Header() {
                             <ProfileButton currentUser={currentUser} />
                         ) : (
                             <div className="flex items-center">
-                                <Group c={"gray.6"}>
-                                    <ul
-                                        color="gray.6"
-                                        className="hidden lg:flex items-center justify-between border-r-2 border-white/80 pr-2 space-x-2 font-spotify font-semibold"
-                                    >
-                                        <li className="hover:scale-105 transition-all duration-150">
-                                            <Link to={"/"}>Premium</Link>
-                                        </li>
-                                        <li className="hover:scale-105 transition-all duration-150">
-                                            <Link to={"/"}>Support</Link>
-                                        </li>
-                                        <li className="hover:scale-105 transition-all duration-150">
-                                            <Link to={"/"}>Download</Link>
-                                        </li>
-                                    </ul>
-                                </Group>
-                                <Button
-                                    variant="transparent"
-                                    c={"gray.6"}
-                                    leftSection={<ArrowCircleDown2 size={20} />}
-                                    className="hover:scale-105 transition-all duration-150"
-                                >
-                                    Install App
-                                </Button>
                                 <Button
                                     variant="transparent"
                                     c={"gray.6"}
