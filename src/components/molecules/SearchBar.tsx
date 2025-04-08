@@ -10,7 +10,7 @@ interface SearchBarProps {
 
 function SearchBar({ className = "" }: SearchBarProps) {
     const ref = useRef<HTMLInputElement>(null);
-    const [isSearchOpen, { open, toggle }] = useDisclosure(true);
+    const [isSearchOpen, { open, close, toggle }] = useDisclosure(true);
     const { width } = useViewportSize();
 
     useEffect(() => {
@@ -27,7 +27,7 @@ function SearchBar({ className = "" }: SearchBarProps) {
 
     useEffect(() => {
         if (width > 0 && width < 768) {
-            // close();
+            close();
         }
         if (width > 0 && width > 768) {
             open();

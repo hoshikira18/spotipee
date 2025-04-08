@@ -11,16 +11,16 @@ function Header() {
     const { data: currentUser, isLoading } = useCurrentUser();
 
     return (
-        <header className="h-16 flex items-center justify-between p-2">
+        <header className="h-16 flex items-center justify-between space-x-3 p-2">
             {/* Left section */}
-            <div className="h-full flex items-center lg:w-1/3">
+            <div className="h-full flex items-center md:w-1/3">
                 <Link to={"/"} className="px-2 flex-none">
                     <Spotify size={40} variant="Bold" />
                 </Link>
-                <SearchBar className="lg:hidden" />
+                <SearchBar className="xl:hidden" />
             </div>
 
-            <SearchBar className="hidden lg:flex w-1/3" />
+            <SearchBar className="hidden xl:flex w-1/3" />
 
             {/* Right section */}
             <div className="flex items-center gap-2 flex-none">
