@@ -21,17 +21,17 @@ export default function MediaCard({
 }: MediaCardProps) {
     const sizeClasses = {
         sm: {
-            container: "p-2 space-y-1 w-32",
+            container: "p-2 space-y-1 min-w-32",
             title: "text-sm font-medium",
             subtitle: "text-xs",
         },
         md: {
-            container: "p-3 space-y-2 w-48",
+            container: "p-3 space-y-2 min-w-48",
             title: "text-base font-medium",
             subtitle: "text-sm",
         },
         lg: {
-            container: "p-4 space-y-3 w-64",
+            container: "p-4 space-y-3 min-w-64",
             title: "text-lg font-semibold",
             subtitle: "text-sm",
         },
@@ -40,7 +40,7 @@ export default function MediaCard({
     return (
         <div
             className={cn(
-                "hover:bg-zinc-700/60 rounded-md transition-colors group",
+                "hover:bg-zinc-700/60 rounded-md transition-colors group font-spotify",
                 sizeClasses[size].container,
                 className,
             )}

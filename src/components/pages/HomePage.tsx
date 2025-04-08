@@ -1,13 +1,16 @@
 import { Loader } from "@mantine/core";
 import { useCurrentUser } from "../../hooks/useCurrentUser";
 import { useRecentlyPlayed } from "../../hooks/useMedia";
+import { getImage } from "../../utils";
 import MediaCard from "../molecules/MediaCard";
+import HomeSection from "../organisms/HomeSection";
 import UnAuthHomePage from "./UnAuthHomePage";
 
 function HomePage() {
     const { data, isLoading } = useCurrentUser();
-    const { data: recentlyPlayed } = useRecentlyPlayed();
-
+    const {
+        data: { items: recentlyPlayed } = { recentlyPlayed: [] },
+    } = useRecentlyPlayed();
     console.log(recentlyPlayed);
 
     if (isLoading)
@@ -17,13 +20,55 @@ function HomePage() {
             </div>
         );
     if (!isLoading && !data) return <UnAuthHomePage />;
+
     return (
-        <div className="w-full h-full bg-zinc-800/60 rounded-md p-3 ">
-            <div className="grid grid-cols-2">
-                {Array.from({ length: 4 }).map((_, i) => (
-                    <MediaCard key={i} size="md" title="Artist" subtitle="Artist" />
+        <div className="p-3 bg-zinc-800/60 rounded-md space-y-4 overflow-y-scroll h-full">
+            <HomeSection title="Recently played">
+                {recentlyPlayed?.map((track, i) => (
+                    <MediaCard
+                        className="w-1/3"
+                        key={i}
+                        size="sm"
+                        title={track.track.name}
+                        imageSrc={getImage(300, track.track.album.images)}
+                        subtitle="Artist"
+                    />
                 ))}
-            </div>
+            </HomeSection>
+            <HomeSection title="Recently played">
+                {recentlyPlayed?.map((track, i) => (
+                    <MediaCard
+                        className="w-1/3"
+                        key={i}
+                        size="md"
+                        title={track.track.name}
+                        imageSrc={getImage(300, track.track.album.images)}
+                        subtitle="Artist"
+                    />
+                ))}
+            </HomeSection>
+            <HomeSection title="Recently played">
+                {recentlyPlayed?.map((_, i) => (
+                    <MediaCard
+                        className="w-1/3"
+                        key={i}
+                        size="md"
+                        title="Artist"
+                        subtitle="Artist"
+                    />
+                ))}
+            </HomeSection>
+            <HomeSection title="Recently played">
+                {recentlyPlayed?.map((_, i) => (
+                    <MediaCard
+                        className="w-1/3"
+                        key={i}
+                        size="lg"
+                        title="Artist"
+                        subtitle="Artist"
+                    />
+                ))}
+            </HomeSection>
         </div>
     );
 }

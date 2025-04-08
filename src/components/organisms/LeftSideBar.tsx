@@ -28,7 +28,7 @@ function LeftSideBar() {
 
     return (
         <div
-            className={`${leftSideBarOpened ? "w-72" : "w-24"} h-full pl-3 py-3 space-y-4 bg-zinc-800/60 rounded-md transition-all duration-300`}
+            className={`${leftSideBarOpened ? "w-72 xl:w-90" : "w-24"} h-full pl-3 py-3 space-y-4 bg-zinc-800/60 rounded-md transition-all duration-300`}
         >
             <div>
                 {/* sidebar header */}
