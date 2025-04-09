@@ -13,38 +13,37 @@ function Header() {
     return (
         <header className="h-16 flex items-center justify-between space-x-3 p-2">
             {/* Left section */}
-            <div className="h-full flex items-center md:w-1/3">
+            <div className="h-full flex items-center 2xl:justify-between w-2/3">
                 <Link to={"/"} className="px-2 flex-none">
                     <Spotify size={40} variant="Bold" />
                 </Link>
-                <SearchBar className="xl:hidden" />
+                <SearchBar className="w-auto md:w-2/3 xl:w-4/7 xl:px-5" />
             </div>
 
-            <SearchBar className="hidden xl:flex w-1/3" />
-
             {/* Right section */}
-            <div className="flex items-center gap-2 flex-none">
-                <Group c={"gray.6"}>
-                    <ul
-                        color="gray.6"
-                        className="hidden lg:flex items-center justify-between border-r-2 border-white/80 pr-2 space-x-2 font-spotify font-semibold"
-                    >
-                        <li className="hover:scale-105 transition-all duration-150">
-                            <Link to={"/"}>Premium</Link>
-                        </li>
-                        <li className="hover:scale-105 transition-all duration-150">
-                            <Link to={"/"}>Support</Link>
-                        </li>
-                        <li className="hover:scale-105 transition-all duration-150">
-                            <Link to={"/"}>Download</Link>
-                        </li>
-                    </ul>
-                </Group>
+            <div className="flex items-center justify-end gap-2 flex-none w-2/3 md:w-auto">
+                {!isLoading && !currentUser && (
+                    <Group>
+                        <ul className="hidden lg:flex items-center justify-between border-r-2 border-white/80 pr-4 space-x-2 font-spotify font-semibold text-[#9f9f9f]">
+                            <li className="hover:scale-105 hover:text-white transition-all duration-150">
+                                <Link to={"/"}>Premium</Link>
+                            </li>
+                            <li className="hover:scale-105 hover:text-white transition-all duration-150">
+                                <Link to={"/"}>Support</Link>
+                            </li>
+                            <li className="hover:scale-105 hover:text-white transition-all duration-150">
+                                <Link to={"/"}>Download</Link>
+                            </li>
+                        </ul>
+                    </Group>
+                )}
                 <Button
                     variant="transparent"
-                    c={"gray.6"}
                     leftSection={<ArrowCircleDown2 size={20} />}
-                    className="hover:scale-105 transition-all duration-150"
+                    classNames={{
+                        root: "hover:!text-white hover:scale-105 transition-all duration-150 text-sm text-gray-600",
+                    }}
+                    c={"#9f9f9f"}
                 >
                     Install App
                 </Button>
@@ -58,8 +57,8 @@ function Header() {
                             <div className="flex items-center">
                                 <Button
                                     variant="transparent"
-                                    c={"gray.6"}
-                                    className="hover:scale-105 transition-all duration-150"
+                                    c={"#9f9f9f"}
+                                    className="hover:scale-105 hover:!text-white transition-all duration-150"
                                 >
                                     Sign up
                                 </Button>
@@ -71,7 +70,9 @@ function Header() {
                                     fw={700}
                                     px={32}
                                     py={8}
-                                    className="hover:scale-105 transition-all duration-150"
+                                    color="white"
+                                    c={"black"}
+                                    className="hover:scale-105 transition-all duration-150 hover:!bg-zinc-200"
                                 >
                                     Log in
                                 </Button>
