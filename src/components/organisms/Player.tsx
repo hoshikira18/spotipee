@@ -1,4 +1,4 @@
-import { Progress } from "@mantine/core";
+import { Progress, Slider } from "@mantine/core";
 import {
     Devices,
     Lyrics,
@@ -158,7 +158,7 @@ function Player() {
                     </button>
                 </div>
                 <div className="">
-                    <Progress value={50} animated size={"sm"} />
+                    <Slider color="blue" size="xs" showLabelOnHover={false} defaultValue={20} />
                 </div>
             </div>
             <div className="w-1/3 flex items-center justify-end space-x-4">

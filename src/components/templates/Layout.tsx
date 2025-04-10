@@ -15,9 +15,9 @@ const Layout = () => {
             <Header />
 
             {/* LeftSideBar */}
-            <div className="flex h-[calc(100vh-150px)] overflow-hidden">
+            <div className="flex h-[calc(100vh-150px)] overflow-hidden space-x-2">
                 <LeftSideBar />
-                <div className="flex-1 bg-black pl-3 overflow-hidden">
+                <div className="flex-1 bg-black overflow-hidden">
                     <Outlet />
                 </div>
                 <RightSideBar />
