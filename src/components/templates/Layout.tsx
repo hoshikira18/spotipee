@@ -3,7 +3,7 @@ import { useAuth } from "../../hooks/useAuth";
 import Header from "../organisms/Header";
 import LeftSideBar from "../organisms/LeftSideBar";
 import RightSideBar from "../organisms/RightSideBar";
-import Player from "../organisms/Player";
+import Player from "../organisms/Player/Player";
 
 const Layout = () => {
     const [searchParams] = useSearchParams();

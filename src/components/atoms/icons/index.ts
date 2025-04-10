@@ -8,3 +8,4 @@ export { default as Queue } from "./Queue";
 export { default as Devices } from "./Devices";
 export { default as Pause } from "./Pause";
 export { default as NowPlayingView } from "./NowPlayingView";
+export { default as RepeatOneIcon } from "./RepeatOneIcon";

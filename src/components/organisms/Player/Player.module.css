@@ -1,0 +1,20 @@
+.root {
+    &:hover {
+        .bar {
+            background-color: var(--color-green-600);
+        }
+        .thumb {
+            display: block;
+        }
+    }
+}
+
+.bar {
+    background-color: white;
+    transition: background-color 0.2s ease;
+}
+
+.thumb {
+    display: none;
+    padding: 1px;
+}

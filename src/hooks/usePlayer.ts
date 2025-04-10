@@ -15,9 +15,14 @@ export const usePlayer = () => {
     const [currentTrack, setTrack] = useState<any>(null);
     const [deviceId, setDeviceId] = useState<string | null>(null);
 
-    const [isPaused, setIsPaused] = useState<boolean>(true);
-    const [currentTime, setCurrentTime] = useState<number>(0);
-    const [duration, setDuration] = useState<number>(0);
+    const [playbackState, setPlaybackState] = useState({
+        isPaused: true,
+        isShuffle: false,
+        repeatMode: 0,
+        currentTime: 0,
+        duration: 0,
+        volume: 0,
+    });
 
     const loadScript = () => {
         const script = document.createElement("script");
@@ -36,9 +41,17 @@ export const usePlayer = () => {
             getOAuthToken: (cb: any) => {
                 cb(token);
             },
+            volume: 0.5,
         });
 
         setPlayer(player);
+
+        player.getVolume().then((volume: number) => {
+            setPlaybackState((prevState) => ({
+                ...prevState,
+                volume: volume * 100,
+            }));
+        });
 
         // Playback status updates
         player.addListener("player_state_changed", (state: any) => {
@@ -47,13 +60,18 @@ export const usePlayer = () => {
             }
 
             try {
-                const { paused, track_window, duration, position } = state;
+                const { paused, track_window, duration, position, shuffle, repeat_mode } = state;
                 const { current_track } = track_window;
 
                 setTrack(current_track);
-                setIsPaused(paused);
-                setDuration(duration);
-                setCurrentTime(position);
+                setPlaybackState((state) => ({
+                    ...state,
+                    isPaused: paused,
+                    isShuffle: shuffle,
+                    currentTime: position,
+                    duration: duration,
+                    repeatMode: repeat_mode,
+                }));
             } catch (error) {
                 console.log(error);
             }
@@ -101,9 +119,12 @@ export const usePlayer = () => {
     useEffect(() => {
         let interval: NodeJS.Timeout | null = null;
 
-        if (!isPaused) {
+        if (!playbackState.isPaused) {
             interval = setInterval(() => {
-                setCurrentTime((prevTime) => Math.min(prevTime + 1000, duration));
+                setPlaybackState((prevState) => ({
+                    ...prevState,
+                    currentTime: Math.min(prevState.currentTime + 1000, prevState.duration),
+                }));
             }, 1000);
         } else if (interval) {
             clearInterval(interval);
@@ -112,18 +133,71 @@ export const usePlayer = () => {
         return () => {
             if (interval) clearInterval(interval);
         };
-    }, [isPaused, duration]);
+    }, [playbackState.isPaused, playbackState.duration]);
 
     const togglePlay = async () => {
         await player?.togglePlay();
     };
 
+    const seek = async (position: number) => {
+        await player?.seek(position);
+    };
+
+    const skipToNext = async () => {
+        await player?.nextTrack();
+    };
+
+    const skipToPrevious = async () => {
+        await player?.previousTrack();
+    };
+
+    const handleToggleShuffle = async () => {
+        await instance.put("/me/player/shuffle", null, {
+            params: {
+                state: !playbackState.isShuffle,
+            },
+        });
+    };
+
+    const handleToggleRepeat = async () => {
+        const state =
+            playbackState.repeatMode === 0
+                ? "context"
+                : playbackState.repeatMode === 1
+                  ? "track"
+                  : "off";
+        await instance.put("/me/player/repeat", null, {
+            params: {
+                state,
+            },
+        });
+    };
+
+    const handleVolumeChange = async (volume: number) => {
+        await instance
+            .put("/me/player/volume", null, {
+                params: {
+                    volume_percent: volume,
+                },
+            })
+            .then(() => {
+                setPlaybackState((prevState) => ({
+                    ...prevState,
+                    volume: volume,
+                }));
+            });
+    };
+
     return {
         player,
         currentTrack,
+        playbackState,
         togglePlay,
-        isPaused,
-        currentTime,
-        duration,
+        skipToNext,
+        skipToPrevious,
+        seek,
+        handleToggleShuffle,
+        handleToggleRepeat,
+        handleVolumeChange,
     };
 };
