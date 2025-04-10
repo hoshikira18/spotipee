@@ -1,9 +1,10 @@
 import { useDisclosure, useViewportSize } from "@mantine/hooks";
 import { useEffect } from "react";
+import SpotifyPlayback from "./PlayController";
 
 function RightSideBar() {
     const { width } = useViewportSize();
-    const [rightSideBarOpened, { close: rightSideBarClose }] = useDisclosure(false);
+    const [rightSideBarOpened, { close: rightSideBarClose }] = useDisclosure(true);
 
     // Close the sidebar if the screen width is less than 768px
     useEffect(() => {
@@ -15,7 +16,7 @@ function RightSideBar() {
         <div
             className={`${rightSideBarOpened ? "w-72 p-3" : "w-0"} bg-zinc-800 rounded-md transition-all duration-300`}
         >
-            TEST
+            <SpotifyPlayback />
         </div>
     );
 }

@@ -3,6 +3,7 @@ import { useAuth } from "../../hooks/useAuth";
 import Header from "../organisms/Header";
 import LeftSideBar from "../organisms/LeftSideBar";
 import RightSideBar from "../organisms/RightSideBar";
+import Player from "../organisms/Player";
 
 const Layout = () => {
     const [searchParams] = useSearchParams();
@@ -14,15 +15,17 @@ const Layout = () => {
             <Header />
 
             {/* LeftSideBar */}
-            <div className="flex h-[calc(100vh-160px)] overflow-hidden">
+            <div className="flex h-[calc(100vh-150px)] overflow-hidden">
                 <LeftSideBar />
-                <div className="flex-1 bg-black px-3 overflow-hidden">
+                <div className="flex-1 bg-black pl-3 overflow-hidden">
                     <Outlet />
                 </div>
                 <RightSideBar />
             </div>
 
-            <footer className="h-20 fixed left-0 right-0 bottom-0">Footer</footer>
+            <footer className="h-20 fixed left-0 right-0 bottom-0 px-5 pb-2">
+                <Player />
+            </footer>
         </div>
     );
 };
