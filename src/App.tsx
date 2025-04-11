@@ -10,6 +10,9 @@ import Layout from "./components/templates/Layout";
 import { useAuth } from "./hooks/useAuth";
 import { useCurrentUser } from "./hooks/useCurrentUser";
 import { generateRandomString } from "./utils/auth";
+import ArtistDetailPage from "./components/pages/ArtistDetailPage";
+import { useIsFetching } from "@tanstack/react-query";
+import PlayerProvider from "./contexts/PlayerContext";
 
 const theme = createTheme({
     colors: {
@@ -46,6 +49,10 @@ const router = createBrowserRouter([
                 path: "/",
                 element: <HomePage />,
             },
+            {
+                path: "/artist/:artistId",
+                element: <ArtistDetailPage />,
+            },
         ],
     },
 ]);
@@ -60,19 +67,22 @@ function App() {
         }
     }, []);
 
-    const { isFetching: isLoadingUser } = useCurrentUser();
+    const isFetching = useIsFetching();
+
     useEffect(() => {
-        if (isLoadingUser) {
+        if (isFetching) {
             nprogress.start();
         } else {
             nprogress.complete();
         }
-    }, [isLoadingUser]);
+    }, [isFetching]);
 
     return (
         <MantineProvider theme={theme} defaultColorScheme="dark">
-            <NavigationProgress />
-            <RouterProvider router={router} />
+            <PlayerProvider>
+                <NavigationProgress />
+                <RouterProvider router={router} />
+            </PlayerProvider>
         </MantineProvider>
     );
 }

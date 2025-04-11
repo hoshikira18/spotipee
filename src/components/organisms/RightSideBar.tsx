@@ -15,7 +15,6 @@ function RightSideBar() {
             setState("current-track");
         }
     }, [width]);
-    console.log(state);
 
     return (
         <aside

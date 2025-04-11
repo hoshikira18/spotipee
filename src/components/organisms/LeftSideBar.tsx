@@ -7,7 +7,7 @@ import { useFollowedArtists } from "../../hooks/useCurrentUser";
 import ArtistCard from "../atoms/ArtistCard";
 
 function LeftSideBar() {
-    const { data: followedArtists, isLoading: isLoadingArtists } = useFollowedArtists();
+    const { data: followedArtists } = useFollowedArtists();
     const { isAuth, isLoading } = useAuth(null);
 
     const { width } = useViewportSize();

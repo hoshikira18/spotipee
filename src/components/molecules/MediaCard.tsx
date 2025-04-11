@@ -1,5 +1,5 @@
-import { Play } from "iconsax-react";
 import { cn } from "../../utils";
+import { Play } from "../atoms/icons";
 
 export interface MediaCardProps {
     type?: "singer" | "album" | "playlists";
@@ -61,7 +61,7 @@ export default function MediaCard({
                     type="button"
                     className="invisible absolute w-10 aspect-square -bottom-0 right-3 group-hover:bottom-3 group-hover:visible transition-all duration-75 ease-in-out bg-green-600 p-2 rounded-full flex items-center justify-center text-black shadow-md hover:scale-110 hover:shadow-lg active:scale-95"
                 >
-                    <Play variant="Bold" />
+                    <Play />
                 </button>
             </div>
             <div>

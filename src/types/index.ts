@@ -39,4 +39,70 @@ type SpotifyArtist = {
     uri: string;
 };
 
-export type { User, SpotifyArtist };
+type SpotifyTrack = {
+    album: {
+        album_type: string;
+        artists: SpotifyArtist[];
+        available_markets: string[];
+        external_urls: {
+            spotify: string;
+        };
+        href: string;
+        id: string;
+        images: {
+            url: string;
+            height: number;
+            width: number;
+        }[];
+        name: string;
+        release_date: string;
+        release_date_precision: string;
+        total_tracks: number;
+        type: string;
+        uri: string;
+    };
+    artists: SpotifyArtist[];
+    available_markets: string[];
+    disc_number: number;
+    duration_ms: number;
+    explicit: boolean;
+    external_ids: {
+        isrc: string;
+    };
+    external_urls: {
+        spotify: string;
+    };
+    href: string;
+    id: string;
+    is_local: boolean;
+    name: string;
+    popularity: number;
+    preview_url?: null | string;
+    track_number?: number | null;
+    type?: "track";
+    uri?: string | null;
+};
+
+type SpotifyAlbum = {
+    album_type: string;
+    artists: SpotifyArtist[];
+    available_markets: string[];
+    external_urls: {
+        spotify: string;
+    };
+    href: string;
+    id: string;
+    images: {
+        url: string;
+        height: number;
+        width: number;
+    }[];
+    name: string;
+    release_date: string;
+    release_date_precision: string;
+    total_tracks: number;
+    type: "album";
+    uri: string;
+};
+
+export type { User, SpotifyArtist, SpotifyTrack, SpotifyAlbum };
