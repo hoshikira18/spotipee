@@ -1,3 +1,4 @@
+import { useDebouncedCallback } from "@mantine/hooks";
 import { useEffect, useState } from "react";
 import Cookies from "js-cookie";
 import { instance } from "../lib/axios";
@@ -173,7 +174,7 @@ export const usePlayer = () => {
         });
     };
 
-    const handleVolumeChange = async (volume: number) => {
+    const handleVolumeChange = useDebouncedCallback(async (volume: number) => {
         await instance
             .put("/me/player/volume", null, {
                 params: {
@@ -186,7 +187,7 @@ export const usePlayer = () => {
                     volume: volume,
                 }));
             });
-    };
+    }, 100);
 
     return {
         player,

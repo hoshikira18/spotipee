@@ -1,22 +1,29 @@
-import { useDisclosure, useViewportSize } from "@mantine/hooks";
+import { useViewportSize } from "@mantine/hooks";
 import { useEffect } from "react";
+import { useRightSidebarStore } from "../../store/rightSidebarStore";
+import CurrentTrack from "../molecules/CurrentTrack";
 
 function RightSideBar() {
     const { width } = useViewportSize();
-    const [rightSideBarOpened, { close: rightSideBarClose }] = useDisclosure(true);
+    const { state, setState } = useRightSidebarStore();
 
-    // Close the sidebar if the screen width is less than 768px
     useEffect(() => {
         if (width > 0 && width < 768) {
-            rightSideBarClose();
+            setState("off");
+        }
+        if (width > 0 && width > 768) {
+            setState("current-track");
         }
     }, [width]);
+
     return (
-        <div
-            className={`${rightSideBarOpened ? "w-72 p-3" : "w-0"} bg-zinc-800 rounded-md transition-all duration-300`}
+        <aside
+            className={`${
+                state !== "off" ? "w-72" : "w-0"
+            } bg-zinc-800/60 h-full rounded-md transition-all`}
         >
-            Now playing
-        </div>
+            <CurrentTrack />
+        </aside>
     );
 }
 

@@ -15,7 +15,9 @@ import { usePlayer } from "../../../hooks/usePlayer";
 import { Loader, Slider } from "@mantine/core";
 import { createContext, useContext } from "react";
 import styles from "./Player.module.css";
-import { Sound, VoiceCricle, Volume, VolumeHigh } from "iconsax-react";
+import { VolumeHigh } from "iconsax-react";
+import { useDebouncedCallback } from "@mantine/hooks";
+import { useRightSidebarStore } from "../../../store/rightSidebarStore";
 
 const PlayerContext = createContext<{
     playbackState: {
@@ -182,10 +184,10 @@ const SongProgress = () => {
         return `${minutes}:${seconds.toString().padStart(2, "0")}`;
     };
 
-    const handleSeek = (value: number) => {
+    const handleSeek = useDebouncedCallback(async (value: number) => {
         const newPosition = (value / 100) * duration;
         seek(newPosition);
-    };
+    }, 100);
 
     return (
         <div className="w-full flex items-center justify-between space-x-5">
@@ -215,18 +217,33 @@ const PlayerFunction = () => {
         handleVolumeChange,
     } = context;
 
+    // function to change right sidebar content state
+    const setRightSidebarContentState = useRightSidebarStore((state) => state.setState);
+
     return (
         <div className="w-1/3 flex items-center justify-end space-x-4">
-            <button type="button" className="hover:text-white text-zinc-200">
+            <button
+                type="button"
+                className="hover:text-white text-zinc-200"
+                onClick={() => setRightSidebarContentState("current-track")}
+            >
                 <NowPlayingView />
             </button>
             <button type="button" className="hover:text-white text-zinc-200">
                 <Lyrics />
             </button>
-            <button type="button" className="hover:text-white text-zinc-200">
+            <button
+                type="button"
+                className="hover:text-white text-zinc-200"
+                onClick={() => setRightSidebarContentState("queue")}
+            >
                 <Queue />
             </button>
-            <button type="button" className="hover:text-white text-zinc-200">
+            <button
+                type="button"
+                className="hover:text-white text-zinc-200"
+                onClick={() => setRightSidebarContentState("devices")}
+            >
                 <Devices />
             </button>
             <div className="w-1/3 flex items-center justify-end space-x-2">
