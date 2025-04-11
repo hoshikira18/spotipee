@@ -91,7 +91,7 @@ const ArtistSongCard = ({ track, no }: { track: SpotifyTrack; no: number }) => {
     }, []);
 
     const handlePlayTrack = async () => {
-        await TrackServices.play([track.id]);
+        await TrackServices.play([track.uri] as string[]);
     };
 
     const handleSaveTrack = async () => {
