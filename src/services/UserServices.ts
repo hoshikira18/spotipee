@@ -30,6 +30,41 @@ const UserServices = {
             throw new Error(error.message);
         }
     },
+    async saveTracks(ids: string[]): Promise<void> {
+        await instance.put("/me/tracks", {
+            ids,
+        });
+    },
+    async getLikedTracks(): Promise<string[]> {
+        const data = await instance
+            .get("/me/tracks", {
+                params: {
+                    limit: 50,
+                },
+            })
+            .then(({ data: { items, next } }) => {
+                const ids = items.map(({ track }) => track.id);
+                return ids;
+            });
+        return data;
+    },
+    async checkUserSavedTracks(ids: string[]): Promise<boolean> {
+        const data = await instance
+            .get("/me/tracks/contains", {
+                params: {
+                    ids: ids.join(","),
+                },
+            })
+            .then(({ data }) => data[0]);
+        return data;
+    },
+    async removeTracks(ids: string[]): Promise<void> {
+        await instance.delete("/me/tracks", {
+            data: {
+                ids,
+            },
+        });
+    },
 };
 
 export default UserServices;

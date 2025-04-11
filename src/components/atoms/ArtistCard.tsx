@@ -12,7 +12,7 @@ interface ArtistCardProps {
 function ArtistCard({ artist, sidebarOpened = true }: ArtistCardProps) {
     return (
         <Link
-            to={"/"}
+            to={`/artist/${artist.id}`}
             className="inline-flex items-center space-x-2 p-2 hover:bg-zinc-700/80 w-full rounded-md"
         >
             <button

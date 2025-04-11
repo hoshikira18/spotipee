@@ -11,7 +11,6 @@ function HomePage() {
     const {
         data: { items: recentlyPlayed } = { recentlyPlayed: [] },
     } = useRecentlyPlayed();
-    console.log(recentlyPlayed);
 
     if (isLoading)
         return (

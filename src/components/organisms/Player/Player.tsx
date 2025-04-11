@@ -11,67 +11,22 @@ import {
     Shuffe,
 } from "../../atoms/icons";
 import Repeat from "../../atoms/icons/Repeat";
-import { usePlayer } from "../../../hooks/usePlayer";
 import { Loader, Slider } from "@mantine/core";
-import { createContext, useContext } from "react";
+import { useContext } from "react";
 import styles from "./Player.module.css";
 import { VolumeHigh } from "iconsax-react";
 import { useDebouncedCallback } from "@mantine/hooks";
 import { useRightSidebarStore } from "../../../store/rightSidebarStore";
-
-const PlayerContext = createContext<{
-    playbackState: {
-        isPaused: boolean;
-        isShuffle: boolean;
-        currentTime: number;
-        duration: number;
-        repeatMode: number;
-        volume: number;
-    };
-    currentTrack: any;
-    togglePlay: () => void;
-    seek: (position: number) => void;
-    skipToNext: () => void;
-    skipToPrevious: () => void;
-    handleToggleShuffle: () => void;
-    handleToggleRepeat: () => void;
-    handleVolumeChange: (volume: number) => void;
-} | null>(null);
+import { PlayerContext } from "../../../contexts/PlayerContext";
 
 function Player() {
-    const {
-        playbackState,
-        currentTrack,
-        togglePlay,
-        seek,
-        skipToNext,
-        skipToPrevious,
-        handleToggleShuffle,
-        handleToggleRepeat,
-        handleVolumeChange,
-    } = usePlayer();
-
-    const contextValues = {
-        playbackState,
-        currentTrack,
-        togglePlay,
-        seek,
-        skipToNext,
-        skipToPrevious,
-        handleToggleShuffle,
-        handleToggleRepeat,
-        handleVolumeChange,
-    };
-
     return (
-        <PlayerContext.Provider value={contextValues}>
-            <div className="h-full font-spotify flex items-center">
-                <CurrentSong />
-                <PlayerControl />
+        <div className="h-full font-spotify flex items-center">
+            <CurrentSong />
+            <PlayerControl />
 
-                <PlayerFunction />
-            </div>
-        </PlayerContext.Provider>
+            <PlayerFunction />
+        </div>
     );
 }
 
