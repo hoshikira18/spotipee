@@ -11,18 +11,33 @@ function RightSideBar() {
         if (width > 0 && width < 768) {
             setState("off");
         }
-        if (width > 0 && width > 768) {
+        if (width > 0 && width > 768 && state === "off") {
             setState("current-track");
         }
     }, [width]);
+    console.log(state);
 
     return (
         <aside
             className={`${
-                state !== "off" ? "w-72" : "w-0"
+                state !== "off" ? "w-80" : "w-0"
             } bg-zinc-800/60 h-full rounded-md transition-all`}
         >
-            <CurrentTrack />
+            {state === "current-track" && (
+                <div className="h-full overflow-hidden">
+                    <CurrentTrack />
+                </div>
+            )}
+            {state === "devices" && (
+                <div className="h-full overflow-hidden flex items-center justify-center">
+                    Display Devices
+                </div>
+            )}
+            {state === "queue" && (
+                <div className="h-full overflow-hidden flex items-center justify-center">
+                    Display Queue
+                </div>
+            )}
         </aside>
     );
 }

@@ -12,7 +12,7 @@ function CurrentTrack() {
                     >
                         <HideIcon />
                     </button>
-                    <p className="-translate-x-6 group-hover:translate-x-0 transition-all">
+                    <p className="-translate-x-6 group-hover:translate-x-0 transition-all text-lg">
                         Playlist name
                     </p>
                 </div>
