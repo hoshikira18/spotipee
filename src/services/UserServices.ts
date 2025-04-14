@@ -1,5 +1,5 @@
 import { instance } from "../lib/axios";
-import type { SpotifyArtist, User } from "../types";
+import type { SpotifyArtist, SpotifyTrack, User } from "../types";
 
 const UserServices = {
     async getCurrentUser(): Promise<User> {
@@ -35,27 +35,27 @@ const UserServices = {
             ids,
         });
     },
-    async getLikedTracks(): Promise<string[]> {
+    async getSavedTracks(): Promise<string[]> {
         const data = await instance
             .get("/me/tracks", {
                 params: {
                     limit: 50,
                 },
             })
-            .then(({ data: { items, next } }) => {
-                const ids = items.map(({ track }) => track.id);
+            .then(({ data: { items } }) => {
+                const ids = items.map(({ track }: { track: SpotifyTrack }) => track.id);
                 return ids;
             });
         return data;
     },
-    async checkUserSavedTracks(ids: string[]): Promise<boolean> {
+    async checkUserSavedTracks(ids: string[]): Promise<boolean[]> {
         const data = await instance
             .get("/me/tracks/contains", {
                 params: {
                     ids: ids.join(","),
                 },
             })
-            .then(({ data }) => data[0]);
+            .then(({ data }) => data);
         return data;
     },
     async removeTracks(ids: string[]): Promise<void> {
