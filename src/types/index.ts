@@ -81,6 +81,7 @@ type SpotifyTrack = {
     track_number?: number | null;
     type?: "track";
     uri?: string | null;
+    isSaved?: boolean;
 };
 
 type SpotifyAlbum = {

@@ -84,32 +84,35 @@ const ArtistSongCard = ({ track, no }: { track: SpotifyTrack; no: number }) => {
     const queryClient = useQueryClient();
     const [isTrackSaved, setIsTrackSaved] = useState<boolean>(false);
 
-    useEffect(() => {
-        UserServices.checkUserSavedTracks([track.id]).then((res) => {
-            setIsTrackSaved(res);
-        });
-    }, []);
 
     const handlePlayTrack = async () => {
         await TrackServices.play([track.uri] as string[]);
     };
 
-    const handleSaveTrack = async () => {
-        nprogress.start();
-        if (isTrackSaved) {
-            await UserServices.removeTracks([track.id]).then(() => {
-                setIsTrackSaved(false);
-                queryClient.invalidateQueries(["artistTopTracks"]);
-            });
+    const handleSaveTrack = async (track: SpotifyTrack) => {
+        try {
+            nprogress.start();
+            console.log(track)
+            if (track.isSaved) {
+                await UserServices.removeTracks([track.id]).then(() => {
+                    setIsTrackSaved(false);
+                    queryClient.invalidateQueries(["artistTopTracks"]);
+                })
+                return
+            }
+            await UserServices.saveTracks([track.id as string])
+                .then(() => {
+                    setIsTrackSaved(false);
+                })
+                .finally(() => {
+                    nprogress.complete();
+                    queryClient.invalidateQueries(["artistTopTracks"]);
+                });
+        } catch (error) {
+            console.error("Error saving track:", error);
+        } finally {
+            nprogress.complete();
         }
-        await UserServices.saveTracks([track.id as string])
-            .then(() => {
-                setIsTrackSaved(false);
-            })
-            .finally(() => {
-                nprogress.complete();
-                queryClient.invalidateQueries(["artistTopTracks"]);
-            });
     };
 
     return (
@@ -135,10 +138,10 @@ const ArtistSongCard = ({ track, no }: { track: SpotifyTrack; no: number }) => {
             <div className="flex items-center space-x-3">
                 <button
                     type="button"
-                    className={`${!isTrackSaved ? "text-green-500" : "invisible group-hover:visible text-zinc-400 hover:text-zinc-200 hover:scale-105 "}`}
-                    onClick={handleSaveTrack}
+                    className={`${!track.isSaved ? "text-green-500" : "invisible group-hover:visible text-zinc-400 hover:text-zinc-200 hover:scale-105 "}`}
+                    onClick={() => handleSaveTrack(track)}
                 >
-                    {isTrackSaved ? (
+                    {track.isSaved ? (
                         <AddCircle size={18} />
                     ) : (
                         <TickCircle variant="Bold" size={18} />
