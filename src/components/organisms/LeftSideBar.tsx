@@ -4,10 +4,14 @@ import { Add, Category2 } from "iconsax-react";
 import { useEffect } from "react";
 import { useAuth } from "../../hooks/useAuth";
 import { useFollowedArtists } from "../../hooks/useCurrentUser";
-import ArtistCard from "../atoms/ArtistCard";
+import { useCurrentUserPlaylist } from "../../hooks/usePlaylist";
+import SidebarItem from "../molecules/SidebarItem";
 
 function LeftSideBar() {
     const { data: followedArtists } = useFollowedArtists();
+    const { data: currentUserPlaylists } = useCurrentUserPlaylist();
+    console.log(currentUserPlaylists);
+
     const { isAuth, isLoading } = useAuth(null);
 
     const { width } = useViewportSize();
@@ -87,8 +91,25 @@ function LeftSideBar() {
             {/* Playlist, Artists, Albums, Songs */}
 
             <div className="overflow-y-scroll h-full pb-24">
+                {currentUserPlaylists?.map((playlist) => (
+                    <SidebarItem
+                        key={playlist.id}
+                        id={playlist.id}
+                        name={playlist.name}
+                        type="playlist"
+                        images={playlist.images}
+                        sidebarOpened={leftSideBarOpened}
+                    />
+                ))}
                 {followedArtists?.map((artist) => (
-                    <ArtistCard key={artist.id} artist={artist} sidebarOpened={leftSideBarOpened} />
+                    <SidebarItem
+                        key={artist.id}
+                        id={artist.id}
+                        name={artist.name}
+                        type="artist"
+                        images={artist.images}
+                        sidebarOpened={leftSideBarOpened}
+                    />
                 ))}
             </div>
         </div>

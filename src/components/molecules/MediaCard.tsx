@@ -84,7 +84,6 @@ export default function MediaCard({
 }
 
 const MediaCardSkeleton = () => {
-    console.log("render");
     return (
         <div className="p-3 space-y-2 min-w-48">
             <Skeleton height={192} width="100%" radius="md" />
