@@ -130,7 +130,7 @@ const ArtistSongCard = ({ track, no }: { track: SpotifyTrack; no: number }) => {
     const handleSaveTrack = async (track: SpotifyTrack) => {
         try {
             nprogress.start();
-            if (!track.isSaved) {
+            if (track.isSaved) {
                 await UserServices.removeTracks([track.id]).then(() => {
                     queryClient.invalidateQueries(["artistTopTracks"]);
                 });
