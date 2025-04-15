@@ -190,19 +190,14 @@ const ArtistSongCard = ({ track, no }: { track: SpotifyTrack; no: number }) => {
 
 const ArtistAlbums = () => {
     const { artistId } = useParams();
-    const { data: albums, isLoading } = useArtistAlbums(artistId as string);
+    const { data: albums } = useArtistAlbums(artistId as string);
 
     return (
         <div className="px-5 my-10">
             <span className="text-2xl font-bold">Albums</span>
             <div className="flex overflow-x-scroll pb-5">
                 {albums?.map((album) => (
-                    <MediaCard
-                        key={album.id}
-                        title={album.name}
-                        isLoading={isLoading}
-                        imageSrc={album.images[1].url}
-                    />
+                    <MediaCard key={album.id} title={album.name} imageSrc={album.images[1].url} />
                 ))}
             </div>
         </div>
