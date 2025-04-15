@@ -10,8 +10,7 @@ declare global {
     }
 }
 
-export const usePlayer = () => {
-    const token = Cookies.get("access_token");
+export const usePlayer = (token: string) => {
     const [player, setPlayer] = useState<any>(undefined);
     const [currentTrack, setTrack] = useState<any>(null);
     const [deviceId, setDeviceId] = useState<string | null>(null);
@@ -97,7 +96,7 @@ export const usePlayer = () => {
         loadScript();
 
         window.onSpotifyWebPlaybackSDKReady = () => playerInit();
-    }, []);
+    }, [token]);
 
     // Activate current device
     useEffect(() => {
