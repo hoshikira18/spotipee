@@ -11,9 +11,6 @@ function RightSideBar() {
         if (width > 0 && width < 768) {
             setState("off");
         }
-        if (width > 0 && width > 768 && state === "off") {
-            setState("current-track");
-        }
     }, [width]);
 
     return (

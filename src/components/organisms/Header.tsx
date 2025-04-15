@@ -8,7 +8,7 @@ import MenuBurger from "../molecules/MenuBurger";
 import SearchBar from "../molecules/SearchBar";
 
 function Header() {
-    const { data: currentUser, isLoading } = useCurrentUser();
+    const { data: currentUser, isFetching: isLoading } = useCurrentUser();
 
     return (
         <header className="h-16 flex items-center justify-between space-x-3 p-2">

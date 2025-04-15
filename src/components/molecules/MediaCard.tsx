@@ -1,5 +1,6 @@
 import { cn } from "../../utils";
 import { Play } from "../atoms/icons";
+import { Skeleton } from "@mantine/core";
 
 export interface MediaCardProps {
     type?: "singer" | "album" | "playlists";
@@ -8,6 +9,7 @@ export interface MediaCardProps {
     title: string;
     subtitle?: string;
     onClick?: () => void;
+    isLoading?: boolean;
     className?: string;
 }
 
@@ -18,6 +20,7 @@ export default function MediaCard({
     title,
     subtitle,
     className = "",
+    isLoading = false,
 }: MediaCardProps) {
     const sizeClasses = {
         sm: {
@@ -36,6 +39,10 @@ export default function MediaCard({
             subtitle: "text-sm",
         },
     };
+
+    if (isLoading) {
+        return <MediaCardSkeleton />;
+    }
 
     return (
         <div
@@ -75,3 +82,16 @@ export default function MediaCard({
         </div>
     );
 }
+
+const MediaCardSkeleton = () => {
+    console.log("render");
+    return (
+        <div className="p-3 space-y-2 min-w-48">
+            <Skeleton height={192} width="100%" radius="md" />
+            <div className="space-y-1">
+                <Skeleton height={20} width="60%" radius="sm" />
+                <Skeleton height={16} width="40%" radius="sm" />
+            </div>
+        </div>
+    );
+};

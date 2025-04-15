@@ -5,7 +5,7 @@ import { CLIENT_ID, CLIENT_SECRET, REDIRECT_URI } from "../constants/auth";
 import { useCurrentUser } from "./useCurrentUser";
 
 export const useAuth = (code: string | null) => {
-    const { data: currentUser, isLoading } = useCurrentUser();
+    const { data: currentUser, isFetching: isLoading } = useCurrentUser();
 
     const [accessToken, setAccessToken] = useState<string | null>(
         Cookies.get("access_token") || null,

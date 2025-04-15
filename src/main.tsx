@@ -10,6 +10,7 @@ const reactQuery = new QueryClient({
             staleTime: 5 * 60 * 1000, // 5 minutes
             cacheTime: Number.POSITIVE_INFINITY,
             refetchOnWindowFocus: false,
+            retry: 1,
         },
     },
 });
