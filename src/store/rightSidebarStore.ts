@@ -8,7 +8,7 @@ interface RightSidebarStore {
 }
 
 export const useRightSidebarStore = create<RightSidebarStore>((set) => ({
-    state: "current-track",
+    state: "off",
     setState: (newState) =>
         set((state) => ({
             state: state.state !== "off" && state.state === newState ? "off" : newState,
