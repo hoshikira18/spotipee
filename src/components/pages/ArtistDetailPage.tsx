@@ -131,7 +131,7 @@ const ArtistSongCard = ({ track, no }: { track: SpotifyTrack; no: number }) => {
         try {
             nprogress.start();
             console.log(track);
-            if (track.isSaved) {
+            if (!track.isSaved) {
                 await UserServices.removeTracks([track.id]).then(() => {
                     queryClient.invalidateQueries(["artistTopTracks"]);
                 });
@@ -171,10 +171,10 @@ const ArtistSongCard = ({ track, no }: { track: SpotifyTrack; no: number }) => {
             <div className="flex items-center space-x-3">
                 <button
                     type="button"
-                    className={`${!track.isSaved ? "text-green-500" : "invisible group-hover:visible text-zinc-400 hover:text-zinc-200 hover:scale-105 "}`}
+                    className={`${track.isSaved ? "text-green-500" : "invisible group-hover:visible text-zinc-400 hover:text-zinc-200 hover:scale-105 "}`}
                     onClick={() => handleSaveTrack(track)}
                 >
-                    {track.isSaved ? (
+                    {!track.isSaved ? (
                         <AddCircle size={18} />
                     ) : (
                         <TickCircle variant="Bold" size={18} />
