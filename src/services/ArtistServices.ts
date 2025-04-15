@@ -8,18 +8,18 @@ const ArtistServices = {
         return data;
     },
     async getTopTracks(artistId: string): Promise<SpotifyTrack[]> {
-        const tracks = await instance
+        const tracks = (await instance
             .get(`/artists/${artistId}/top-tracks`)
-            .then(({ data }) => data.tracks) as SpotifyTrack[];
+            .then(({ data }) => data.tracks)) as SpotifyTrack[];
 
-        const data = await UserServices.checkUserSavedTracks(tracks.map(({ id }) => id))
-            .then((savedTracks) => {
-                console.log(savedTracks)
+        const data = await UserServices.checkUserSavedTracks(tracks.map(({ id }) => id)).then(
+            (savedTracks) => {
                 return tracks.map((track, index) => ({
                     ...track,
                     isSaved: savedTracks[index],
                 }));
-            });
+            },
+        );
         return data;
     },
     async getAlbums(artistId: string, limit = 4): Promise<SpotifyAlbum[]> {

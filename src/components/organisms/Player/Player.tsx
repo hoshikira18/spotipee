@@ -66,6 +66,7 @@ const PlayerControl = () => {
     if (!context) {
         return null;
     }
+
     const {
         playbackState,
         togglePlay,

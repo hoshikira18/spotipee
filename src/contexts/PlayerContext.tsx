@@ -1,7 +1,8 @@
 import { createContext } from "react";
 import { usePlayer } from "../hooks/usePlayer";
+import Cookies from "js-cookie";
 
-interface PlayerContextProps {
+interface PlayerProviderProps {
     children: React.ReactNode;
 }
 
@@ -24,7 +25,13 @@ export const PlayerContext = createContext<{
     handleVolumeChange: (volume: number) => void;
 } | null>(null);
 
-function PlayerProvider({ children }: PlayerContextProps) {
+function PlayerProvider({ children }: PlayerProviderProps) {
+    const token = Cookies.get("access_token");
+
+    if (!token) {
+        return children;
+    }
+
     const {
         playbackState,
         currentTrack,
@@ -35,7 +42,7 @@ function PlayerProvider({ children }: PlayerContextProps) {
         handleToggleShuffle,
         handleToggleRepeat,
         handleVolumeChange,
-    } = usePlayer();
+    } = usePlayer(token);
 
     const contextValues = {
         playbackState,
