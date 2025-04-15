@@ -130,7 +130,7 @@ const ArtistSongCard = ({ track, no }: { track: SpotifyTrack; no: number }) => {
     const handleSaveTrack = async (track: SpotifyTrack) => {
         try {
             nprogress.start();
-            if (track.isSaved) {
+            if (!track.isSaved) {
                 await UserServices.removeTracks([track.id]).then(() => {
                     queryClient.invalidateQueries(["artistTopTracks"]);
                 });
@@ -170,10 +170,10 @@ const ArtistSongCard = ({ track, no }: { track: SpotifyTrack; no: number }) => {
             <div className="flex items-center space-x-3">
                 <button
                     type="button"
-                    className={`${!track.isSaved ? "text-green-500" : "invisible group-hover:visible text-zinc-400 hover:text-zinc-200 hover:scale-105 "}`}
+                    className={`${track.isSaved ? "text-green-500" : "invisible group-hover:visible text-zinc-400 hover:text-zinc-200 hover:scale-105 "}`}
                     onClick={() => handleSaveTrack(track)}
                 >
-                    {track.isSaved ? (
+                    {!track.isSaved ? (
                         <AddCircle size={18} />
                     ) : (
                         <TickCircle variant="Bold" size={18} />
@@ -189,19 +189,14 @@ const ArtistSongCard = ({ track, no }: { track: SpotifyTrack; no: number }) => {
 
 const ArtistAlbums = () => {
     const { artistId } = useParams();
-    const { data: albums, isLoading } = useArtistAlbums(artistId as string);
+    const { data: albums } = useArtistAlbums(artistId as string);
 
     return (
         <div className="px-5 my-10">
             <span className="text-2xl font-bold">Albums</span>
             <div className="flex overflow-x-scroll pb-5">
                 {albums?.map((album) => (
-                    <MediaCard
-                        key={album.id}
-                        title={album.name}
-                        isLoading={isLoading}
-                        imageSrc={album.images[1].url}
-                    />
+                    <MediaCard key={album.id} title={album.name} imageSrc={album.images[1].url} />
                 ))}
             </div>
         </div>
