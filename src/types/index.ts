@@ -1,3 +1,9 @@
+type Image = {
+    url: string;
+    height: number;
+    width: number;
+};
+
 type User = {
     country: string;
     display_name: string;
@@ -106,4 +112,40 @@ type SpotifyAlbum = {
     uri: string;
 };
 
-export type { User, SpotifyArtist, SpotifyTrack, SpotifyAlbum };
+type SpotifyPlaylist = {
+    collaborative: boolean;
+    description: string;
+    external_urls: {
+        spotify: string;
+    };
+    href: string;
+    id: string;
+    images: [
+        {
+            url: string;
+            height: number;
+            width: number;
+        },
+    ];
+    name: string;
+    owner: {
+        external_urls: {
+            spotify: string;
+        };
+        href: string;
+        id: string;
+        type: "user";
+        uri: string;
+        display_name: string;
+    };
+    public: false;
+    snapshot_id: string;
+    tracks: {
+        href: string;
+        total: number;
+    };
+    type: string;
+    uri: string;
+};
+
+export type { User, SpotifyArtist, SpotifyTrack, SpotifyAlbum, SpotifyPlaylist, Image };

@@ -1,15 +1,10 @@
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
+import type { Image } from "../types";
 
 export function cn(...inputs: ClassValue[]) {
     return twMerge(clsx(inputs));
 }
-
-type Image = {
-    url: string;
-    height: number;
-    width: number;
-};
 
 export const getImage = (size: number, images?: Image[]) => {
     return images?.find((img) => img.height === size)?.url;

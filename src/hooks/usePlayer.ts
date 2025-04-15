@@ -104,7 +104,7 @@ export const usePlayer = (token: string) => {
             instance
                 .put("me/player", {
                     device_ids: [deviceId],
-                    play: true,
+                    play: false,
                 })
                 .then(() => {
                     console.log("Device is active and ready to play");
