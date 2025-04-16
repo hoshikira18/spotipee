@@ -13,6 +13,8 @@ import { useElementScroll } from "../../hooks/useElementScroll";
 import AuthWrapper from "../templates/AuthWrapper";
 import { TrackContext } from "../../contexts/TrackContext";
 import { notifications } from "@mantine/notifications";
+import VerifiedBadgeIcon from "../atoms/icons/VerifyBadgeIcon";
+import FollowArtistButton from "../atoms/FollowArtistButton";
 
 function ArtistDetailPage() {
     const { artistId } = useParams();
@@ -100,6 +102,10 @@ function ArtistDetailPage() {
                 <div className="h-full absolute inset-0">
                     <div className="relative h-1/2 overflow-hidden">
                         <div className="absolute inset-0 py-4 rounded-t-md flex flex-col justify-end bg-gradient-to-t from-zinc-900/80 to-transparent space-y-4">
+                            <span className="px-4 flex items-center space-x-2">
+                                <VerifiedBadgeIcon color="#55aaff" />
+                                <span data-encore-id="text">Verified Artist</span>
+                            </span>
                             <h1 className="text-6xl font-bold text-white px-4">{artist?.name}</h1>
                             <p className="px-4">1,692,463 monthly listeners</p>
                         </div>
@@ -121,14 +127,8 @@ function ArtistDetailPage() {
                         >
                             <Play />
                         </button>
-                        <button
-                            type="button"
-                            className="border-1 border-zinc-400 rounded-full px-4 py-1"
-                        >
-                            <span className="text-sm font-[700] font-spotify text-white">
-                                Following
-                            </span>
-                        </button>
+
+                        <FollowArtistButton artistId={artist?.id} />
                     </div>
                     <div className="px-5 mt-8">
                         <span className="text-2xl font-bold">Popular</span>
