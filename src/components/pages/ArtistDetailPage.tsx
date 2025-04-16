@@ -148,22 +148,24 @@ const ArtistSongCard = ({ track, no }: { track: SpotifyTrack; no: number }) => {
     if (!trackContext) {
         throw new Error("TrackContext is not available");
     }
-    const { setSavedTracks } = trackContext;
+    const { setSavedTracks, savedTracks } = trackContext;
 
     const handleSaveTrack = async (track: SpotifyTrack) => {
         try {
             nprogress.start();
             if (track.isSaved) {
                 await UserServices.removeTracks([track.id]).then(() => {
-                    setSavedTracks((prev: SpotifyTrack[]) =>
-                        prev.filter((savedTrack) => savedTrack.id !== track.id),
+                    const updatedTracks = savedTracks.filter(
+                        (savedTrack) => savedTrack.id !== track.id,
                     );
+                    setSavedTracks(updatedTracks);
                 });
                 return;
             }
             await UserServices.saveTracks([track.id as string]).finally(() => {
                 nprogress.complete();
-                setSavedTracks((prev: SpotifyTrack[]) => [...prev, track]);
+                const updatedTracks = [...savedTracks, track];
+                setSavedTracks(updatedTracks);
             });
         } catch (error) {
             console.error("Error saving track:", error);
