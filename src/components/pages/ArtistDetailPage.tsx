@@ -9,10 +9,10 @@ import MediaCard from "../molecules/MediaCard";
 import { AddCircle, TickCircle } from "iconsax-react";
 import UserServices from "../../services/UserServices";
 import { nprogress } from "@mantine/nprogress";
-import { useQueryClient } from "@tanstack/react-query";
 import { useElementScroll } from "../../hooks/useElementScroll";
 import AuthWrapper from "../templates/AuthWrapper";
 import { TrackContext } from "../../contexts/TrackContext";
+import { notifications } from "@mantine/notifications";
 
 function ArtistDetailPage() {
     const { artistId } = useParams();
@@ -46,7 +46,7 @@ function ArtistDetailPage() {
             >
                 <div
                     className={cn(
-                        "sticky top-0 right-0 left-0 z-10 py-2 px-3 flex items-center transition-opacity bg-stone-900 opacity-0",
+                        "sticky top-0 right-0 left-0 z-10 py-2 px-3 flex items-center transition-opacity duration-200 bg-stone-900 opacity-0",
                         {
                             "opacity-10": top > 10,
                             "opacity-40": top > 20,
@@ -138,8 +138,6 @@ function ArtistDetailPage() {
 export default ArtistDetailPage;
 
 const ArtistSongCard = ({ track, no }: { track: SpotifyTrack; no: number }) => {
-    const queryClient = useQueryClient();
-
     const handlePlayTrack = async () => {
         await TrackServices.play([track.uri] as string[]);
     };
@@ -154,19 +152,35 @@ const ArtistSongCard = ({ track, no }: { track: SpotifyTrack; no: number }) => {
         try {
             nprogress.start();
             if (track.isSaved) {
-                await UserServices.removeTracks([track.id]).then(() => {
-                    const updatedTracks = savedTracks.filter(
-                        (savedTrack) => savedTrack.id !== track.id,
-                    );
-                    setSavedTracks(updatedTracks);
-                });
+                await UserServices.removeTracks([track.id])
+                    .then(() => {
+                        const updatedTracks = savedTracks.filter(
+                            (savedTrack) => savedTrack.id !== track.id,
+                        );
+                        setSavedTracks(updatedTracks);
+                    })
+                    .catch(() => {
+                        notifications.show({
+                            message: "Failed to remove track from saved tracks",
+                            color: "red",
+                        });
+                    });
                 return;
             }
-            await UserServices.saveTracks([track.id as string]).finally(() => {
-                nprogress.complete();
-                const updatedTracks = [...savedTracks, track];
-                setSavedTracks(updatedTracks);
-            });
+            await UserServices.saveTracks([track.id as string])
+                .then(() => {
+                    const updatedTracks = [...savedTracks, track];
+                    setSavedTracks(updatedTracks);
+                })
+                .catch(() => {
+                    notifications.show({
+                        message: "Failed to save track",
+                        color: "red",
+                    });
+                })
+                .finally(() => {
+                    nprogress.complete();
+                });
         } catch (error) {
             console.error("Error saving track:", error);
         } finally {
