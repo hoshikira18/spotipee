@@ -53,12 +53,12 @@ function ArtistDetailPage() {
         }
         const headerHeight = 64;
         const topbarHeight = 64;
-        const scrollTop = top + headerHeight + topbarHeight + 50;
+        const scrollTop = top + headerHeight + topbarHeight + 60;
         const opacity = Math.max(
             0,
             Math.min(1, (scrollTop - playButtonRef.current.offsetTop) / 50),
         );
-        return `opacity-${opacity}`;
+        return opacity;
     };
 
     return (
@@ -69,9 +69,9 @@ function ArtistDetailPage() {
             >
                 <div
                     className={cn(
-                        "sticky top-0 right-0 left-0 z-10 py-2 px-3 bg-stone-900 transition-opacity duration-200",
-                        calOpacity(),
+                        "sticky top-0 right-0 left-0 z-10 py-2 px-3 bg-stone-900 transition-opacity",
                     )}
+                    style={{ opacity: calOpacity() }}
                 >
                     <div
                         className={cn(
