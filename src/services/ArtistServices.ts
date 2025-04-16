@@ -13,7 +13,7 @@ const ArtistServices = {
 
         return tracks;
     },
-    async getAlbums(artistId: string, limit = 4): Promise<SpotifyAlbum[]> {
+    async getAlbums(artistId: string, limit = 10): Promise<SpotifyAlbum[]> {
         const data = await instance
             .get(`/artists/${artistId}/albums?limit=${limit}`)
             .then(({ data }) => data.items);

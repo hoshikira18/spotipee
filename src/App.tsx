@@ -14,6 +14,7 @@ import ArtistDetailPage from "./components/pages/ArtistDetailPage";
 import { useIsFetching } from "@tanstack/react-query";
 import PlayerProvider from "./contexts/PlayerContext";
 import TrackProvider from "./contexts/TrackContext";
+import "./App.css";
 
 const theme = createTheme({
     colors: {

@@ -55,7 +55,7 @@ function ArtistDetailPage() {
         }
         const headerHeight = 64;
         const topbarHeight = 64;
-        const scrollTop = top + headerHeight + topbarHeight + 60;
+        const scrollTop = top + headerHeight + topbarHeight;
         const opacity = Math.max(
             0,
             Math.min(1, (scrollTop - playButtonRef.current.offsetTop) / 50),

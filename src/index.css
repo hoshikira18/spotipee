@@ -1,12 +1,7 @@
 @import "tailwindcss";
 
-@font-face {
-    font-family: CircularSpotify;
-    src: url("/src/assets/fonts/CircularSpotifyText-Book.otf");
-}
-
 @theme {
-    --font-spotify: CircularSpotify, "sans-serif";
+    --font-spotify: "Inter", "sans-serif";
 
     --animate-fade-in: fade-in;
 
