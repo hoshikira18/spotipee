@@ -65,6 +65,15 @@ const UserServices = {
             },
         });
     },
+    async followArtist(artistId: string, type: "artist" | "user"): Promise<void> {
+        await instance.put(`/me/following?ids=${artistId}&type=${type}`, {
+            ids: [artistId],
+            type,
+        });
+    },
+    async unfollowArtist(artistId: string, type: "artist" | "user"): Promise<void> {
+        await instance.delete(`/me/following?ids=${artistId}&type=${type}`);
+    },
 };
 
 export default UserServices;
