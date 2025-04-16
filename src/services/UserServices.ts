@@ -35,7 +35,7 @@ const UserServices = {
             ids,
         });
     },
-    async getSavedTracks(): Promise<string[]> {
+    async getSavedTracks(): Promise<SpotifyTrack[]> {
         const data = await instance
             .get("/me/tracks", {
                 params: {
@@ -43,8 +43,8 @@ const UserServices = {
                 },
             })
             .then(({ data: { items } }) => {
-                const ids = items.map(({ track }: { track: SpotifyTrack }) => track.id);
-                return ids;
+                const tracks = items.map(({ track }: { track: SpotifyTrack }) => track);
+                return tracks;
             });
         return data;
     },

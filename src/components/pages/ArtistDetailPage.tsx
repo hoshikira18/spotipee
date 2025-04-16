@@ -3,7 +3,7 @@ import { useArtist, useArtistAlbums, useArtistTopTracks } from "../../hooks/useA
 import { Play } from "../atoms/icons";
 import type { SpotifyTrack } from "../../types";
 import { cn, convertMillisecondsToMinutes } from "../../utils";
-import { useRef, useState } from "react";
+import { useContext, useRef, useState } from "react";
 import TrackServices from "../../services/TrackServices";
 import MediaCard from "../molecules/MediaCard";
 import { AddCircle, TickCircle } from "iconsax-react";
@@ -12,6 +12,7 @@ import { nprogress } from "@mantine/nprogress";
 import { useQueryClient } from "@tanstack/react-query";
 import { useElementScroll } from "../../hooks/useElementScroll";
 import AuthWrapper from "../templates/AuthWrapper";
+import { TrackContext } from "../../contexts/TrackContext";
 
 function ArtistDetailPage() {
     const { artistId } = useParams();
@@ -20,6 +21,22 @@ function ArtistDetailPage() {
     const [isShowMore, setIsShowMore] = useState(false);
     const ref = useRef<HTMLDivElement>(null);
     const { top } = useElementScroll(ref);
+
+    const trackContext = useContext(TrackContext);
+
+    if (!trackContext) {
+        throw new Error("TrackContext is not available");
+    }
+
+    const { savedTracks } = trackContext;
+
+    const mapSavedTracks = topTracks?.map((track) => {
+        const isSaved = savedTracks.some((savedTrack) => savedTrack.id === track.id);
+        return {
+            ...track,
+            isSaved,
+        };
+    });
 
     return (
         <AuthWrapper>
@@ -87,7 +104,7 @@ function ArtistDetailPage() {
                     <div className="px-5 mt-8">
                         <span className="text-2xl font-bold">Popular</span>
                         <div>
-                            {topTracks?.slice(0, isShowMore ? 10 : 5).map((track, index) => (
+                            {mapSavedTracks?.slice(0, isShowMore ? 10 : 5).map((track, index) => (
                                 <ArtistSongCard key={track.id} track={track} no={index} />
                             ))}
                         </div>
@@ -127,18 +144,26 @@ const ArtistSongCard = ({ track, no }: { track: SpotifyTrack; no: number }) => {
         await TrackServices.play([track.uri] as string[]);
     };
 
+    const trackContext = useContext(TrackContext);
+    if (!trackContext) {
+        throw new Error("TrackContext is not available");
+    }
+    const { setSavedTracks } = trackContext;
+
     const handleSaveTrack = async (track: SpotifyTrack) => {
         try {
             nprogress.start();
             if (track.isSaved) {
                 await UserServices.removeTracks([track.id]).then(() => {
-                    queryClient.invalidateQueries(["artistTopTracks"]);
+                    setSavedTracks((prev: SpotifyTrack[]) =>
+                        prev.filter((savedTrack) => savedTrack.id !== track.id),
+                    );
                 });
                 return;
             }
             await UserServices.saveTracks([track.id as string]).finally(() => {
                 nprogress.complete();
-                queryClient.invalidateQueries(["artistTopTracks"]);
+                setSavedTracks((prev: SpotifyTrack[]) => [...prev, track]);
             });
         } catch (error) {
             console.error("Error saving track:", error);
