@@ -9,25 +9,23 @@ import MediaCard from "../molecules/MediaCard";
 import { AddCircle, TickCircle } from "iconsax-react";
 import UserServices from "../../services/UserServices";
 import { nprogress } from "@mantine/nprogress";
-import { useQueryClient } from "@tanstack/react-query";
 import { useElementScroll } from "../../hooks/useElementScroll";
 import AuthWrapper from "../templates/AuthWrapper";
 import { TrackContext } from "../../contexts/TrackContext";
+import { notifications } from "@mantine/notifications";
 
 function ArtistDetailPage() {
     const { artistId } = useParams();
     const { data: artist } = useArtist(artistId as string);
     const { data: topTracks } = useArtistTopTracks(artistId as string);
     const [isShowMore, setIsShowMore] = useState(false);
+
     const ref = useRef<HTMLDivElement>(null);
+    const playButtonRef = useRef<HTMLDivElement>(null);
     const { top } = useElementScroll(ref);
 
     const trackContext = useContext(TrackContext);
-
-    if (!trackContext) {
-        throw new Error("TrackContext is not available");
-    }
-
+    if (!trackContext) throw new Error("TrackContext is not available");
     const { savedTracks } = trackContext;
 
     const mapSavedTracks = topTracks?.map((track) => {
@@ -38,6 +36,31 @@ function ArtistDetailPage() {
         };
     });
 
+    const isPlayButtonVisible = () => {
+        if (!playButtonRef.current) {
+            return false;
+        }
+        const headerHeight = 64;
+        const topbarHeight = 64;
+        return (
+            playButtonRef.current.getBoundingClientRect().bottom < headerHeight + topbarHeight + 50
+        );
+    };
+
+    const calOpacity = () => {
+        if (!playButtonRef.current) {
+            return 0;
+        }
+        const headerHeight = 64;
+        const topbarHeight = 64;
+        const scrollTop = top + headerHeight + topbarHeight + 50;
+        const opacity = Math.max(
+            0,
+            Math.min(1, (scrollTop - playButtonRef.current.offsetTop) / 50),
+        );
+        return `opacity-${opacity}`;
+    };
+
     return (
         <AuthWrapper>
             <div
@@ -46,27 +69,33 @@ function ArtistDetailPage() {
             >
                 <div
                     className={cn(
-                        "sticky top-0 right-0 left-0 z-10 py-2 px-3 flex items-center transition-opacity bg-stone-900 opacity-0",
-                        {
-                            "opacity-10": top > 10,
-                            "opacity-40": top > 20,
-                            "opacity-70": top > 50,
-                            "opacity-100": top >= 200,
-                        },
+                        "sticky top-0 right-0 left-0 z-10 py-2 px-3 bg-stone-900 transition-opacity duration-200",
+                        calOpacity(),
                     )}
                 >
-                    <button
-                        type="button"
-                        className="min-w-12 h-12 flex items-center justify-center bg-green-500 rounded-full hover:bg-green-400 hover:scale-105 text-black"
-                        onClick={() => {
-                            if (topTracks?.length) {
-                                TrackServices.play(topTracks.map((track) => track.uri || ""));
-                            }
-                        }}
+                    <div
+                        className={cn(
+                            "flex items-center transition-opacity duration-200",
+                            isPlayButtonVisible() ? "opacity-100" : "opacity-0",
+                        )}
                     >
-                        <Play />
-                    </button>
-                    <span className={"text-3xl font-bold text-zinc-200 px-4"}>{artist?.name}</span>
+                        <button
+                            type="button"
+                            className={cn(
+                                "min-w-12 h-12 flex items-center justify-center bg-green-500 rounded-full hover:bg-green-400 hover:scale-105 text-black",
+                            )}
+                            onClick={() => {
+                                if (topTracks?.length) {
+                                    TrackServices.play(topTracks.map((track) => track.uri || ""));
+                                }
+                            }}
+                        >
+                            <Play />
+                        </button>
+                        <span className={"text-3xl font-bold text-zinc-200 px-4"}>
+                            {artist?.name}
+                        </span>
+                    </div>
                 </div>
                 <div className="h-full absolute inset-0">
                     <div className="relative h-1/2 overflow-hidden">
@@ -80,7 +109,7 @@ function ArtistDetailPage() {
                             className="w-full h-full object-cover rounded-t-md"
                         />
                     </div>
-                    <div className="flex items-center space-x-3 p-5">
+                    <div className="flex items-center space-x-3 p-5" ref={playButtonRef}>
                         <button
                             type="button"
                             className="min-w-14 h-14 flex items-center justify-center transition-all duration-150 bg-green-500 rounded-full hover:bg-green-400 hover:scale-105 text-black"
@@ -138,8 +167,6 @@ function ArtistDetailPage() {
 export default ArtistDetailPage;
 
 const ArtistSongCard = ({ track, no }: { track: SpotifyTrack; no: number }) => {
-    const queryClient = useQueryClient();
-
     const handlePlayTrack = async () => {
         await TrackServices.play([track.uri] as string[]);
     };
@@ -154,19 +181,35 @@ const ArtistSongCard = ({ track, no }: { track: SpotifyTrack; no: number }) => {
         try {
             nprogress.start();
             if (track.isSaved) {
-                await UserServices.removeTracks([track.id]).then(() => {
-                    const updatedTracks = savedTracks.filter(
-                        (savedTrack) => savedTrack.id !== track.id,
-                    );
-                    setSavedTracks(updatedTracks);
-                });
+                await UserServices.removeTracks([track.id])
+                    .then(() => {
+                        const updatedTracks = savedTracks.filter(
+                            (savedTrack) => savedTrack.id !== track.id,
+                        );
+                        setSavedTracks(updatedTracks);
+                    })
+                    .catch(() => {
+                        notifications.show({
+                            message: "Failed to remove track from saved tracks",
+                            color: "red",
+                        });
+                    });
                 return;
             }
-            await UserServices.saveTracks([track.id as string]).finally(() => {
-                nprogress.complete();
-                const updatedTracks = [...savedTracks, track];
-                setSavedTracks(updatedTracks);
-            });
+            await UserServices.saveTracks([track.id as string])
+                .then(() => {
+                    const updatedTracks = [...savedTracks, track];
+                    setSavedTracks(updatedTracks);
+                })
+                .catch(() => {
+                    notifications.show({
+                        message: "Failed to save track",
+                        color: "red",
+                    });
+                })
+                .finally(() => {
+                    nprogress.complete();
+                });
         } catch (error) {
             console.error("Error saving track:", error);
         } finally {

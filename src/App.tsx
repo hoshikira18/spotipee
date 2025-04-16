@@ -1,6 +1,8 @@
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import "@mantine/core/styles.css";
 import "@mantine/nprogress/styles.css";
+import "@mantine/notifications/styles.css";
+import { Notifications } from "@mantine/notifications";
 import { Button, MantineProvider, createTheme } from "@mantine/core";
 import { NavigationProgress, nprogress } from "@mantine/nprogress";
 import { useEffect } from "react";
@@ -80,6 +82,7 @@ function App() {
         <MantineProvider theme={theme} defaultColorScheme="dark">
             <TrackProvider>
                 <PlayerProvider>
+                    <Notifications position="top-right" />
                     <NavigationProgress />
                     <RouterProvider router={router} />
                 </PlayerProvider>
