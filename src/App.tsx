@@ -11,6 +11,7 @@ import { generateRandomString } from "./utils/auth";
 import ArtistDetailPage from "./components/pages/ArtistDetailPage";
 import { useIsFetching } from "@tanstack/react-query";
 import PlayerProvider from "./contexts/PlayerContext";
+import TrackProvider from "./contexts/TrackContext";
 
 const theme = createTheme({
     colors: {
@@ -77,10 +78,12 @@ function App() {
 
     return (
         <MantineProvider theme={theme} defaultColorScheme="dark">
-            <PlayerProvider>
-                <NavigationProgress />
-                <RouterProvider router={router} />
-            </PlayerProvider>
+            <TrackProvider>
+                <PlayerProvider>
+                    <NavigationProgress />
+                    <RouterProvider router={router} />
+                </PlayerProvider>
+            </TrackProvider>
         </MantineProvider>
     );
 }
