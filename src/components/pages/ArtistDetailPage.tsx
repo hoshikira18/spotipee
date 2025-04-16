@@ -19,15 +19,13 @@ function ArtistDetailPage() {
     const { data: artist } = useArtist(artistId as string);
     const { data: topTracks } = useArtistTopTracks(artistId as string);
     const [isShowMore, setIsShowMore] = useState(false);
+
     const ref = useRef<HTMLDivElement>(null);
+    const playButtonRef = useRef<HTMLDivElement>(null);
     const { top } = useElementScroll(ref);
 
     const trackContext = useContext(TrackContext);
-
-    if (!trackContext) {
-        throw new Error("TrackContext is not available");
-    }
-
+    if (!trackContext) throw new Error("TrackContext is not available");
     const { savedTracks } = trackContext;
 
     const mapSavedTracks = topTracks?.map((track) => {
@@ -38,6 +36,31 @@ function ArtistDetailPage() {
         };
     });
 
+    const isPlayButtonVisible = () => {
+        if (!playButtonRef.current) {
+            return false;
+        }
+        const headerHeight = 64;
+        const topbarHeight = 64;
+        return (
+            playButtonRef.current.getBoundingClientRect().bottom < headerHeight + topbarHeight + 50
+        );
+    };
+
+    const calOpacity = () => {
+        if (!playButtonRef.current) {
+            return 0;
+        }
+        const headerHeight = 64;
+        const topbarHeight = 64;
+        const scrollTop = top + headerHeight + topbarHeight + 50;
+        const opacity = Math.max(
+            0,
+            Math.min(1, (scrollTop - playButtonRef.current.offsetTop) / 50),
+        );
+        return `opacity-${opacity}`;
+    };
+
     return (
         <AuthWrapper>
             <div
@@ -46,27 +69,33 @@ function ArtistDetailPage() {
             >
                 <div
                     className={cn(
-                        "sticky top-0 right-0 left-0 z-10 py-2 px-3 flex items-center transition-opacity duration-200 bg-stone-900 opacity-0",
-                        {
-                            "opacity-10": top > 10,
-                            "opacity-40": top > 20,
-                            "opacity-70": top > 50,
-                            "opacity-100": top >= 200,
-                        },
+                        "sticky top-0 right-0 left-0 z-10 py-2 px-3 bg-stone-900 transition-opacity duration-200",
+                        calOpacity(),
                     )}
                 >
-                    <button
-                        type="button"
-                        className="min-w-12 h-12 flex items-center justify-center bg-green-500 rounded-full hover:bg-green-400 hover:scale-105 text-black"
-                        onClick={() => {
-                            if (topTracks?.length) {
-                                TrackServices.play(topTracks.map((track) => track.uri || ""));
-                            }
-                        }}
+                    <div
+                        className={cn(
+                            "flex items-center transition-opacity duration-200",
+                            isPlayButtonVisible() ? "opacity-100" : "opacity-0",
+                        )}
                     >
-                        <Play />
-                    </button>
-                    <span className={"text-3xl font-bold text-zinc-200 px-4"}>{artist?.name}</span>
+                        <button
+                            type="button"
+                            className={cn(
+                                "min-w-12 h-12 flex items-center justify-center bg-green-500 rounded-full hover:bg-green-400 hover:scale-105 text-black",
+                            )}
+                            onClick={() => {
+                                if (topTracks?.length) {
+                                    TrackServices.play(topTracks.map((track) => track.uri || ""));
+                                }
+                            }}
+                        >
+                            <Play />
+                        </button>
+                        <span className={"text-3xl font-bold text-zinc-200 px-4"}>
+                            {artist?.name}
+                        </span>
+                    </div>
                 </div>
                 <div className="h-full absolute inset-0">
                     <div className="relative h-1/2 overflow-hidden">
@@ -80,7 +109,7 @@ function ArtistDetailPage() {
                             className="w-full h-full object-cover rounded-t-md"
                         />
                     </div>
-                    <div className="flex items-center space-x-3 p-5">
+                    <div className="flex items-center space-x-3 p-5" ref={playButtonRef}>
                         <button
                             type="button"
                             className="min-w-14 h-14 flex items-center justify-center transition-all duration-150 bg-green-500 rounded-full hover:bg-green-400 hover:scale-105 text-black"
