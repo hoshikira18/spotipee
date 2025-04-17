@@ -1,45 +1,45 @@
-import { Table } from "@mantine/core";
-import { cn } from "../../utils";
+import { Table, type TableProps } from "@mantine/core";
 
-interface CustomTableProps {
+interface CustomTableProps extends TableProps {
     children?: React.ReactNode;
 }
-interface HeadProps {
+interface HeadProps extends React.ComponentPropsWithoutRef<'thead'> {
     children?: React.ReactNode;
 }
-interface BodyProps {
+interface BodyProps extends React.ComponentPropsWithoutRef<'tbody'> {
     children?: React.ReactNode;
 }
-interface RowProps {
-    children?: React.ReactNode;
-    className?: string;
-}
-interface HeaderCellProps {
+interface RowProps extends React.ComponentPropsWithoutRef<'tr'> {
     children?: React.ReactNode;
 }
-interface CellProps {
+interface HeaderCellProps extends React.ComponentPropsWithoutRef<'th'> {
+    children?: React.ReactNode;
+}
+interface CellProps extends React.ComponentPropsWithoutRef<'td'> {
     children?: React.ReactNode;
 }
 
 const CustomTable = ({ children, ...props }: CustomTableProps) => {
     return (
-        <Table striped highlightOnHover withTableBorder withColumnBorders {...props}>
+        <Table highlightOnHover {...props}>
             {children}
         </Table>
     );
 };
 
-const Head = ({ children }: HeadProps) => <Table.Thead>{children}</Table.Thead>;
+const Head = ({ children, ...props }: HeadProps) => <Table.Thead {...props}>{children}</Table.Thead>;
 
-const Body = ({ children }: BodyProps) => <Table.Tbody>{children}</Table.Tbody>;
+const Body = ({ children, ...props }: BodyProps) => <Table.Tbody {...props}>{children}</Table.Tbody>;
 
-const Row = ({ children, className }: RowProps) => (
-    <Table.Tr className={cn(className)}>{children}</Table.Tr>
+const Row = ({ children, ...props }: RowProps) => (
+    <Table.Tr  {...props} style={{
+        border: "none",
+    }}>{children}</Table.Tr>
 );
 
-const HeaderCell = ({ children }: HeaderCellProps) => <Table.Th>{children}</Table.Th>;
+const HeaderCell = ({ children, ...props }: HeaderCellProps) => <Table.Th {...props}>{children}</Table.Th>;
 
-const Cell = ({ children }: CellProps) => <Table.Td>{children}</Table.Td>;
+const Cell = ({ children, ...props }: CellProps) => <Table.Td {...props}>{children}</Table.Td>;
 
 CustomTable.Head = Head;
 CustomTable.Body = Body;

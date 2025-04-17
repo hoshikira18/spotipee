@@ -1,6 +1,6 @@
 import { useParams } from "react-router-dom";
 import { useArtist, useArtistAlbums, useArtistTopTracks } from "../../hooks/useArtist";
-import { Play } from "../atoms/icons";
+import { Pause, Play } from "../atoms/icons";
 import type { SpotifyTrack } from "../../types";
 import { cn, convertMillisecondsToMinutes } from "../../utils";
 import { createContext, useContext, useEffect, useRef, useState } from "react";
@@ -20,6 +20,8 @@ import { useQueryClient } from "@tanstack/react-query";
 import { useDebouncedCallback } from "@mantine/hooks";
 import ArtistOptions from "../atoms/ArtistOptionsButton";
 import CustomTable from "../organisms/CustomTable";
+import TrackCell from "../atoms/TrackCell";
+import { PlayerContext } from "../../contexts/PlayerContext";
 
 export const ArtistDetailContext = createContext<{
     artistId: string | undefined;
@@ -163,7 +165,7 @@ function ArtistDetailPage() {
                     </div>
                     <div className="h-full absolute inset-0">
                         <div className="relative h-1/2 overflow-hidden">
-                            <div className="absolute inset-0 py-4 rounded-t-md flex flex-col justify-end bg-gradient-to-t from-zinc-900/80 to-transparent space-y-4">
+                            <div className="absolute inset-0 py-4 rounded-t-md flex flex-col justify-end bg-gradient-to-t from-zinc-900/80 to-transparent space-y-4 ">
                                 <span className="px-4 flex items-center space-x-2">
                                     <VerifiedBadgeIcon color="#55aaff" />
                                     <span data-encore-id="text">Verified Artist</span>
@@ -197,9 +199,13 @@ function ArtistDetailPage() {
                             <FollowArtistButton />
                             <ArtistOptions />
                         </div>
-                        <div className="mt-8">
+
+                        {/* Top Tracks table */}
+                        <div className="mt-8 px-5">
                             <span className="text-2xl font-bold">Popular</span>
-                            <TopTracksTable />
+                            <div className="mt-5">
+                                <TopTracksTable />
+                            </div>
 
                             <div className="text-zinc-400 text-sm my-2">
                                 {isShowMore ? (
@@ -231,29 +237,24 @@ function ArtistDetailPage() {
 
 export default ArtistDetailPage;
 
-const ArtistSongCard = ({ track, no }: { track: SpotifyTrack; no: number }) => {
-    return (
-        <div className="flex items-center justify-between space-x-3 px-3 py-2 hover:bg-zinc-700/60 rounded-md group">
-            <div className="flex items-center space-x-3">
-                <p className="text-sm text-zinc-400 w-10">
-                    {convertMillisecondsToMinutes(track.duration_ms)}
-                </p>
-            </div>
-        </div>
-    );
-};
-
 const TopTracksTable = () => {
     const { mapSavedTracks, isShowMore } = useContext(ArtistDetailContext) || {};
+
     const handlePlayTrack = async (track: SpotifyTrack) => {
-        await TrackServices.play([track.uri] as string[]);
+        playbackState.isPaused && currentTrack?.id === track.id
+            ? togglePlay() :
+            await TrackServices.play([track.uri] as string[]).then(() => {
+                setCurrentPlayingTrack(track)
+            })
     };
 
     const trackContext = useContext(TrackContext);
-    if (!trackContext) {
-        throw new Error("TrackContext is not available");
+    const playerContext = useContext(PlayerContext);
+    if (!trackContext || !playerContext) {
+        throw new Error("TrackContext or PlayerContext is not available");
     }
-    const { setSavedTracks, savedTracks } = trackContext;
+    const { setSavedTracks, savedTracks, currentPlayingTrack, setCurrentPlayingTrack } = trackContext;
+    const { currentTrack, togglePlay, playbackState } = playerContext
 
     const handleSaveTrack = async (track: SpotifyTrack) => {
         try {
@@ -294,50 +295,64 @@ const TopTracksTable = () => {
             nprogress.complete();
         }
     };
+
+    const isPlaying = (track: SpotifyTrack) => {
+        if (!currentTrack) return false;
+        return currentTrack.id === track.id;
+    }
     return (
         <CustomTable>
             <CustomTable.Body>
                 {mapSavedTracks?.slice(0, isShowMore ? 10 : 5).map((track, index) => (
                     <CustomTable.Row key={track.id} className="group">
-                        <CustomTable.Cell>
+                        <CustomTable.Cell width={20}>
                             <div className="flex items-center space-x-3">
-                                <span className="block w-5 text-center text-base text-zinc-200 group-hover:hidden">
-                                    {index + 1}
-                                </span>
+                                {
+                                    isPlaying(track) && !playbackState.isPaused ? (
+                                        <div className="group">
+                                            <img width="14" height="14" alt="" src="https://open.spotifycdn.com/cdn/images/equaliser-green.f8937a92.svg" className="group-hover:hidden" />
+                                            <button onClick={togglePlay} type="button" className="hidden group-hover:block">
+                                                <Pause />
+                                            </button>
+                                        </div>
+                                    ) : (
+                                        <div className={isPlaying(track) ? "text-green-400" : "text-zinc-200"}>
+                                            <span className="block w-5 text-center text-base group-hover:hidden">
+                                                {index + 1}
+                                            </span>
+                                            <button
+                                                type="button"
+                                                className="w-5 text-center text-base hidden group-hover:block"
+                                                onClick={() => handlePlayTrack(track)}
+                                            >
+                                                <Play />
+                                            </button>
+                                        </div>
+                                    )
+                                }
+                            </div>
+                        </CustomTable.Cell>
+                        <CustomTable.Cell className={`${isPlaying(track) ? "text-green-400" : ""}`}>
+                            <TrackCell track={track} />
+                        </CustomTable.Cell>
+                        <CustomTable.Cell align="right">
+                            <div className="flex items-center justify-center space-x-3">
                                 <button
                                     type="button"
-                                    className="w-5 text-center text-base text-zinc-200 hidden group-hover:block"
-                                    onClick={() => handlePlayTrack(track)}
+                                    className={`${track.isSaved ? "text-green-500" : "invisible group-hover:visible text-zinc-400 hover:text-zinc-200 hover:scale-105 "}`}
+                                    onClick={() => handleSaveTrack(track)}
                                 >
-                                    <Play />
+                                    {!track.isSaved ? (
+                                        <AddCircle size={18} />
+                                    ) : (
+                                        <TickCircle variant="Bold" size={18} />
+                                    )}
                                 </button>
+                                <span>
+                                    {convertMillisecondsToMinutes(track.duration_ms)}
+                                </span>
+
                             </div>
-                        </CustomTable.Cell>
-                        <CustomTable.Cell>
-                            <div className="flex items-center space-x-3">
-                                <img
-                                    src={track.album.images[0].url}
-                                    alt="song-img"
-                                    className="w-11 h-11 rounded-md"
-                                />
-                                <p>{track.name}</p>
-                            </div>
-                        </CustomTable.Cell>
-                        <CustomTable.Cell>
-                            <button
-                                type="button"
-                                className={`${track.isSaved ? "text-green-500" : "invisible group-hover:visible text-zinc-400 hover:text-zinc-200 hover:scale-105 "}`}
-                                onClick={() => handleSaveTrack(track)}
-                            >
-                                {!track.isSaved ? (
-                                    <AddCircle size={18} />
-                                ) : (
-                                    <TickCircle variant="Bold" size={18} />
-                                )}
-                            </button>
-                        </CustomTable.Cell>
-                        <CustomTable.Cell>
-                            {convertMillisecondsToMinutes(track.duration_ms)}
                         </CustomTable.Cell>
                     </CustomTable.Row>
                 ))}
