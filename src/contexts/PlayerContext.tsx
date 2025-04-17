@@ -56,8 +56,6 @@ function PlayerProvider({ children }: PlayerProviderProps) {
         handleVolumeChange,
     };
 
-    console.log(currentTrack)
-
     return <PlayerContext.Provider value={contextValues}>{children}</PlayerContext.Provider>;
 }
 
