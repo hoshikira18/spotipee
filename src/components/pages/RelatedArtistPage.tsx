@@ -41,15 +41,17 @@ function RelatedArtistPage() {
                 </Link>
             </div>
             <div className="grid grid-cols-12 gap-2 px-7 pb-10">
-                {relatedArtist?.map((item) => (
-                    <MediaCard
-                        key={item.id}
-                        type="singer"
-                        title={item.name}
-                        imageSrc={item.images[1].url}
-                        className="col-span-6 md:col-span-4 lg:col-span-3 xl:col-span-2 min-w-0 w-auto"
-                    />
-                ))}
+                {relatedArtist
+                    ?.filter((item) => item.id !== artist?.id)
+                    .map((item) => (
+                        <MediaCard
+                            key={item.id}
+                            type="singer"
+                            title={item.name}
+                            imageSrc={item.images[1].url}
+                            className="col-span-6 md:col-span-4 lg:col-span-3 xl:col-span-2 min-w-0 w-auto"
+                        />
+                    ))}
             </div>
         </div>
     );
