@@ -1,17 +1,40 @@
-import { Menu } from "@mantine/core";
-import { Forbidden, Airdrop, Augur, ExportSquare, Spotify } from "iconsax-react";
+import { Input, Menu } from "@mantine/core";
+import {
+    Airdrop,
+    Augur,
+    ExportSquare,
+    Spotify,
+    Add,
+    ArrowRight2,
+    SearchNormal,
+} from "iconsax-react";
 import { MoreIcon } from "./icons";
+import { useCurrentUserPlaylist } from "../../hooks/usePlaylist";
+import PlaylistServices from "../../services/PlaylistServices";
+import type { SpotifyTrack } from "../../types";
+import { useQueryClient } from "@tanstack/react-query";
+import { notifications } from "@mantine/notifications";
 
-const TrackOptions = () => {
+interface TrackOptionsProps {
+    track: SpotifyTrack;
+}
+
+const TrackOptions = ({ track }: TrackOptionsProps) => {
     return (
-        <Menu width={200} position="bottom-start">
+        <Menu
+            width={200}
+            position="left"
+            closeOnItemClick={false}
+            closeOnClickOutside={true}
+            withinPortal={false}
+        >
             <Menu.Target>
                 <button type="button" className="text-zinc-400">
                     <MoreIcon size={24} />
                 </button>
             </Menu.Target>
             <Menu.Dropdown>
-                <Menu.Item leftSection={<Forbidden size={16} />}>Don't play this artist</Menu.Item>
+                <AddToPlaylistOption track={track} />
                 <Menu.Item leftSection={<Airdrop size={16} />}>Go to artist radio</Menu.Item>
                 <Menu.Item
                     component="a"
@@ -37,3 +60,82 @@ const TrackOptions = () => {
 };
 
 export default TrackOptions;
+
+interface AddToPlaylistOptionProps {
+    track: SpotifyTrack;
+}
+
+const AddToPlaylistOption = ({ track }: AddToPlaylistOptionProps) => {
+    const { data: playlists } = useCurrentUserPlaylist();
+    const queryClient = useQueryClient();
+
+    const handleCreatePlaylist = async () => {
+        await PlaylistServices.createPlaylist(track.name, [track]).then(() => {
+            queryClient.invalidateQueries(["currentUserPlaylist"]);
+            notifications.show({
+                message: "Playlist created successfully",
+                color: "green",
+            });
+        });
+    };
+
+    const handleAddToPlaylist = async (playlistId: string) => {
+        await PlaylistServices.addTracksToPlaylist(playlistId, [track])
+            .then(() => {
+                queryClient.invalidateQueries(["currentUserPlaylist"]);
+                notifications.show({
+                    message: "Track added to playlist successfully",
+                    color: "green",
+                });
+            })
+            .catch(() => {
+                notifications.show({
+                    message: "Failed to add track to playlist",
+                    color: "red",
+                });
+            });
+    };
+
+    if (!playlists) return null;
+    return (
+        <Menu position="left-start" width={200} closeOnItemClick={false} withinPortal={false}>
+            <Menu.Target>
+                <button type="button" className="w-full">
+                    <Menu.Item
+                        leftSection={<Add size={20} />}
+                        rightSection={<ArrowRight2 size={20} />}
+                    >
+                        Add to playlist
+                    </Menu.Item>
+                </button>
+            </Menu.Target>
+            <Menu.Dropdown>
+                <Menu.Item p={0} mb={5}>
+                    <Input leftSection={<SearchNormal size={16} />} placeholder="Find a playlist" />
+                </Menu.Item>
+                <Menu.Item
+                    leftSection={<Add size={20} />}
+                    component="button"
+                    onClick={handleCreatePlaylist}
+                >
+                    New playlist
+                </Menu.Item>
+                <Menu.Divider />
+                {playlists.map((playlist) => (
+                    <Menu.Item
+                        key={playlist.id}
+                        component="a"
+                        href={`spotify:playlist:${playlist.id}`}
+                        target="_blank"
+                        rel="noreferrer"
+                        onClick={(e) => {
+                            handleAddToPlaylist(playlist.id);
+                        }}
+                    >
+                        {playlist.name}
+                    </Menu.Item>
+                ))}
+            </Menu.Dropdown>
+        </Menu>
+    );
+};

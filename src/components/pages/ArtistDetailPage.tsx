@@ -362,7 +362,7 @@ const TopTracksTable = () => {
                                 <span className="text-[#b3b3b3]">
                                     {convertMillisecondsToMinutes(track.duration_ms)}
                                 </span>
-                                <TrackOptions />
+                                <TrackOptions track={track} />
                             </div>
                         </CustomTable.Cell>
                     </CustomTable.Row>
