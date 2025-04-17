@@ -23,6 +23,7 @@ import TrackProvider from "./contexts/TrackContext";
 import "./App.css";
 import CommonPageLayout from "./components/templates/CommonPageLayout";
 import ArtistDiscographyPage from "./components/pages/ArtistDiscographyPage";
+import RelatedArtistPage from "./components/pages/RelatedArtistPage";
 
 const theme = createTheme({
     colors: {
@@ -91,6 +92,10 @@ const router = createBrowserRouter([
             {
                 path: "/artist/:artistId/discography",
                 element: <ArtistDiscographyPage />,
+            },
+            {
+                path: "/artist/:artistId/related",
+                element: <RelatedArtistPage />,
             },
         ],
     },
