@@ -22,6 +22,7 @@ import PlayerProvider from "./contexts/PlayerContext";
 import TrackProvider from "./contexts/TrackContext";
 import "./App.css";
 import CommonPageLayout from "./components/templates/CommonPageLayout";
+import ArtistDiscographyPage from "./components/pages/ArtistDiscographyPage";
 
 const theme = createTheme({
     colors: {
@@ -86,6 +87,10 @@ const router = createBrowserRouter([
             {
                 path: "/artist/:artistId",
                 element: <ArtistDetailPage />,
+            },
+            {
+                path: "/artist/:artistId/discography",
+                element: <ArtistDiscographyPage />,
             },
         ],
     },

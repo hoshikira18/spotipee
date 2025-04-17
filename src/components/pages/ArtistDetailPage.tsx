@@ -1,4 +1,4 @@
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { useArtist, useArtistAlbums, useArtistTopTracks } from "../../hooks/useArtist";
 import { Pause, Play } from "../atoms/icons";
 import type { SpotifyArtist, SpotifyTrack } from "../../types";
@@ -414,6 +414,12 @@ const ArtistAlbums = () => {
                             Singles and EPs
                         </Button>
                     </div>
+                    <Link
+                        to={`/artist/${artistId}/discography`}
+                        className="text-sm text-zinc-400 hover:underline"
+                    >
+                        See all
+                    </Link>
                 </div>
             </div>
             <div className="flex overflow-x-scroll pb-5">

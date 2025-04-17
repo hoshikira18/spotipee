@@ -29,7 +29,7 @@ export default function MediaCard({
             subtitle: "text-xs",
         },
         md: {
-            container: "p-3 space-y-2 min-w-48 w-48",
+            container: "p-3 space-y-2 min-w-48",
             title: "text-base font-medium",
             subtitle: "text-sm",
         },
