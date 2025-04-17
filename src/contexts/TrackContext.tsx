@@ -3,6 +3,8 @@ import type { SpotifyTrack } from "../types";
 import UserServices from "../services/UserServices";
 
 export const TrackContext = createContext<{
+    currentPlayingTrack: SpotifyTrack | null;
+    setCurrentPlayingTrack: (track: SpotifyTrack | null) => void;
     savedTracks: SpotifyTrack[];
     savedTracksCount: number;
     setSavedTracks: (tracks: SpotifyTrack[]) => void;
@@ -14,6 +16,7 @@ interface TrackProviderProps {
 }
 
 function TrackProvider({ children }: TrackProviderProps) {
+    const [currentPlayingTrack, setCurrentPlayingTrack] = useState<SpotifyTrack | null>(null);
     const [savedTracks, setSavedTracks] = useState<SpotifyTrack[]>([]);
     const [savedTracksCount, setSavedTracksCount] = useState(0);
 
@@ -36,6 +39,8 @@ function TrackProvider({ children }: TrackProviderProps) {
         savedTracksCount,
         setSavedTracks,
         setSavedTracksCount,
+        currentPlayingTrack,
+        setCurrentPlayingTrack,
     };
     return <TrackContext.Provider value={contextValues}>{children}</TrackContext.Provider>;
 }

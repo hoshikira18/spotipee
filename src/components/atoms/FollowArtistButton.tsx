@@ -1,51 +1,17 @@
-import { useEffect, useState } from "react";
-import { useFollowedArtists } from "../../hooks/useCurrentUser";
-import UserServices from "../../services/UserServices";
+import { useContext } from "react";
+import { ArtistDetailContext } from "../pages/ArtistDetailPage";
 
-interface FollowButtonProps {
-    artistId: string | undefined;
-    className?: string;
-}
-
-function FollowArtistButton({ artistId }: FollowButtonProps) {
-    const [isFollowing, setIsFollowing] = useState(false);
-    const { data: followedArtists } = useFollowedArtists();
-
-    useEffect(() => {
-        const isArtistFollowed = followedArtists?.some(
-            (artist: { id: string }) => artist.id === artistId,
-        );
-        setIsFollowing(isArtistFollowed || false);
-    }, [followedArtists]);
-
-    if (!artistId || !followedArtists) return null;
-
-    const handleChangeStatus = async () => {
-        if (isFollowing) {
-            // Unfollow the artist
-            await UserServices.unfollowArtist(artistId, "artist")
-                .then(() => {
-                    setIsFollowing(false);
-                })
-                .catch((error) => {
-                    console.error("Error unfollowing artist:", error);
-                });
-        } else {
-            // Follow the artist
-            await UserServices.followArtist(artistId, "artist")
-                .then(() => {
-                    setIsFollowing(true);
-                })
-                .catch((error) => {
-                    console.error("Error following artist:", error);
-                });
-        }
-    };
+function FollowArtistButton() {
+    const artistContext = useContext(ArtistDetailContext);
+    if (!artistContext) {
+        throw new Error("FollowArtistButton must be used within ArtistDetailContext");
+    }
+    const { isFollowing, handleChangeStatus } = artistContext;
 
     return (
         <button
             type="button"
-            className="border-1 border-zinc-400 rounded-full px-4 py-1"
+            className="border-1 border-zinc-400 rounded-full px-4 py-1 hover:scale-105 active:scale-100 transition-all"
             onClick={handleChangeStatus}
         >
             <span className="text-sm font-[700] font-spotify text-white">

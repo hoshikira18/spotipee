@@ -1,12 +1,7 @@
 @import "tailwindcss";
 
-@font-face {
-    font-family: CircularSpotify;
-    src: url("/src/assets/fonts/CircularSpotifyText-Book.otf");
-}
-
 @theme {
-    --font-spotify: CircularSpotify, "sans-serif";
+    --font-spotify: "Inter", "sans-serif";
 
     --animate-fade-in: fade-in;
 
@@ -40,6 +35,24 @@
     background: transparent;
 }
 
+html {
+    --table-row-radius: 4px;
+}
+
 button {
     cursor: pointer;
+}
+
+td:first-child {
+    border-top-left-radius: var(--table-row-radius);
+}
+td:last-child {
+    border-top-right-radius: var(--table-row-radius);
+}
+
+td:first-child {
+    border-bottom-left-radius: var(--table-row-radius);
+}
+td:last-child {
+    border-bottom-right-radius: var(--table-row-radius);
 }
