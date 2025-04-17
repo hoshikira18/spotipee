@@ -18,14 +18,14 @@ function ArtistDiscographyPage() {
     );
 
     return (
-        <div className="h-full overflow-y-scroll bg-zinc-900 rounded-md px-7 relative">
-            <div className="sticky z-10 bg-zinc-900 inset-0 pt-10 pb-2 shadow-2xl flex items-center justify-between">
+        <div className="h-full overflow-y-scroll bg-zinc-900 rounded-md relative">
+            <div className="sticky z-10 bg-zinc-900 top-0 right-0 left-0 pt-10 pb-2 shadow-2xl flex items-center justify-between px-7">
                 <Link to={`/artist/${artistId}`} className="text-2xl font-semibold hover:underline">
                     Discography
                 </Link>
                 <div></div>
             </div>
-            <div className="grid grid-cols-12 gap-4">
+            <div className="grid grid-cols-12 gap-4 px-7">
                 {filteredData?.map((item) => (
                     <MediaCard
                         key={item.id}
