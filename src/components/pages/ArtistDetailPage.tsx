@@ -26,6 +26,7 @@ import TrackOptions from "../atoms/TrackOptionsButton";
 import { Button } from "@mantine/core";
 import MediaServices from "../../services/MediaService";
 import SeeAllButton from "../atoms/SeeAllButton";
+import DetailPageTemplate from "../templates/DetailPageTemplate";
 
 export const ArtistDetailContext = createContext<{
     artistId: string | undefined;
@@ -42,6 +43,9 @@ function ArtistDetailPage() {
     const { data: topTracks } = useArtistTopTracks(artistId as string);
     const { data: followedArtists } = useFollowedArtists();
     const [isFollowing, setIsFollowing] = useState(false);
+    const [isShowMore, setIsShowMore] = useState(false);
+
+    const playButtonRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
         const isArtistFollowed = followedArtists?.some(
@@ -49,8 +53,8 @@ function ArtistDetailPage() {
         );
         setIsFollowing(isArtistFollowed || false);
     }, [followedArtists]);
-    const queryClient = useQueryClient();
 
+    const queryClient = useQueryClient();
     const handleChangeStatus = useDebouncedCallback(async () => {
         if (!artistId) return;
         if (isFollowing) {
@@ -76,12 +80,6 @@ function ArtistDetailPage() {
         }
     }, 200);
 
-    const [isShowMore, setIsShowMore] = useState(false);
-
-    const ref = useRef<HTMLDivElement>(null);
-    const playButtonRef = useRef<HTMLDivElement>(null);
-    const { top } = useElementScroll(ref);
-
     const trackContext = useContext(TrackContext);
     if (!trackContext) throw new Error("TrackContext is not available");
     const { savedTracks } = trackContext;
@@ -94,149 +92,87 @@ function ArtistDetailPage() {
         };
     });
 
-    const isPlayButtonVisible = () => {
-        if (!playButtonRef.current) {
-            return false;
-        }
-        const headerHeight = 64;
-        const topbarHeight = 64;
-        return (
-            playButtonRef.current.getBoundingClientRect().bottom < headerHeight + topbarHeight + 50
-        );
-    };
-
-    const calOpacity = () => {
-        if (!playButtonRef.current) {
-            return 0;
-        }
-        const headerHeight = 64;
-        const topbarHeight = 64;
-        const scrollTop = top + headerHeight + topbarHeight;
-        const opacity = Math.max(
-            0,
-            Math.min(1, (scrollTop - playButtonRef.current.offsetTop) / 50),
-        );
-        return opacity;
-    };
-
     return (
-        <AuthWrapper>
-            <ArtistDetailContext.Provider
-                value={{
-                    artistId,
-                    isFollowing,
-                    setIsFollowing,
-                    handleChangeStatus,
-                    mapSavedTracks,
-                    isShowMore,
-                }}
+        <ArtistDetailContext.Provider
+            value={{
+                artistId,
+                isFollowing,
+                setIsFollowing,
+                handleChangeStatus,
+                mapSavedTracks,
+                isShowMore,
+            }}
+        >
+            <DetailPageTemplate
+                playButtonRef={playButtonRef}
+                uris={topTracks?.map((track) => track.uri || "")}
+                title={artist?.name}
             >
-                <div
-                    ref={ref}
-                    className="relative bg-zinc-900 h-full rounded-md font-spotify overflow-y-scroll"
-                >
-                    <div
-                        className={cn(
-                            "sticky top-0 right-0 left-0 z-10 py-2 px-3 bg-stone-900 transition-opacity",
-                        )}
-                        style={{ opacity: calOpacity() }}
-                    >
-                        <div
-                            className={cn(
-                                "flex items-center transition-opacity duration-200",
-                                isPlayButtonVisible() ? "opacity-100" : "opacity-0",
-                            )}
-                        >
-                            <button
-                                type="button"
-                                className={cn(
-                                    "min-w-12 h-12 flex items-center justify-center bg-green-500 rounded-full hover:bg-green-400 hover:scale-105 text-black",
-                                )}
-                                onClick={() => {
-                                    if (topTracks?.length) {
-                                        TrackServices.play(
-                                            topTracks.map((track) => track.uri || ""),
-                                        );
-                                    }
-                                }}
-                            >
-                                <Play />
-                            </button>
-                            <span className={"text-3xl font-bold text-zinc-200 px-4"}>
-                                {artist?.name}
+                <div className="h-full absolute inset-0">
+                    <div className="relative h-1/2 overflow-hidden">
+                        <div className="absolute inset-0 py-4 rounded-t-md flex flex-col justify-end bg-gradient-to-t from-zinc-900/80 to-transparent space-y-4 ">
+                            <span className="px-4 flex items-center space-x-2">
+                                <VerifiedBadgeIcon color="#55aaff" />
+                                <span data-encore-id="text">Verified Artist</span>
                             </span>
+                            <h1 className="text-6xl font-bold text-white px-4">{artist?.name}</h1>
+                            <p className="px-4">1,692,463 monthly listeners</p>
+                        </div>
+                        <img
+                            src={artist?.images[0].url}
+                            alt={artist?.name}
+                            className="w-full h-full object-cover rounded-t-md"
+                        />
+                    </div>
+                    <div className="flex items-center space-x-5 p-5" ref={playButtonRef}>
+                        <button
+                            type="button"
+                            className="min-w-14 h-14 flex items-center justify-center transition-all duration-150 bg-green-500 rounded-full hover:bg-green-400 hover:scale-105 text-black"
+                            onClick={() => {
+                                if (topTracks?.length) {
+                                    TrackServices.play(topTracks.map((track) => track.uri || ""));
+                                }
+                            }}
+                        >
+                            <Play />
+                        </button>
+
+                        <FollowArtistButton />
+                        <ArtistOptions />
+                    </div>
+
+                    {/* Top Tracks table */}
+                    <div className="mt-8 px-5">
+                        <span className="text-2xl font-bold">Popular</span>
+                        <div className="mt-5">
+                            <TopTracksTable />
+                        </div>
+
+                        <div className="text-zinc-400 text-sm my-2">
+                            {isShowMore ? (
+                                <button
+                                    type="button"
+                                    className="text-sm font-spotify text-zinc-400"
+                                    onClick={() => setIsShowMore(false)}
+                                >
+                                    Show less
+                                </button>
+                            ) : (
+                                <button
+                                    type="button"
+                                    className="text-sm font-spotify text-zinc-400"
+                                    onClick={() => setIsShowMore(true)}
+                                >
+                                    Show more
+                                </button>
+                            )}
                         </div>
                     </div>
-                    <div className="h-full absolute inset-0">
-                        <div className="relative h-1/2 overflow-hidden">
-                            <div className="absolute inset-0 py-4 rounded-t-md flex flex-col justify-end bg-gradient-to-t from-zinc-900/80 to-transparent space-y-4 ">
-                                <span className="px-4 flex items-center space-x-2">
-                                    <VerifiedBadgeIcon color="#55aaff" />
-                                    <span data-encore-id="text">Verified Artist</span>
-                                </span>
-                                <h1 className="text-6xl font-bold text-white px-4">
-                                    {artist?.name}
-                                </h1>
-                                <p className="px-4">1,692,463 monthly listeners</p>
-                            </div>
-                            <img
-                                src={artist?.images[0].url}
-                                alt={artist?.name}
-                                className="w-full h-full object-cover rounded-t-md"
-                            />
-                        </div>
-                        <div className="flex items-center space-x-5 p-5" ref={playButtonRef}>
-                            <button
-                                type="button"
-                                className="min-w-14 h-14 flex items-center justify-center transition-all duration-150 bg-green-500 rounded-full hover:bg-green-400 hover:scale-105 text-black"
-                                onClick={() => {
-                                    if (topTracks?.length) {
-                                        TrackServices.play(
-                                            topTracks.map((track) => track.uri || ""),
-                                        );
-                                    }
-                                }}
-                            >
-                                <Play />
-                            </button>
-
-                            <FollowArtistButton />
-                            <ArtistOptions />
-                        </div>
-
-                        {/* Top Tracks table */}
-                        <div className="mt-8 px-5">
-                            <span className="text-2xl font-bold">Popular</span>
-                            <div className="mt-5">
-                                <TopTracksTable />
-                            </div>
-
-                            <div className="text-zinc-400 text-sm my-2">
-                                {isShowMore ? (
-                                    <button
-                                        type="button"
-                                        className="text-sm font-spotify text-zinc-400"
-                                        onClick={() => setIsShowMore(false)}
-                                    >
-                                        Show less
-                                    </button>
-                                ) : (
-                                    <button
-                                        type="button"
-                                        className="text-sm font-spotify text-zinc-400"
-                                        onClick={() => setIsShowMore(true)}
-                                    >
-                                        Show more
-                                    </button>
-                                )}
-                            </div>
-                        </div>
-                        <ArtistAlbums />
-                        <RelatedArtists />
-                    </div>
+                    <ArtistAlbums />
+                    <RelatedArtists />
                 </div>
-            </ArtistDetailContext.Provider>
-        </AuthWrapper>
+            </DetailPageTemplate>
+        </ArtistDetailContext.Provider>
     );
 }
 

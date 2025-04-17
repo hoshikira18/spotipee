@@ -1,7 +1,25 @@
 import { instance } from "../lib/axios";
 import type { SpotifyPlaylist, SpotifyTrack } from "../types";
+import UserServices from "./UserServices";
 
 const PlaylistServices = {
+    async getPlaylist(playlistId: string): Promise<SpotifyPlaylist> {
+        const data = await instance.get(`/playlists/${playlistId}`).then(async ({ data }) => {
+            const ownerImages = await UserServices.getUser(data.owner.id).then(
+                ({ images }) => images,
+            );
+
+            return {
+                ...data,
+                owner: {
+                    ...data.owner,
+                    images: ownerImages,
+                },
+            };
+        });
+
+        return data;
+    },
     async getCurrentUserPlaylist(): Promise<SpotifyPlaylist[]> {
         const data = await instance.get("/me/playlists").then(({ data }) => data.items);
         return data;

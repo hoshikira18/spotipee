@@ -10,6 +10,15 @@ const UserServices = {
             throw new Error(error.message);
         }
     },
+    async getUser(userId: string): Promise<User> {
+        try {
+            const data = instance.get(`/users/${userId}`).then(({ data }) => data);
+            return data;
+        } catch (error: any) {
+            throw new Error(error.message);
+        }
+    },
+
     async getFollowedArtists(): Promise<SpotifyArtist[]> {
         try {
             const data = instance

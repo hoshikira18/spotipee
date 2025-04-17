@@ -7,3 +7,10 @@ export const useCurrentUserPlaylist = () => {
         queryFn: () => PlaylistServices.getCurrentUserPlaylist(),
     });
 };
+
+export const usePlaylist = (playlistId: string) => {
+    return useQuery({
+        queryKey: ["playlist", playlistId],
+        queryFn: () => PlaylistServices.getPlaylist(playlistId),
+    });
+};
