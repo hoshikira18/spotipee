@@ -129,6 +129,7 @@ const AddToPlaylistOption = ({ track }: AddToPlaylistOptionProps) => {
                         target="_blank"
                         rel="noreferrer"
                         onClick={(e) => {
+                            e.preventDefault();
                             handleAddToPlaylist(playlist.id);
                         }}
                     >

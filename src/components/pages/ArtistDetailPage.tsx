@@ -25,6 +25,7 @@ import { PlayerContext } from "../../contexts/PlayerContext";
 import TrackOptions from "../atoms/TrackOptionsButton";
 import { Button } from "@mantine/core";
 import MediaServices from "../../services/MediaService";
+import SeeAllButton from "../atoms/SeeAllButton";
 
 export const ArtistDetailContext = createContext<{
     artistId: string | undefined;
@@ -414,12 +415,7 @@ const ArtistAlbums = () => {
                             Singles and EPs
                         </Button>
                     </div>
-                    <Link
-                        to={`/artist/${artistId}/discography`}
-                        className="text-sm text-zinc-400 hover:underline"
-                    >
-                        See all
-                    </Link>
+                    <SeeAllButton link={`/artist/${artistId}/discography`} />
                 </div>
             </div>
             <div className="flex overflow-x-scroll pb-5">
@@ -457,8 +453,11 @@ const RelatedArtists = () => {
 
     return (
         <div className="px-5 my-10">
-            <span className="text-2xl font-bold">Related Artists</span>
-            <div className="flex overflow-x-scroll pb-5">
+            <div className="flex items-center justify-between">
+                <span className="text-2xl font-bold">Fans also like</span>
+                <SeeAllButton link={`/artist/${artistId}/related`} />
+            </div>
+            <div className="flex overflow-x-scroll pb-5 mt-5">
                 {relatedArtist?.map((artist) => (
                     <MediaCard
                         type="singer"
