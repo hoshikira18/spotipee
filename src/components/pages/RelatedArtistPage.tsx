@@ -40,7 +40,7 @@ function RelatedArtistPage() {
                     Fans also like
                 </Link>
             </div>
-            <div className="grid grid-cols-12 gap-2 px-7">
+            <div className="grid grid-cols-12 gap-2 px-7 pb-10">
                 {relatedArtist?.map((item) => (
                     <MediaCard
                         key={item.id}
