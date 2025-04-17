@@ -10,7 +10,6 @@ import SidebarItem from "../molecules/SidebarItem";
 function LeftSideBar() {
     const { data: followedArtists } = useFollowedArtists();
     const { data: currentUserPlaylists } = useCurrentUserPlaylist();
-    console.log(currentUserPlaylists);
 
     const { isAuth, isLoading } = useAuth(null);
 

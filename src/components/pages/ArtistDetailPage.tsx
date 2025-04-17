@@ -22,6 +22,7 @@ import ArtistOptions from "../atoms/ArtistOptionsButton";
 import CustomTable from "../organisms/CustomTable";
 import TrackCell from "../atoms/TrackCell";
 import { PlayerContext } from "../../contexts/PlayerContext";
+import TrackOptions from "../atoms/TrackOptionsButton";
 
 export const ArtistDetailContext = createContext<{
     artistId: string | undefined;
@@ -361,6 +362,7 @@ const TopTracksTable = () => {
                                 <span className="text-[#b3b3b3]">
                                     {convertMillisecondsToMinutes(track.duration_ms)}
                                 </span>
+                                <TrackOptions />
                             </div>
                         </CustomTable.Cell>
                     </CustomTable.Row>
