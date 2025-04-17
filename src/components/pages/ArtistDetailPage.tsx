@@ -1,7 +1,7 @@
 import { useParams } from "react-router-dom";
 import { useArtist, useArtistAlbums, useArtistTopTracks } from "../../hooks/useArtist";
 import { Pause, Play } from "../atoms/icons";
-import type { SpotifyTrack } from "../../types";
+import type { SpotifyArtist, SpotifyTrack } from "../../types";
 import { cn, convertMillisecondsToMinutes } from "../../utils";
 import { createContext, useContext, useEffect, useRef, useState } from "react";
 import TrackServices from "../../services/TrackServices";
@@ -23,6 +23,8 @@ import CustomTable from "../organisms/CustomTable";
 import TrackCell from "../atoms/TrackCell";
 import { PlayerContext } from "../../contexts/PlayerContext";
 import TrackOptions from "../atoms/TrackOptionsButton";
+import { Button } from "@mantine/core";
+import MediaServices from "../../services/MediaService";
 
 export const ArtistDetailContext = createContext<{
     artistId: string | undefined;
@@ -229,6 +231,7 @@ function ArtistDetailPage() {
                             </div>
                         </div>
                         <ArtistAlbums />
+                        <RelatedArtists />
                     </div>
                 </div>
             </ArtistDetailContext.Provider>
@@ -374,14 +377,89 @@ const TopTracksTable = () => {
 
 const ArtistAlbums = () => {
     const { artistId } = useParams();
-    const { data: albums } = useArtistAlbums(artistId as string);
+    const { data: topTracks } = useArtistTopTracks(artistId as string);
+
+    const [filter, setFilter] = useState<"single" | "album" | "all">("all");
+    const handleFilterChange = (newFilter: "single" | "album" | "all") => {
+        setFilter(newFilter);
+    };
+
+    const filteredData = topTracks?.filter(
+        (track) => filter === "all" || track.album.album_type === filter,
+    );
 
     return (
         <div className="px-5 my-10">
-            <span className="text-2xl font-bold">Albums</span>
+            <span className="text-2xl font-bold">Discography</span>
+            <div>
+                <div className="flex items-center justify-between">
+                    <div className="flex space-x-3 my-5">
+                        <Button
+                            variant={filter === "all" ? "filter-active" : "filter"}
+                            onClick={() => handleFilterChange("all")}
+                        >
+                            Popular release
+                        </Button>
+                        <Button
+                            variant={filter === "album" ? "filter-active" : "filter"}
+                            onClick={() => handleFilterChange("album")}
+                        >
+                            Albums
+                        </Button>
+
+                        <Button
+                            variant={filter === "single" ? "filter-active" : "filter"}
+                            onClick={() => handleFilterChange("single")}
+                        >
+                            Singles and EPs
+                        </Button>
+                    </div>
+                </div>
+            </div>
             <div className="flex overflow-x-scroll pb-5">
-                {albums?.map((album) => (
-                    <MediaCard key={album.id} title={album.name} imageSrc={album.images[1].url} />
+                {filteredData?.map((item) => (
+                    <MediaCard
+                        key={item.id}
+                        title={item.name}
+                        imageSrc={item.album.images[1].url}
+                    />
+                ))}
+            </div>
+        </div>
+    );
+};
+
+const RelatedArtists = () => {
+    const { artistId } = useParams();
+    const { data: artist } = useArtist(artistId as string);
+    const [relatedArtist, setRelatedArtist] = useState<SpotifyArtist[]>([]);
+
+    const ARTIST_PER_PAGE = 10;
+    useEffect(() => {
+        const fetchRelatedArtists = async () => {
+            const data = await MediaServices.search({
+                q: artist?.genres.join(","),
+                type: "artist",
+                limit: ARTIST_PER_PAGE,
+            }).then((res) => res.artists.items);
+            setRelatedArtist(data);
+        };
+        fetchRelatedArtists();
+    }, [artist]);
+
+    if (!relatedArtist) return null;
+
+    return (
+        <div className="px-5 my-10">
+            <span className="text-2xl font-bold">Related Artists</span>
+            <div className="flex overflow-x-scroll pb-5">
+                {relatedArtist?.map((artist) => (
+                    <MediaCard
+                        type="singer"
+                        key={artist.id}
+                        title={artist.name}
+                        imageSrc={artist.images[1].url}
+                    />
                 ))}
             </div>
         </div>
