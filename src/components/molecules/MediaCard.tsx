@@ -24,7 +24,7 @@ export default function MediaCard({
 }: MediaCardProps) {
     const sizeClasses = {
         sm: {
-            container: "p-2 space-y-1 min-w-32",
+            container: "p-2 space-y-1 min-w-32 w-32",
             title: "text-sm font-medium",
             subtitle: "text-xs",
         },
@@ -34,7 +34,7 @@ export default function MediaCard({
             subtitle: "text-sm",
         },
         lg: {
-            container: "p-4 space-y-3 min-w-64",
+            container: "p-4 space-y-3 min-w-64 w-64",
             title: "text-lg font-semibold",
             subtitle: "text-sm",
         },

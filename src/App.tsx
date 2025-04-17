@@ -3,7 +3,13 @@ import "@mantine/core/styles.css";
 import "@mantine/nprogress/styles.css";
 import "@mantine/notifications/styles.css";
 import { Notifications } from "@mantine/notifications";
-import { Button, MantineProvider, createTheme } from "@mantine/core";
+import {
+    Button,
+    MantineProvider,
+    type VariantColorsResolver,
+    createTheme,
+    defaultVariantColorsResolver,
+} from "@mantine/core";
 import { NavigationProgress, nprogress } from "@mantine/nprogress";
 import { useEffect } from "react";
 import ErrorPage from "./components/pages/ErrorPage";
@@ -15,6 +21,8 @@ import { useIsFetching } from "@tanstack/react-query";
 import PlayerProvider from "./contexts/PlayerContext";
 import TrackProvider from "./contexts/TrackContext";
 import "./App.css";
+import CommonPageLayout from "./components/templates/CommonPageLayout";
+import ArtistDiscographyPage from "./components/pages/ArtistDiscographyPage";
 
 const theme = createTheme({
     colors: {
@@ -42,6 +50,31 @@ const theme = createTheme({
     },
 });
 
+const variantColorResolver: VariantColorsResolver = (input) => {
+    const defaultResolvedColors = defaultVariantColorsResolver(input);
+
+    // Add new variants support
+    if (input.variant === "filter") {
+        return {
+            background: "#27272a",
+            hover: "#3f3f46",
+            color: "var(--mantine-color-white)",
+            border: "none",
+        };
+    }
+
+    if (input.variant === "filter-active") {
+        return {
+            background: "#f1f1f1",
+            hover: "#f0f0f0",
+            color: "var(--mantine-color-black)",
+            border: "none",
+        };
+    }
+
+    return defaultResolvedColors;
+};
+
 const router = createBrowserRouter([
     {
         element: <Layout />,
@@ -54,6 +87,10 @@ const router = createBrowserRouter([
             {
                 path: "/artist/:artistId",
                 element: <ArtistDetailPage />,
+            },
+            {
+                path: "/artist/:artistId/discography",
+                element: <ArtistDiscographyPage />,
             },
         ],
     },
@@ -80,7 +117,7 @@ function App() {
     }, [isFetching]);
 
     return (
-        <MantineProvider theme={theme} defaultColorScheme="dark">
+        <MantineProvider theme={{ ...theme, variantColorResolver }} defaultColorScheme="dark">
             <TrackProvider>
                 <PlayerProvider>
                     <Notifications position="top-right" />
