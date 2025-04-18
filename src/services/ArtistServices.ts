@@ -7,9 +7,9 @@ const ArtistServices = {
         return data;
     },
     async getTopTracks(artistId: string): Promise<SpotifyTrack[]> {
-        const tracks = (await instance
+        const tracks = await instance
             .get(`/artists/${artistId}/top-tracks`)
-            .then(({ data }) => data.tracks)) as SpotifyTrack[];
+            .then(({ data }) => data.tracks);
 
         return tracks;
     },

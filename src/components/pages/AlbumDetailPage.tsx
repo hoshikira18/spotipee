@@ -38,8 +38,6 @@ function AlbumDetailPage() {
             : await TrackServices.play([track.uri] as string[]);
     };
 
-    console.log(album);
-
     if (!album) return null;
     return (
         <DetailPageTemplate
