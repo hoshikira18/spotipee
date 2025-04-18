@@ -11,7 +11,6 @@ import TrackCell from "../atoms/TrackCell";
 import { calAddedTime, convertMillisecondsToMinutes } from "../../utils";
 import { Clock } from "iconsax-react";
 import UserImage from "../atoms/UserImage";
-import { modals } from "@mantine/modals";
 import EditPlaylistModal from "../organisms/EditPlaylistModal";
 import { Modal } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
@@ -88,6 +87,7 @@ function PLaylistDetailPage() {
                                 {playlist?.public ? "Public" : "Private"} Playlist
                             </p>
                             <p className="font-extrabold text-8xl">{name}</p>
+                            <p className="text-sm mb-2">{description}</p>
                             <div>
                                 <div className="flex items-center space-x-3 text-sm text-zinc-200">
                                     <div className="flex items-center space-x-1">
