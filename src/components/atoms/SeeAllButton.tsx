@@ -1,12 +1,13 @@
 import { Link } from "react-router-dom";
 
 interface SeeAllButtonProps {
+    title?: string;
     link: string;
 }
-function SeeAllButton({ link = "/" }: SeeAllButtonProps) {
+function SeeAllButton({ title = "See all", link = "/" }: SeeAllButtonProps) {
     return (
         <Link to={link} className="text-sm text-zinc-400 hover:underline">
-            See all
+            {title}
         </Link>
     );
 }

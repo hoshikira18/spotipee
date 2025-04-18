@@ -86,7 +86,17 @@ function PLaylistDetailPage() {
                             <p className="font-semibold text-sm">
                                 {playlist?.public ? "Public" : "Private"} Playlist
                             </p>
-                            <p className="font-extrabold text-8xl">{name}</p>
+                            <p
+                                className={`font-extrabold line-clamp-1 ${
+                                    name.length > 20
+                                        ? "text-4xl"
+                                        : name.length > 10
+                                          ? "text-6xl"
+                                          : "text-8xl"
+                                }`}
+                            >
+                                {name}
+                            </p>
                             <p className="text-sm mb-2">{description}</p>
                             <div>
                                 <div className="flex items-center space-x-3 text-sm text-zinc-200">

@@ -33,3 +33,21 @@ export const calAddedTime = (added_at: string) => {
     if (diffInMinutes > 0) return `${diffInMinutes} minutes ago`;
     return `${diffInSeconds} seconds ago`;
 };
+
+export const calDurationTime = (duration: number) => {
+    const minutes = Math.floor(duration / 60);
+    const seconds = Math.floor(duration % 60);
+    return `${minutes} min, ${seconds < 10 ? "0" : ""}${seconds} sec`;
+};
+
+export const getUSDate = (date: string) => {
+    const d = new Date(date);
+
+    const formattedDate = d.toLocaleDateString("en-US", {
+        year: "numeric",
+        month: "long",
+        day: "numeric",
+    });
+
+    return formattedDate;
+};

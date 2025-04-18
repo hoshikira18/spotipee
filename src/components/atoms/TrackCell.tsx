@@ -4,12 +4,19 @@ import type { SpotifyTrack } from "../../types";
 interface TrackCellProps {
     track: SpotifyTrack;
     displayArtist?: boolean;
+    displayImage?: boolean;
 }
 
-function TrackCell({ track, displayArtist = false }: TrackCellProps) {
+function TrackCell({ track, displayArtist = false, displayImage = true }: TrackCellProps) {
     return (
         <div className="flex items-center space-x-3">
-            <img src={track.album.images[0].url} alt="song-img" className="w-11 h-11 rounded-md" />
+            {displayImage && (
+                <img
+                    src={track.album.images[0].url}
+                    alt="song-img"
+                    className="w-11 h-11 rounded-md"
+                />
+            )}
             <div className="flex flex-col">
                 <Link to={`/track/${track.id}`} className="hover:underline text-base">
                     {track.name}

@@ -25,6 +25,7 @@ import "./App.css";
 import ArtistDiscographyPage from "./components/pages/ArtistDiscographyPage";
 import RelatedArtistPage from "./components/pages/RelatedArtistPage";
 import PLaylistDetailPage from "./components/pages/PLaylistDetailPage";
+import AlbumDetailPage from "./components/pages/AlbumDetailPage";
 
 const theme = createTheme({
     colors: {
@@ -89,6 +90,10 @@ const router = createBrowserRouter([
             {
                 path: "/playlist/:playlistId",
                 element: <PLaylistDetailPage />,
+            },
+            {
+                path: "/album/:albumId",
+                element: <AlbumDetailPage />,
             },
             {
                 path: "/artist/:artistId",
