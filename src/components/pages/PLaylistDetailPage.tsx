@@ -9,6 +9,7 @@ import { PlayerContext } from "../../contexts/PlayerContext";
 import TrackServices from "../../services/TrackServices";
 import TrackCell from "../atoms/TrackCell";
 import { convertMillisecondsToMinutes } from "../../utils";
+import { Clock } from "iconsax-react";
 
 function PLaylistDetailPage() {
     const { playlistId } = useParams();
@@ -107,14 +108,16 @@ function PLaylistDetailPage() {
                                 background: "#27272a",
                             }}
                         >
-                            <CustomTable.Row>
+                            <CustomTable.Row className="text-zinc-400">
                                 <CustomTable.HeaderCell className="w-16 flex items-center justify-end">
                                     #
                                 </CustomTable.HeaderCell>
                                 <CustomTable.HeaderCell>Title</CustomTable.HeaderCell>
                                 <CustomTable.HeaderCell>Album</CustomTable.HeaderCell>
                                 <CustomTable.HeaderCell>Added At</CustomTable.HeaderCell>
-                                <CustomTable.HeaderCell>Duration</CustomTable.HeaderCell>
+                                <CustomTable.HeaderCell>
+                                    <Clock size={20} />
+                                </CustomTable.HeaderCell>
                             </CustomTable.Row>
                         </CustomTable.Head>
                         <CustomTable.Body>
@@ -174,12 +177,15 @@ function PLaylistDetailPage() {
                                         <CustomTable.Cell
                                             className={`${isPlaying(track) ? "text-green-400" : ""}`}
                                         >
-                                            <TrackCell track={track} />
+                                            <TrackCell track={track} displayArtist />
                                         </CustomTable.Cell>
                                         <CustomTable.Cell>
-                                            <span className="text-[#b3b3b3]">
+                                            <Link
+                                                to={`/album/${track.album.id}`}
+                                                className="text-[#b3b3b3] hover:underline"
+                                            >
                                                 {track.album.name}
-                                            </span>
+                                            </Link>
                                         </CustomTable.Cell>
                                         <CustomTable.Cell>
                                             <span className="text-[#b3b3b3]">
