@@ -1,39 +1,29 @@
-import { Link, useParams } from "react-router-dom";
-import { useArtist, useArtistAlbums, useArtistTopTracks } from "../../hooks/useArtist";
-import { Pause, Play } from "../atoms/icons";
+import { useParams } from "react-router-dom";
+import { useArtist, useArtistTopTracks } from "../../hooks/useArtist";
+import { Play } from "../atoms/icons";
 import type { SpotifyArtist, SpotifyTrack } from "../../types";
-import { cn, convertMillisecondsToMinutes } from "../../utils";
 import { createContext, useContext, useEffect, useRef, useState } from "react";
 import TrackServices from "../../services/TrackServices";
 import MediaCard from "../molecules/MediaCard";
-import { AddCircle, TickCircle } from "iconsax-react";
 import UserServices from "../../services/UserServices";
-import { nprogress } from "@mantine/nprogress";
-import { useElementScroll } from "../../hooks/useElementScroll";
-import AuthWrapper from "../templates/AuthWrapper";
 import { TrackContext } from "../../contexts/TrackContext";
-import { notifications } from "@mantine/notifications";
 import VerifiedBadgeIcon from "../atoms/icons/VerifyBadgeIcon";
 import FollowArtistButton from "../atoms/FollowArtistButton";
 import { useFollowedArtists } from "../../hooks/useCurrentUser";
 import { useQueryClient } from "@tanstack/react-query";
 import { useDebouncedCallback } from "@mantine/hooks";
 import ArtistOptions from "../atoms/ArtistOptionsButton";
-import CustomTable from "../organisms/CustomTable";
-import TrackCell from "../atoms/TrackCell";
-import { PlayerContext } from "../../contexts/PlayerContext";
-import TrackOptions from "../atoms/TrackOptionsButton";
 import { Button } from "@mantine/core";
 import MediaServices from "../../services/MediaService";
 import SeeAllButton from "../atoms/SeeAllButton";
 import DetailPageTemplate from "../templates/DetailPageTemplate";
+import TopTracksTable from "../organisms/TopTrackTable";
 
 export const ArtistDetailContext = createContext<{
     artistId: string | undefined;
     isFollowing: boolean;
     setIsFollowing: React.Dispatch<React.SetStateAction<boolean>>;
     handleChangeStatus: () => void;
-    mapSavedTracks: SpotifyTrack[] | undefined;
     isShowMore: boolean;
 } | null>(null);
 
@@ -82,15 +72,6 @@ function ArtistDetailPage() {
 
     const trackContext = useContext(TrackContext);
     if (!trackContext) throw new Error("TrackContext is not available");
-    const { savedTracks } = trackContext;
-
-    const mapSavedTracks = topTracks?.map((track) => {
-        const isSaved = savedTracks.some((savedTrack) => savedTrack.id === track.id);
-        return {
-            ...track,
-            isSaved,
-        };
-    });
 
     return (
         <ArtistDetailContext.Provider
@@ -99,7 +80,6 @@ function ArtistDetailPage() {
                 isFollowing,
                 setIsFollowing,
                 handleChangeStatus,
-                mapSavedTracks,
                 isShowMore,
             }}
         >
@@ -145,7 +125,7 @@ function ArtistDetailPage() {
                     <div className="mt-8 px-5">
                         <span className="text-2xl font-bold">Popular</span>
                         <div className="mt-5">
-                            <TopTracksTable />
+                            <TopTracksTable tracks={topTracks} isShowMore={isShowMore} />
                         </div>
 
                         <div className="text-zinc-400 text-sm my-2">
@@ -177,140 +157,6 @@ function ArtistDetailPage() {
 }
 
 export default ArtistDetailPage;
-
-const TopTracksTable = () => {
-    const { mapSavedTracks, isShowMore } = useContext(ArtistDetailContext) || {};
-
-    const handlePlayTrack = async (track: SpotifyTrack) => {
-        playbackState.isPaused && currentTrack?.id === track.id
-            ? togglePlay()
-            : await TrackServices.play([track.uri] as string[]);
-    };
-
-    const trackContext = useContext(TrackContext);
-    const playerContext = useContext(PlayerContext);
-    if (!trackContext || !playerContext) {
-        throw new Error("TrackContext or PlayerContext is not available");
-    }
-    const { setSavedTracks, savedTracks } = trackContext;
-    const { currentTrack, togglePlay, playbackState } = playerContext;
-
-    const handleSaveTrack = async (track: SpotifyTrack) => {
-        try {
-            nprogress.start();
-            if (track.isSaved) {
-                await UserServices.removeTracks([track.id])
-                    .then(() => {
-                        const updatedTracks = savedTracks.filter(
-                            (savedTrack) => savedTrack.id !== track.id,
-                        );
-                        setSavedTracks(updatedTracks);
-                    })
-                    .catch(() => {
-                        notifications.show({
-                            message: "Failed to remove track from saved tracks",
-                            color: "red",
-                        });
-                    });
-                return;
-            }
-            await UserServices.saveTracks([track.id as string])
-                .then(() => {
-                    const updatedTracks = [...savedTracks, track];
-                    setSavedTracks(updatedTracks);
-                })
-                .catch(() => {
-                    notifications.show({
-                        message: "Failed to save track",
-                        color: "red",
-                    });
-                })
-                .finally(() => {
-                    nprogress.complete();
-                });
-        } catch (error) {
-            console.error("Error saving track:", error);
-        } finally {
-            nprogress.complete();
-        }
-    };
-
-    const isPlaying = (track: SpotifyTrack) => {
-        if (!currentTrack) return false;
-        return currentTrack.id === track.id;
-    };
-    return (
-        <CustomTable>
-            <CustomTable.Body>
-                {mapSavedTracks?.slice(0, isShowMore ? 10 : 5).map((track, index) => (
-                    <CustomTable.Row key={track.id} className="group">
-                        <CustomTable.Cell width={20}>
-                            <div className="flex items-center space-x-3">
-                                {isPlaying(track) && !playbackState.isPaused ? (
-                                    <div className="group">
-                                        <img
-                                            width="14"
-                                            height="14"
-                                            alt=""
-                                            src="https://open.spotifycdn.com/cdn/images/equaliser-green.f8937a92.svg"
-                                            className="group-hover:hidden"
-                                        />
-                                        <button
-                                            onClick={togglePlay}
-                                            type="button"
-                                            className="hidden group-hover:block"
-                                        >
-                                            <Pause />
-                                        </button>
-                                    </div>
-                                ) : (
-                                    <div
-                                        className={
-                                            isPlaying(track) ? "text-green-400" : "text-zinc-200"
-                                        }
-                                    >
-                                        <span className="block w-5 text-center text-base group-hover:hidden">
-                                            {index + 1}
-                                        </span>
-                                        <button
-                                            type="button"
-                                            className="w-5 text-center text-base hidden group-hover:block"
-                                            onClick={() => handlePlayTrack(track)}
-                                        >
-                                            <Play />
-                                        </button>
-                                    </div>
-                                )}
-                            </div>
-                        </CustomTable.Cell>
-                        <CustomTable.Cell className={`${isPlaying(track) ? "text-green-400" : ""}`}>
-                            <TrackCell track={track} />
-                        </CustomTable.Cell>
-                        <CustomTable.Cell align="right">
-                            <div className="flex items-center justify-end space-x-3">
-                                <button
-                                    type="button"
-                                    className={`${track.isSaved ? "text-green-500" : "invisible group-hover:visible text-zinc-400 hover:text-zinc-200 hover:scale-105 "}`}
-                                    onClick={() => handleSaveTrack(track)}
-                                >
-                                    {!track.isSaved ? (
-                                        <AddCircle size={18} />
-                                    ) : (
-                                        <TickCircle variant="Bold" size={18} />
-                                    )}
-                                </button>
-                                <span className="text-[#b3b3b3]">
-                                    {convertMillisecondsToMinutes(track.duration_ms)}
-                                </span>
-                                <TrackOptions track={track} />
-                            </div>
-                        </CustomTable.Cell>
-                    </CustomTable.Row>
-                ))}
-            </CustomTable.Body>
-        </CustomTable>
-    );
-};
 
 const ArtistAlbums = () => {
     const { artistId } = useParams();

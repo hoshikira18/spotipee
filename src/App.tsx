@@ -26,6 +26,7 @@ import ArtistDiscographyPage from "./components/pages/ArtistDiscographyPage";
 import RelatedArtistPage from "./components/pages/RelatedArtistPage";
 import PLaylistDetailPage from "./components/pages/PLaylistDetailPage";
 import AlbumDetailPage from "./components/pages/AlbumDetailPage";
+import TrackDetailPage from "./components/pages/TrackDetailPage";
 
 const theme = createTheme({
     colors: {
@@ -96,11 +97,19 @@ const router = createBrowserRouter([
                 element: <AlbumDetailPage />,
             },
             {
+                path: "/track/:trackId",
+                element: <TrackDetailPage />,
+            },
+            {
                 path: "/artist/:artistId",
                 element: <ArtistDetailPage />,
             },
             {
                 path: "/artist/:artistId/discography",
+                element: <ArtistDiscographyPage />,
+            },
+            {
+                path: "/artist/:artistId/discography/:type",
                 element: <ArtistDiscographyPage />,
             },
             {

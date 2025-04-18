@@ -8,10 +8,10 @@ import { cn } from "../../utils";
 import { useElementScroll } from "../../hooks/useElementScroll";
 
 function ArtistDiscographyPage() {
-    const { artistId } = useParams();
+    const { artistId, type } = useParams<{ artistId: string; type?: "single" | "album" }>();
     const { data: artist } = useArtist(artistId as string);
     const { data: topTracks } = useArtistAlbums(artistId as string, 50);
-    const [filter, setFilter] = useState<"single" | "album" | "all">("all");
+    const [filter, setFilter] = useState<"single" | "album" | "all">(type ?? "all");
 
     const filteredData = topTracks?.filter(
         (track) => filter === "all" || track.album_type === filter,
