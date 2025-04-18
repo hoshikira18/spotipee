@@ -1,6 +1,6 @@
 import { useRef, useState } from "react";
 import { Link, useParams } from "react-router-dom";
-import { useArtistAlbums } from "../../hooks/useArtist";
+import { useArtist, useArtistAlbums } from "../../hooks/useArtist";
 import MediaCard from "../molecules/MediaCard";
 import { Combobox, useCombobox } from "@mantine/core";
 import { ArrowDown2, ArrowUp2 } from "iconsax-react";
@@ -9,6 +9,7 @@ import { useElementScroll } from "../../hooks/useElementScroll";
 
 function ArtistDiscographyPage() {
     const { artistId } = useParams();
+    const { data: artist } = useArtist(artistId as string);
     const { data: topTracks } = useArtistAlbums(artistId as string, 50);
     const [filter, setFilter] = useState<"single" | "album" | "all">("all");
 
@@ -37,7 +38,7 @@ function ArtistDiscographyPage() {
                 )}
             >
                 <Link to={`/artist/${artistId}`} className="text-2xl font-semibold hover:underline">
-                    Discography
+                    {artist?.name}
                 </Link>
                 <div>
                     <Combobox

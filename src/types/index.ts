@@ -110,6 +110,13 @@ type SpotifyAlbum = {
     total_tracks: number;
     type: "album";
     uri: string;
+    tracks: {
+        items: SpotifyTrack[];
+    };
+    copyrights: {
+        text: string;
+        type: string;
+    }[];
 };
 
 type SpotifyPlaylist = {
