@@ -137,12 +137,19 @@ type SpotifyPlaylist = {
         type: "user";
         uri: string;
         display_name: string;
+        images: Image[];
     };
     public: false;
     snapshot_id: string;
     tracks: {
         href: string;
         total: number;
+        items: [
+            {
+                added_at: string;
+                track: SpotifyTrack;
+            },
+        ];
     };
     type: string;
     uri: string;
