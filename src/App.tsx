@@ -10,6 +10,7 @@ import {
     createTheme,
     defaultVariantColorsResolver,
 } from "@mantine/core";
+import { ModalsProvider } from "@mantine/modals";
 import { NavigationProgress, nprogress } from "@mantine/nprogress";
 import { useEffect } from "react";
 import ErrorPage from "./components/pages/ErrorPage";
@@ -21,7 +22,6 @@ import { useIsFetching } from "@tanstack/react-query";
 import PlayerProvider from "./contexts/PlayerContext";
 import TrackProvider from "./contexts/TrackContext";
 import "./App.css";
-import CommonPageLayout from "./components/templates/CommonPageLayout";
 import ArtistDiscographyPage from "./components/pages/ArtistDiscographyPage";
 import RelatedArtistPage from "./components/pages/RelatedArtistPage";
 import PLaylistDetailPage from "./components/pages/PLaylistDetailPage";
@@ -128,13 +128,15 @@ function App() {
 
     return (
         <MantineProvider theme={{ ...theme, variantColorResolver }} defaultColorScheme="dark">
-            <TrackProvider>
-                <PlayerProvider>
-                    <Notifications position="top-right" />
-                    <NavigationProgress />
-                    <RouterProvider router={router} />
-                </PlayerProvider>
-            </TrackProvider>
+            <ModalsProvider>
+                <TrackProvider>
+                    <PlayerProvider>
+                        <Notifications position="top-right" />
+                        <NavigationProgress />
+                        <RouterProvider router={router} />
+                    </PlayerProvider>
+                </TrackProvider>
+            </ModalsProvider>
         </MantineProvider>
     );
 }

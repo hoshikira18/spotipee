@@ -40,6 +40,13 @@ const PlaylistServices = {
         });
         console.log(data);
     },
+    async changePlaylistInfo(id: string, name?: string, description?: string) {
+        const data = await instance.put(`/playlists/${id}`, {
+            name,
+            description,
+        });
+        return data;
+    },
 };
 
 export default PlaylistServices;
