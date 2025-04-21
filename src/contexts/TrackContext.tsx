@@ -5,9 +5,9 @@ import UserServices from "../services/UserServices";
 export const TrackContext = createContext<{
     currentPlayingTrack: SpotifyTrack | null;
     setCurrentPlayingTrack: (track: SpotifyTrack | null) => void;
-    savedTracks: SpotifyTrack[];
+    savedTracks: string[];
     savedTracksCount: number;
-    setSavedTracks: (tracks: SpotifyTrack[]) => void;
+    setSavedTracks: (tracks: string[]) => void;
     setSavedTracksCount: (count: number) => void;
 } | null>(null);
 
@@ -17,14 +17,14 @@ interface TrackProviderProps {
 
 function TrackProvider({ children }: TrackProviderProps) {
     const [currentPlayingTrack, setCurrentPlayingTrack] = useState<SpotifyTrack | null>(null);
-    const [savedTracks, setSavedTracks] = useState<SpotifyTrack[]>([]);
+    const [savedTracks, setSavedTracks] = useState<string[]>([]);
     const [savedTracksCount, setSavedTracksCount] = useState(0);
 
     useEffect(() => {
         const fetchSavedTracks = async () => {
             try {
                 const tracks = await UserServices.getSavedTracks();
-                setSavedTracks(tracks);
+                setSavedTracks(tracks.map((track) => track.id));
                 setSavedTracksCount(tracks.length);
             } catch (error) {
                 console.error("Error fetching saved tracks:", error);

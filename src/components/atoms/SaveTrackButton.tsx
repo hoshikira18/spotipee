@@ -8,7 +8,7 @@ import { notifications } from "@mantine/notifications";
 import { cn } from "../../utils";
 
 interface SaveTrackButtonProps {
-    track: SpotifyTrack;
+    trackId: string;
     className?: string;
     size?: "sm" | "md" | "lg";
 }
@@ -19,7 +19,7 @@ const buttonSize = {
     lg: 30,
 };
 
-function SaveTrackButton({ track, className = "", size = "sm" }: SaveTrackButtonProps) {
+function SaveTrackButton({ trackId, className = "", size = "sm" }: SaveTrackButtonProps) {
     const trackContext = useContext(TrackContext);
 
     if (!trackContext) {
@@ -28,16 +28,16 @@ function SaveTrackButton({ track, className = "", size = "sm" }: SaveTrackButton
 
     const { setSavedTracks, savedTracks } = trackContext;
 
-    const isSaved = savedTracks.some((t) => t.id === track.id);
+    const isSaved = savedTracks.some((t) => t === trackId);
 
-    const handleSaveTrack = async (track: SpotifyTrack) => {
+    const handleSaveTrack = async (trackId: string) => {
         try {
             nprogress.start();
             if (isSaved) {
-                await UserServices.removeTracks([track.id])
+                await UserServices.removeTracks([trackId])
                     .then(() => {
                         const updatedTracks = savedTracks.filter(
-                            (savedTrack) => savedTrack.id !== track.id,
+                            (savedTrack) => savedTrack !== trackId,
                         );
                         setSavedTracks(updatedTracks);
                     })
@@ -49,9 +49,9 @@ function SaveTrackButton({ track, className = "", size = "sm" }: SaveTrackButton
                     });
                 return;
             }
-            await UserServices.saveTracks([track.id as string])
+            await UserServices.saveTracks([trackId as string])
                 .then(() => {
-                    const updatedTracks = [...savedTracks, track];
+                    const updatedTracks = [...savedTracks, trackId];
                     setSavedTracks(updatedTracks);
                 })
                 .catch(() => {
@@ -77,7 +77,7 @@ function SaveTrackButton({ track, className = "", size = "sm" }: SaveTrackButton
                 `${isSaved ? "text-green-500" : "invisible group-hover:visible text-zinc-400 hover:text-zinc-200 hover:scale-105 "}`,
                 className,
             )}
-            onClick={() => handleSaveTrack(track)}
+            onClick={() => handleSaveTrack(trackId)}
         >
             {!isSaved ? (
                 <AddCircle size={buttonSize[size]} />

@@ -20,6 +20,7 @@ import { useRightSidebarStore } from "../../../store/rightSidebarStore";
 import { PlayerContext } from "../../../contexts/PlayerContext";
 import { Link } from "react-router-dom";
 import type { SpotifyArtist } from "../../../types";
+import CurrentTrackTitle from "../../molecules/CurrentTrackTitle";
 
 function Player() {
     return (
@@ -47,27 +48,11 @@ const CurrentSong = () => {
                         alt="song-img"
                         className="h-full rounded-md"
                     />
-                    <div>
-                        <Link
-                            to={`/track/${currentTrack.id}`}
-                            className="line-clamp-1 hover:underline text-sm"
-                        >
-                            {currentTrack?.name || "No Track Playing"}
-                        </Link>
-                        <p className="text-sm text-zinc-400 line-clamp-1">
-                            {currentTrack?.artists
-                                ?.map((artist: SpotifyArtist) => (
-                                    <Link
-                                        key={artist.id}
-                                        to={`/artist/${artist.uri.split(":")[2]}`}
-                                        className="hover:underline text-[12px]"
-                                    >
-                                        {artist.name}
-                                    </Link>
-                                ))
-                                .reduce((prev: any, curr: any) => [prev, ", ", curr])}
-                        </p>
-                    </div>
+                    <CurrentTrackTitle
+                        id={currentTrack?.id}
+                        name={currentTrack?.name}
+                        artists={currentTrack?.artists}
+                    />
                 </>
             ) : (
                 <Loader />

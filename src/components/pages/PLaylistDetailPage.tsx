@@ -104,7 +104,7 @@ function PLaylistDetailPage() {
                         </div>
                     </div>
                     <div className="flex items-center space-x-5 p-5" ref={playButtonRef}>
-                        <PlayButton tracks={playlist.tracks.items.map((item) => item.track)} />
+                        <PlayButton context_uri={playlist.uri} />
                     </div>
                     <div className="pb-20">
                         <CustomTable stickyHeader stickyHeaderOffset={64}>

@@ -1,6 +1,17 @@
 import { instance } from "../lib/axios";
+import type { SpotifyPlaybackState } from "../types";
 
-const MediaServices = {
+type PlayPrams =
+    | {
+          context_uri?: string;
+          uris?: never;
+      }
+    | {
+          context_uri?: never;
+          uris?: string[];
+      };
+
+const CommonServices = {
     async getRecentlyPlayed(limit = 10, offset = 0) {
         const data = await instance
             .get("/me/player/recently-played", {
@@ -35,6 +46,21 @@ const MediaServices = {
             .then(({ data }) => data);
         return data;
     },
+    async getNowPlaying(): Promise<SpotifyPlaybackState> {
+        const data = await instance.get("/me/player").then(({ data }) => data);
+        return data;
+    },
+    async play({ context_uri, uris }: PlayPrams): Promise<void> {
+        if (context_uri) {
+            await instance.put("/me/player/play", {
+                context_uri,
+            });
+            return;
+        }
+        await instance.put("/me/player/play", {
+            uris,
+        });
+    },
 };
 
-export default MediaServices;
+export default CommonServices;

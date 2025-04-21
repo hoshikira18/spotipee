@@ -3,18 +3,22 @@ import { PlayerContext } from "../../contexts/PlayerContext";
 import type { SpotifyTrack } from "../../types";
 import { Pause, Play } from "./icons";
 import TrackServices from "../../services/TrackServices";
+import { NowPlayingContext } from "../../contexts/NowPlayingContext";
 
 interface PlayButtonCellProps {
+    context_uri?: string;
     track: SpotifyTrack;
     index: number;
 }
 
 function PlayButtonCell({ track, index }: PlayButtonCellProps) {
     const playerContext = useContext(PlayerContext);
-    if (!playerContext) {
-        throw new Error("PlayerContext is not available");
+    const nowPlayingContext = useContext(NowPlayingContext);
+    if (!playerContext || !nowPlayingContext) {
+        throw new Error("PlayerContext | NowPlayingContext is not available");
     }
     const { currentTrack, togglePlay, playbackState } = playerContext;
+    const { setKey } = nowPlayingContext;
 
     const isPlaying = (track: SpotifyTrack) => {
         if (!currentTrack) return false;
@@ -25,6 +29,7 @@ function PlayButtonCell({ track, index }: PlayButtonCellProps) {
         playbackState.isPaused && currentTrack?.id === track.id
             ? togglePlay()
             : await TrackServices.play([track.uri] as string[]);
+        setKey((prev) => !prev);
     };
 
     return (

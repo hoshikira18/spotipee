@@ -1,6 +1,7 @@
 import { createContext } from "react";
 import { usePlayer } from "../hooks/usePlayer";
 import Cookies from "js-cookie";
+import type { SpotifyTrack } from "../types";
 
 interface PlayerProviderProps {
     children: React.ReactNode;
@@ -15,7 +16,8 @@ export const PlayerContext = createContext<{
         repeatMode: number;
         volume: number;
     };
-    currentTrack: any;
+    currentTrack: SpotifyTrack;
+    nextTrack: SpotifyTrack[] | null;
     togglePlay: () => void;
     seek: (position: number) => void;
     skipToNext: () => void;
@@ -35,6 +37,7 @@ function PlayerProvider({ children }: PlayerProviderProps) {
     const {
         playbackState,
         currentTrack,
+        nextTrack,
         togglePlay,
         seek,
         skipToNext,
@@ -47,6 +50,7 @@ function PlayerProvider({ children }: PlayerProviderProps) {
     const contextValues = {
         playbackState,
         currentTrack,
+        nextTrack,
         togglePlay,
         seek,
         skipToNext,

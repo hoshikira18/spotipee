@@ -14,10 +14,11 @@ import { useQueryClient } from "@tanstack/react-query";
 import { useDebouncedCallback } from "@mantine/hooks";
 import ArtistOptions from "../atoms/ArtistOptionsButton";
 import { Button } from "@mantine/core";
-import MediaServices from "../../services/MediaService";
+import CommonServices from "../../services/CommonServices";
 import SeeAllButton from "../atoms/SeeAllButton";
 import DetailPageTemplate from "../templates/DetailPageTemplate";
 import TopTracksTable from "../organisms/TopTrackTable";
+import PlayButton from "../atoms/PlayButton";
 
 export const ArtistDetailContext = createContext<{
     artistId: string | undefined;
@@ -105,17 +106,7 @@ function ArtistDetailPage() {
                         />
                     </div>
                     <div className="flex items-center space-x-5 p-5" ref={playButtonRef}>
-                        <button
-                            type="button"
-                            className="min-w-14 h-14 flex items-center justify-center transition-all duration-150 bg-green-500 rounded-full hover:bg-green-400 hover:scale-105 text-black"
-                            onClick={() => {
-                                if (topTracks?.length) {
-                                    TrackServices.play(topTracks.map((track) => track.uri || ""));
-                                }
-                            }}
-                        >
-                            <Play />
-                        </button>
+                        <PlayButton context_uri={artist?.uri} />
 
                         <FollowArtistButton />
                         <ArtistOptions />
@@ -221,7 +212,7 @@ const RelatedArtists = () => {
     const ARTIST_PER_PAGE = 10;
     useEffect(() => {
         const fetchRelatedArtists = async () => {
-            const data = await MediaServices.search({
+            const data = await CommonServices.search({
                 q: artist?.genres.join(","),
                 type: "artist",
                 limit: ARTIST_PER_PAGE,

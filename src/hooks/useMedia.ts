@@ -1,9 +1,9 @@
 import { useQuery } from "@tanstack/react-query";
-import MediaServices from "../services/MediaService";
+import CommonServices from "../services/CommonServices";
 
 export const useRecentlyPlayed = () => {
     return useQuery({
         queryKey: ["recently-played"],
-        queryFn: () => MediaServices.getRecentlyPlayed(),
+        queryFn: () => CommonServices.getRecentlyPlayed(),
     });
 };

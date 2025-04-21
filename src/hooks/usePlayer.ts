@@ -1,7 +1,7 @@
 import { useDebouncedCallback } from "@mantine/hooks";
 import { useEffect, useState } from "react";
-import Cookies from "js-cookie";
 import { instance } from "../lib/axios";
+import type { SpotifyTrack } from "../types";
 
 declare global {
     interface Window {
@@ -13,6 +13,7 @@ declare global {
 export const usePlayer = (token: string) => {
     const [player, setPlayer] = useState<any>(undefined);
     const [currentTrack, setTrack] = useState<any>(null);
+    const [nextTrack, setNextTrack] = useState<SpotifyTrack[] | null>(null);
     const [deviceId, setDeviceId] = useState<string | null>(null);
 
     const [playbackState, setPlaybackState] = useState({
@@ -61,7 +62,8 @@ export const usePlayer = (token: string) => {
 
             try {
                 const { paused, track_window, duration, position, shuffle, repeat_mode } = state;
-                const { current_track } = track_window;
+                const { current_track, next_tracks } = track_window;
+                setNextTrack(next_tracks);
 
                 setTrack(current_track);
                 setPlaybackState((state) => ({
@@ -191,6 +193,7 @@ export const usePlayer = (token: string) => {
     return {
         player,
         currentTrack,
+        nextTrack,
         playbackState,
         togglePlay,
         skipToNext,
