@@ -1,5 +1,8 @@
 import { Link } from "react-router-dom";
 import type { SpotifyTrack } from "../../types";
+import { useContext } from "react";
+import { PlayerContext } from "../../contexts/PlayerContext";
+import { cn } from "../../utils";
 
 interface TrackCellProps {
     track: SpotifyTrack;
@@ -8,8 +11,19 @@ interface TrackCellProps {
 }
 
 function TrackCell({ track, displayArtist = false, displayImage = true }: TrackCellProps) {
+    const playerContext = useContext(PlayerContext);
+    if (!playerContext) {
+        throw new Error("PlayerContext is not available");
+    }
+    const { currentTrack } = playerContext;
+
+    const isPlaying = (track: SpotifyTrack) => {
+        if (!track) return false;
+        return track?.id === currentTrack?.id;
+    };
+
     return (
-        <div className="flex items-center space-x-3">
+        <div className={cn("flex items-center space-x-3", isPlaying(track) && "text-green-400")}>
             {displayImage && (
                 <img
                     src={track.album.images[0].url}

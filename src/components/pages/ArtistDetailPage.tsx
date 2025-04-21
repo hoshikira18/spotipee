@@ -1,7 +1,7 @@
 import { useParams } from "react-router-dom";
 import { useArtist, useArtistTopTracks } from "../../hooks/useArtist";
 import { Play } from "../atoms/icons";
-import type { SpotifyArtist, SpotifyTrack } from "../../types";
+import type { SpotifyArtist } from "../../types";
 import { createContext, useContext, useEffect, useRef, useState } from "react";
 import TrackServices from "../../services/TrackServices";
 import MediaCard from "../molecules/MediaCard";
