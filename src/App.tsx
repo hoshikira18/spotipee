@@ -27,6 +27,7 @@ import RelatedArtistPage from "./components/pages/RelatedArtistPage";
 import PLaylistDetailPage from "./components/pages/PLaylistDetailPage";
 import AlbumDetailPage from "./components/pages/AlbumDetailPage";
 import TrackDetailPage from "./components/pages/TrackDetailPage";
+import NowPlayingProvider from "./contexts/NowPlayingContext";
 
 const theme = createTheme({
     colors: {
@@ -145,9 +146,11 @@ function App() {
             <ModalsProvider>
                 <TrackProvider>
                     <PlayerProvider>
-                        <Notifications position="top-right" />
-                        <NavigationProgress />
-                        <RouterProvider router={router} />
+                        <NowPlayingProvider>
+                            <Notifications position="top-right" />
+                            <NavigationProgress />
+                            <RouterProvider router={router} />
+                        </NowPlayingProvider>
                     </PlayerProvider>
                 </TrackProvider>
             </ModalsProvider>

@@ -70,7 +70,7 @@ function TrackDetailPage() {
                 </div>
                 <div className="flex items-center space-x-5 p-5" ref={playButtonRef}>
                     <PlayButton tracks={[track]} />
-                    <SaveTrackButton track={track} className="visible" size="lg" />
+                    <SaveTrackButton trackId={track.id} className="visible" size="lg" />
                 </div>
                 <div className="px-5 mb-10">
                     {track?.artists.map((artist) => (

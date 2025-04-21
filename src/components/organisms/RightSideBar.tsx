@@ -1,12 +1,13 @@
 import { useViewportSize } from "@mantine/hooks";
 import { useEffect } from "react";
 import { useRightSidebarStore } from "../../store/rightSidebarStore";
-import CurrentTrack from "../molecules/CurrentTrack";
+import NowPlayingView from "../molecules/NowPlayingView";
 
 function RightSideBar() {
     const { width } = useViewportSize();
     const { state, setState } = useRightSidebarStore();
 
+    // Handle the sidebar state based on the screen width
     useEffect(() => {
         if (width > 0 && width < 768) {
             setState("off");
@@ -16,17 +17,17 @@ function RightSideBar() {
     return (
         <aside
             className={`${
-                state !== "off" ? "w-80" : "w-0"
+                state !== "off" ? "w-1/4" : "w-0"
             } bg-zinc-800/60 h-full rounded-md transition-all`}
         >
             {state === "current-track" && (
                 <div className="h-full overflow-hidden">
-                    <CurrentTrack />
+                    <NowPlayingView />
                 </div>
             )}
             {state === "devices" && (
-                <div className="h-full overflow-hidden flex items-center justify-center">
-                    Display Devices
+                <div className="h-full overflow-hidden flex items-center justify-center group">
+                    Devices
                 </div>
             )}
             {state === "queue" && (

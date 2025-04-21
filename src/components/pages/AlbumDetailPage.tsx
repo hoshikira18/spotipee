@@ -75,7 +75,7 @@ function AlbumDetailPage() {
                     </div>
                 </div>
                 <div className="flex items-center space-x-5 p-5" ref={playButtonRef}>
-                    <PlayButton tracks={album.tracks.items} />
+                    <PlayButton context_uri={album.uri} />
                 </div>
 
                 {/* Album tracks table */}

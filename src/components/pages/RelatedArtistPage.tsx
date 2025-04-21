@@ -2,7 +2,7 @@ import { Link, useParams } from "react-router-dom";
 import { useArtist } from "../../hooks/useArtist";
 import { useEffect, useRef, useState } from "react";
 import type { SpotifyArtist } from "../../types";
-import MediaServices from "../../services/MediaService";
+import CommonServices from "../../services/CommonServices";
 import MediaCard from "../molecules/MediaCard";
 import { useElementScroll } from "../../hooks/useElementScroll";
 import { cn } from "../../utils";
@@ -15,7 +15,7 @@ function RelatedArtistPage() {
     const ARTIST_PER_PAGE = 40;
     useEffect(() => {
         const fetchRelatedArtists = async () => {
-            const data = await MediaServices.search({
+            const data = await CommonServices.search({
                 q: artist?.genres.join(","),
                 type: "artist",
                 limit: ARTIST_PER_PAGE,
