@@ -4,7 +4,6 @@ import { Link, useParams } from "react-router-dom";
 import CustomTable from "../organisms/CustomTable";
 import type { SpotifyTrack } from "../../types";
 import { Clock } from "iconsax-react";
-import UserImage from "../atoms/UserImage";
 import { useAlbum } from "../../hooks/useAlbum";
 import { calDurationTime, convertMillisecondsToMinutes, getUSDate } from "../../utils";
 import TrackCell from "../atoms/TrackCell";
@@ -13,6 +12,7 @@ import SeeAllButton from "../atoms/SeeAllButton";
 import MediaCard from "../molecules/MediaCard";
 import PlayButtonCell from "../atoms/PlayButtonCell";
 import PlayButton from "../atoms/PlayButton";
+import AvtImage from "../atoms/AvtImage";
 
 function AlbumDetailPage() {
     const { albumId } = useParams();
@@ -29,7 +29,7 @@ function AlbumDetailPage() {
         >
             <div className="h-full absolute inset-0 rounded-md">
                 <div className="relative h-1/3 overflow-hidden p-5 bg-gradient-to-b from-[#b24242] to-[#602020] flex items-end space-x-5 pt-12 xl:pt-8">
-                    <UserImage imageUrl={album?.images[0].url} alt="playlist-image" />
+                    <AvtImage imageUrl={album?.images[0].url} alt="playlist-image" />
                     <div className="space-y-4">
                         <span className="text-sm">Album</span>
                         <p

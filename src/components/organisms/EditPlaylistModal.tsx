@@ -1,5 +1,5 @@
 import { TextInput, Textarea, Button } from "@mantine/core";
-import UserImage from "../atoms/UserImage";
+import UserImage from "../atoms/AvtImage";
 import type { SpotifyPlaylist } from "../../types";
 import PlaylistServices from "../../services/PlaylistServices";
 import { nprogress } from "@mantine/nprogress";

@@ -7,12 +7,12 @@ import type { SpotifyTrack } from "../../types";
 import TrackCell from "../atoms/TrackCell";
 import { calAddedTime, convertMillisecondsToMinutes } from "../../utils";
 import { Clock } from "iconsax-react";
-import UserImage from "../atoms/UserImage";
 import EditPlaylistModal from "../organisms/EditPlaylistModal";
 import { Modal } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import PlayButton from "../atoms/PlayButton";
 import PlayButtonCell from "../atoms/PlayButtonCell";
+import AvtImage from "../atoms/AvtImage";
 
 export const PlaylistDetailContext = createContext<{
     playlistId: string;
@@ -60,7 +60,8 @@ function PLaylistDetailPage() {
             >
                 <div className="h-full absolute inset-0 rounded-md">
                     <div className="relative h-1/3 overflow-hidden p-5 bg-gradient-to-b from-[#b24242] to-[#602020] flex items-end space-x-5 pt-12 xl:pt-8">
-                        <UserImage
+                        <AvtImage
+                            isEdit={true}
                             imageUrl={playlist?.images[0].url}
                             alt="playlist-image"
                             onClick={open}

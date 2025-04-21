@@ -1,7 +1,6 @@
 import { useRef, useState } from "react";
 import DetailPageTemplate from "../templates/DetailPageTemplate";
 import { Link, useParams } from "react-router-dom";
-import UserImage from "../atoms/UserImage";
 import { calDurationTime } from "../../utils";
 import { useArtistTopTracks } from "../../hooks/useArtist";
 import { useTrack } from "../../hooks/useTrack";
@@ -9,6 +8,7 @@ import SaveTrackButton from "../atoms/SaveTrackButton";
 import DetailSection from "../organisms/DetailSection";
 import TopTracksTable from "../organisms/TopTrackTable";
 import PlayButton from "../atoms/PlayButton";
+import AvtImage from "../atoms/AvtImage";
 
 function TrackDetailPage() {
     const { trackId } = useParams();
@@ -25,7 +25,7 @@ function TrackDetailPage() {
         >
             <div className="h-full absolute inset-0 rounded-md">
                 <div className="relative h-1/3 overflow-hidden p-5 bg-gradient-to-b from-[#b24242] to-[#602020] flex items-end space-x-5 pt-12 xl:pt-8">
-                    <UserImage imageUrl={track?.album.images[0].url} alt="playlist-image" />
+                    <AvtImage imageUrl={track?.album.images[0].url} alt="playlist-image" />
                     <div className="space-y-4">
                         <span className="text-sm">Song</span>
                         <p

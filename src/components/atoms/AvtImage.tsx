@@ -6,9 +6,10 @@ interface UserImageProps {
     alt: string;
     onClick?: () => void;
     className?: string;
+    isEdit?: boolean;
 }
 
-function UserImage({ className, imageUrl, alt, onClick }: UserImageProps) {
+function AvtImage({ isEdit = false, className, imageUrl, alt, onClick }: UserImageProps) {
     return (
         <div className={cn("group relative h-full overflow-hidden", className)}>
             <img
@@ -19,7 +20,10 @@ function UserImage({ className, imageUrl, alt, onClick }: UserImageProps) {
             <button
                 type="button"
                 onClick={onClick}
-                className="absolute inset-0 invisible group-hover:visible flex items-center justify-center bg-black/50 transition-all duration-150 rounded-md"
+                className={cn(
+                    "absolute inset-0 invisible flex items-center justify-center bg-black/50 transition-all duration-150 rounded-md",
+                    isEdit ? "group-hover:visible" : "",
+                )}
             >
                 <Edit2 size={60} />
             </button>
@@ -27,4 +31,4 @@ function UserImage({ className, imageUrl, alt, onClick }: UserImageProps) {
     );
 }
 
-export default UserImage;
+export default AvtImage;
