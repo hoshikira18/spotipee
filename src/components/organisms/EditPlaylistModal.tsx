@@ -25,7 +25,7 @@ function EditPlaylistModal({ playlist }: ModalProps) {
         if (!playlist) return;
 
         nprogress.start();
-        await PlaylistServices.changePlaylistInfo(playlist.id, name, description)
+        await PlaylistServices.changePlaylistInfo(playlist.id, n, d)
             .then(() => {
                 setName(n);
                 setDescription(d);
