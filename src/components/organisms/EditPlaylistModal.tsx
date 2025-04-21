@@ -1,5 +1,5 @@
 import { TextInput, Textarea, Button } from "@mantine/core";
-import UserImage from "../atoms/UserImage";
+import UserImage from "../atoms/AvtImage";
 import type { SpotifyPlaylist } from "../../types";
 import PlaylistServices from "../../services/PlaylistServices";
 import { nprogress } from "@mantine/nprogress";
@@ -25,7 +25,7 @@ function EditPlaylistModal({ playlist }: ModalProps) {
         if (!playlist) return;
 
         nprogress.start();
-        await PlaylistServices.changePlaylistInfo(playlist.id, name, description)
+        await PlaylistServices.changePlaylistInfo(playlist.id, n, d)
             .then(() => {
                 setName(n);
                 setDescription(d);
