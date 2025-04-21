@@ -1,11 +1,8 @@
-import { useContext, useRef } from "react";
+import { useRef } from "react";
 import DetailPageTemplate from "../templates/DetailPageTemplate";
-import { Pause, Play } from "../atoms/icons";
 import { Link, useParams } from "react-router-dom";
 import CustomTable from "../organisms/CustomTable";
 import type { SpotifyTrack } from "../../types";
-import { PlayerContext } from "../../contexts/PlayerContext";
-import TrackServices from "../../services/TrackServices";
 import { Clock } from "iconsax-react";
 import UserImage from "../atoms/UserImage";
 import { useAlbum } from "../../hooks/useAlbum";
@@ -14,6 +11,8 @@ import TrackCell from "../atoms/TrackCell";
 import { useArtistTopTracks } from "../../hooks/useArtist";
 import SeeAllButton from "../atoms/SeeAllButton";
 import MediaCard from "../molecules/MediaCard";
+import PlayButtonCell from "../atoms/PlayButtonCell";
+import PlayButton from "../atoms/PlayButton";
 
 function AlbumDetailPage() {
     const { albumId } = useParams();
@@ -21,28 +20,11 @@ function AlbumDetailPage() {
 
     const playButtonRef = useRef<HTMLDivElement>(null);
 
-    const playerContext = useContext(PlayerContext);
-    if (!playerContext) {
-        throw new Error("PlayerContext is not available");
-    }
-    const { currentTrack, togglePlay, playbackState } = playerContext;
-
-    const isPlaying = (track: SpotifyTrack) => {
-        if (!currentTrack) return false;
-        return currentTrack.id === track.id;
-    };
-
-    const handlePlayTrack = async (track: SpotifyTrack) => {
-        playbackState.isPaused && currentTrack?.id === track.id
-            ? togglePlay()
-            : await TrackServices.play([track.uri] as string[]);
-    };
-
     if (!album) return null;
     return (
         <DetailPageTemplate
             playButtonRef={playButtonRef}
-            uris={album.tracks.items.map((track) => track.uri)}
+            uris={album.tracks.items.map((track) => track.uri) as string[]}
             title="Playlist Detail"
         >
             <div className="h-full absolute inset-0 rounded-md">
@@ -93,12 +75,7 @@ function AlbumDetailPage() {
                     </div>
                 </div>
                 <div className="flex items-center space-x-5 p-5" ref={playButtonRef}>
-                    <button
-                        type="button"
-                        className="min-w-14 h-14 flex items-center justify-center transition-all duration-150 bg-green-500 rounded-full hover:bg-green-400 hover:scale-105 text-black"
-                    >
-                        <Play />
-                    </button>
+                    <PlayButton tracks={album.tracks.items} />
                 </div>
 
                 {/* Album tracks table */}
@@ -129,49 +106,9 @@ function AlbumDetailPage() {
                                     }}
                                 >
                                     <CustomTable.Cell width={20}>
-                                        <div className="flex items-center justify-end">
-                                            {isPlaying(track) && !playbackState.isPaused ? (
-                                                <div className="group">
-                                                    <img
-                                                        width="14"
-                                                        height="14"
-                                                        alt=""
-                                                        src="https://open.spotifycdn.com/cdn/images/equaliser-green.f8937a92.svg"
-                                                        className="group-hover:hidden"
-                                                    />
-                                                    <button
-                                                        onClick={togglePlay}
-                                                        type="button"
-                                                        className="hidden group-hover:block"
-                                                    >
-                                                        <Pause />
-                                                    </button>
-                                                </div>
-                                            ) : (
-                                                <div
-                                                    className={
-                                                        isPlaying(track)
-                                                            ? "text-green-400"
-                                                            : "text-zinc-200"
-                                                    }
-                                                >
-                                                    <span className="block w-5 text-center text-base group-hover:hidden">
-                                                        {index + 1}
-                                                    </span>
-                                                    <button
-                                                        type="button"
-                                                        className="w-5 text-center text-base hidden group-hover:block"
-                                                        onClick={() => handlePlayTrack(track)}
-                                                    >
-                                                        <Play />
-                                                    </button>
-                                                </div>
-                                            )}
-                                        </div>
+                                        <PlayButtonCell index={index} track={track} />
                                     </CustomTable.Cell>
-                                    <CustomTable.Cell
-                                        className={`${isPlaying(track) ? "text-green-400" : ""}`}
-                                    >
+                                    <CustomTable.Cell>
                                         <TrackCell
                                             track={track}
                                             displayArtist

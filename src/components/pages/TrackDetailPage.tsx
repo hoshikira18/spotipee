@@ -1,10 +1,6 @@
-import { useContext, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import DetailPageTemplate from "../templates/DetailPageTemplate";
-import { Play } from "../atoms/icons";
 import { Link, useParams } from "react-router-dom";
-import type { SpotifyTrack } from "../../types";
-import { PlayerContext } from "../../contexts/PlayerContext";
-import TrackServices from "../../services/TrackServices";
 import UserImage from "../atoms/UserImage";
 import { calDurationTime } from "../../utils";
 import { useArtistTopTracks } from "../../hooks/useArtist";
@@ -12,6 +8,7 @@ import { useTrack } from "../../hooks/useTrack";
 import SaveTrackButton from "../atoms/SaveTrackButton";
 import DetailSection from "../organisms/DetailSection";
 import TopTracksTable from "../organisms/TopTrackTable";
+import PlayButton from "../atoms/PlayButton";
 
 function TrackDetailPage() {
     const { trackId } = useParams();
@@ -19,23 +16,11 @@ function TrackDetailPage() {
 
     const playButtonRef = useRef<HTMLDivElement>(null);
 
-    const playerContext = useContext(PlayerContext);
-    if (!playerContext) {
-        throw new Error("PlayerContext is not available");
-    }
-    const { currentTrack, togglePlay, playbackState } = playerContext;
-
-    const handlePlayTrack = async (track: SpotifyTrack) => {
-        playbackState.isPaused && currentTrack?.id === track.id
-            ? togglePlay()
-            : await TrackServices.play([track.uri] as string[]);
-    };
-
     if (!track) return null;
     return (
         <DetailPageTemplate
             playButtonRef={playButtonRef}
-            uris={[track?.uri]}
+            uris={[track?.uri] as string[]}
             title="Playlist Detail"
         >
             <div className="h-full absolute inset-0 rounded-md">
@@ -56,19 +41,21 @@ function TrackDetailPage() {
                         </p>
                         <div>
                             <div className="flex items-center space-x-1 text-sm text-zinc-200">
-                                <div className="flex items-center space-x-1">
-                                    <img
-                                        src={track.artists[0].images[0].url}
-                                        alt="owner-image"
-                                        className="w-7 aspect-square object-cover rounded-full"
-                                    />
-                                    <Link
-                                        to={`/artist/${track?.artists[0].id}`}
-                                        className="font-bold hover:underline"
-                                    >
-                                        {track?.artists[0].name}
-                                    </Link>
-                                </div>
+                                {track?.artists.map((artist) => (
+                                    <div key={artist.id} className="flex items-center space-x-1">
+                                        <img
+                                            src={artist.images[0].url}
+                                            alt="owner-image"
+                                            className="w-7 aspect-square object-cover rounded-full"
+                                        />
+                                        <Link
+                                            to={`/artist/${artist.id}`}
+                                            className="font-bold hover:underline"
+                                        >
+                                            {artist.name}
+                                        </Link>
+                                    </div>
+                                ))}
                                 <span>•</span>
                                 <Link to={`/album/${track.album.id}`} className="hover:underline">
                                     {track.album.name}
@@ -82,13 +69,7 @@ function TrackDetailPage() {
                     </div>
                 </div>
                 <div className="flex items-center space-x-5 p-5" ref={playButtonRef}>
-                    <button
-                        type="button"
-                        onClick={() => handlePlayTrack(track)}
-                        className="min-w-14 h-14 flex items-center justify-center transition-all duration-150 bg-green-500 rounded-full hover:bg-green-400 hover:scale-105 text-black"
-                    >
-                        <Play />
-                    </button>
+                    <PlayButton tracks={[track]} />
                     <SaveTrackButton track={track} className="visible" size="lg" />
                 </div>
                 <div className="px-5 mb-10">

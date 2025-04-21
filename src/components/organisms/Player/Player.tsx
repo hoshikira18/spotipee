@@ -14,17 +14,18 @@ import Repeat from "../../atoms/icons/Repeat";
 import { Loader, Slider } from "@mantine/core";
 import { useContext } from "react";
 import styles from "./Player.module.css";
-import { VolumeHigh } from "iconsax-react";
+import { VolumeHigh, VolumeLow1, VolumeMute } from "iconsax-react";
 import { useDebouncedCallback } from "@mantine/hooks";
 import { useRightSidebarStore } from "../../../store/rightSidebarStore";
 import { PlayerContext } from "../../../contexts/PlayerContext";
+import { Link } from "react-router-dom";
+import type { SpotifyArtist } from "../../../types";
 
 function Player() {
     return (
         <div className="h-full font-spotify flex items-center">
             <CurrentSong />
             <PlayerControl />
-
             <PlayerFunction />
         </div>
     );
@@ -46,11 +47,25 @@ const CurrentSong = () => {
                         alt="song-img"
                         className="h-full rounded-md"
                     />
-                    <div className="max-w-52">
-                        <p className="line-clamp-1">{currentTrack?.name || "No Track Playing"}</p>
-                        <p className="text-sm text-zinc-400">
-                            {currentTrack?.artists?.map((artist: any) => artist.name).join(", ") ||
-                                ""}
+                    <div>
+                        <Link
+                            to={`/track/${currentTrack.id}`}
+                            className="line-clamp-1 hover:underline text-sm"
+                        >
+                            {currentTrack?.name || "No Track Playing"}
+                        </Link>
+                        <p className="text-sm text-zinc-400 line-clamp-1">
+                            {currentTrack?.artists
+                                ?.map((artist: SpotifyArtist) => (
+                                    <Link
+                                        key={artist.id}
+                                        to={`/artist/${artist.uri.split(":")[2]}`}
+                                        className="hover:underline text-[12px]"
+                                    >
+                                        {artist.name}
+                                    </Link>
+                                ))
+                                .reduce((prev: any, curr: any) => [prev, ", ", curr])}
                         </p>
                     </div>
                 </>
@@ -203,7 +218,9 @@ const PlayerFunction = () => {
                 <Devices />
             </button>
             <div className="w-1/3 flex items-center justify-end space-x-2">
-                <VolumeHigh />
+                <button type="button" onClick={() => handleVolumeChange(0)}>
+                    {volume === 0 ? <VolumeMute /> : volume < 50 ? <VolumeLow1 /> : <VolumeHigh />}
+                </button>
                 <Slider
                     color="blue"
                     size="xs"
