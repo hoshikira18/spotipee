@@ -1,4 +1,4 @@
-import { useContext } from "react";
+import { useCallback, useContext } from "react";
 import type { SpotifyTrack } from "../../types";
 import { PlayerContext } from "../../contexts/PlayerContext";
 import { Play } from "./icons";
@@ -30,28 +30,30 @@ const PlayButton = ({
     const { currentTrack, togglePlay, playbackState } = playerContext;
     const { setKey } = nowPlayingContext;
 
-    const handlePlayTrack = async () => {
-        if (tracks) {
-            playbackState.isPaused && tracks.some((t) => t.id === currentTrack?.id)
-                ? togglePlay()
-                : await CommonServices.play({
-                      uris: tracks.map((t) => t.uri as string),
-                  });
+    const handlePlayTrack = useCallback(async () => {
+        try {
+            if (tracks) {
+                playbackState.isPaused && tracks.some((t) => t.id === currentTrack?.id)
+                    ? togglePlay()
+                    : await CommonServices.play({
+                          uris: tracks.map((t) => t.uri as string),
+                      });
 
-            return;
+                return;
+            }
+            await CommonServices.play({
+                context_uri,
+            });
+            setKey((prev) => !prev);
+        } catch (error) {
+            console.error("Error playing track:", error);
         }
-        await CommonServices.play({
-            context_uri,
-        });
-        setKey((prev) => !prev);
-    };
+    }, [context_uri, currentTrack, playbackState.isPaused, tracks, togglePlay, setKey]);
 
     return (
-        <>
-            <button type="button" onClick={handlePlayTrack} className={className}>
-                <Play />
-            </button>
-        </>
+        <button type="button" onClick={handlePlayTrack} className={className}>
+            <Play />
+        </button>
     );
 };
 

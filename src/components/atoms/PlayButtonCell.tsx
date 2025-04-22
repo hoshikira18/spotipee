@@ -1,4 +1,4 @@
-import { useContext } from "react";
+import { useCallback, useContext, useMemo } from "react";
 import { PlayerContext } from "../../contexts/PlayerContext";
 import type { SpotifyTrack } from "../../types";
 import { Pause, Play } from "./icons";
@@ -20,21 +20,26 @@ function PlayButtonCell({ track, index }: PlayButtonCellProps) {
     const { currentTrack, togglePlay, playbackState } = playerContext;
     const { setKey } = nowPlayingContext;
 
-    const isPlaying = (track: SpotifyTrack) => {
+    const isTrackPlaying = useMemo(() => {
         if (!currentTrack) return false;
         return currentTrack.id === track.id;
-    };
+    }, [currentTrack, track.id]);
 
-    const handlePlayTrack = async (track: SpotifyTrack) => {
-        playbackState.isPaused && currentTrack?.id === track.id
-            ? togglePlay()
-            : await TrackServices.play([track.uri] as string[]);
-        setKey((prev) => !prev);
-    };
+    const handlePlayTrack = useCallback(
+        async (track: SpotifyTrack) => {
+            if (playbackState.isPaused && currentTrack?.id === track.id) {
+                togglePlay();
+            } else {
+                await TrackServices.play([track.uri] as string[]);
+            }
+            setKey((prev) => !prev);
+        },
+        [playbackState.isPaused, currentTrack, track.uri, togglePlay, setKey],
+    );
 
     return (
         <div className="flex items-center justify-end">
-            {isPlaying(track) && !playbackState.isPaused ? (
+            {isTrackPlaying && !playbackState.isPaused ? (
                 <div className="group">
                     <img
                         width="14"
@@ -48,7 +53,7 @@ function PlayButtonCell({ track, index }: PlayButtonCellProps) {
                     </button>
                 </div>
             ) : (
-                <div className={isPlaying(track) ? "text-green-400" : "text-zinc-200"}>
+                <div className={isTrackPlaying ? "text-green-400" : "text-zinc-200"}>
                     <span className="block w-5 text-center text-base group-hover:hidden">
                         {index + 1}
                     </span>

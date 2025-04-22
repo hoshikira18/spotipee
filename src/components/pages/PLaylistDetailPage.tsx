@@ -61,7 +61,7 @@ function PLaylistDetailPage() {
                 <div className="h-full absolute inset-0 rounded-md">
                     <div className="relative h-1/3 overflow-hidden p-5 bg-gradient-to-b from-[#b24242] to-[#602020] flex items-end space-x-5 pt-12 xl:pt-8">
                         <AvtImage
-                            isEdit={true}
+                            showEditOverlay={true}
                             imageUrl={playlist?.images[0].url}
                             alt="playlist-image"
                             onClick={open}

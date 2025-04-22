@@ -1,8 +1,5 @@
 import { useRecentlyPlayed } from "../../hooks/useMedia";
-import { getImage } from "../../utils";
 import MediaCard from "../molecules/MediaCard";
-import HomeSection from "../organisms/HomeSection";
-import type { SpotifyTrack } from "../../types";
 import AuthWrapper from "../templates/AuthWrapper";
 
 function HomePage() {
@@ -11,22 +8,22 @@ function HomePage() {
         isFetching: isRecentlyPlayedLoading,
     } = useRecentlyPlayed();
 
+    console.log(recentlyPlayed);
+
+    if (!recentlyPlayed) return null;
+
     return (
         <AuthWrapper>
-            <div className="p-3 bg-zinc-800/60 rounded-md space-y-4 overflow-y-scroll h-full">
-                <HomeSection title="Recently played">
-                    {recentlyPlayed?.map((track: { track: SpotifyTrack }, i: number) => (
+            <div className="bg-zinc-900 h-full rounded-md font-spotify p-3">
+                <div className="overflow-x-auto flex">
+                    {recentlyPlayed?.map((item: any, index: number) => (
                         <MediaCard
-                            isLoading={isRecentlyPlayedLoading}
-                            className="w-1/3"
-                            key={i}
-                            size="sm"
-                            title={track.track.name}
-                            imageSrc={getImage(300, track.track.album.images)}
-                            subtitle="Artist"
+                            key={index}
+                            title={item.track.name}
+                            imageSrc={item.track.album.images[0].url}
                         />
                     ))}
-                </HomeSection>
+                </div>
             </div>
         </AuthWrapper>
     );

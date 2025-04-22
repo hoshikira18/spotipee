@@ -10,11 +10,13 @@ interface FollowArtistButtonProps {
 }
 
 function FollowArtistButton({ artist }: FollowArtistButtonProps) {
-    const [isFollowing, setIsFollowing] = useState<boolean>(false);
     const queryClient = useQueryClient();
+    const [isFollowing, setIsFollowing] = useState<boolean>(false);
+    const [isLoading, setIsLoading] = useState<boolean>(false);
 
-    const handleChangeStatus = useDebouncedCallback(async () => {
+    const handleChangeStatus = async () => {
         if (!artist) return;
+        setIsLoading(true);
         if (isFollowing) {
             // Unfollow the artist
             await UserServices.unfollowArtist(artist.id, "artist")
@@ -25,6 +27,7 @@ function FollowArtistButton({ artist }: FollowArtistButtonProps) {
                 .catch((error) => {
                     console.error("Error unfollowing artist:", error);
                 });
+            setIsLoading(false);
         } else {
             // Follow the artist
             await UserServices.followArtist(artist.id, "artist")
@@ -35,8 +38,9 @@ function FollowArtistButton({ artist }: FollowArtistButtonProps) {
                 .catch((error) => {
                     console.error("Error following artist:", error);
                 });
+            setIsLoading(false);
         }
-    }, 200);
+    };
 
     const { data: followedArtists } = useFollowedArtists();
 
@@ -48,8 +52,9 @@ function FollowArtistButton({ artist }: FollowArtistButtonProps) {
     return (
         <button
             type="button"
-            className="border-1 border-zinc-400 rounded-full px-4 py-1 hover:scale-105 active:scale-100 transition-all"
+            className="border-1 border-zinc-400 rounded-full px-4 py-1 hover:scale-105 active:scale-100 transition-all disabled:bg-zinc-600"
             onClick={handleChangeStatus}
+            disabled={isLoading}
         >
             <span className="text-sm font-[700] font-spotify text-white">
                 {isFollowing ? "Following" : "Follow"}

@@ -76,7 +76,7 @@ function NowPlayingView() {
                 </div>
             </div>
             <div className="px-4 py-2">
-                <Artists artists={track.artists} />
+                <Artists artists={track?.artists} />
             </div>
             <div className="px-4 py-2">
                 <NextInQueue />
@@ -113,15 +113,15 @@ const NextInQueue = () => {
     );
 };
 
-const Artists = ({ artists }: { artists: SpotifyArtist[] }) => {
-    console.log(artists);
+const Artists = ({ artists }: { artists?: SpotifyArtist[] }) => {
+    if (!artists?.length) return null;
     return (
         <div className="bg-zinc-800 p-4 rounded-md space-y-3">
             <div className="flex items-center justify-between">
                 <h4 className="text-base font-semibold">Credits</h4>
             </div>
             <div className="space-y-5">
-                {artists.map((artist) => (
+                {artists?.map((artist) => (
                     <div key={artist.id} className="flex items-center justify-between">
                         <p>{artist.name}</p>
                         <FollowArtistButton artist={artist} />
