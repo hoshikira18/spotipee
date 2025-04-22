@@ -1,5 +1,5 @@
 import { instance } from "../lib/axios";
-import type { SpotifyPlaybackState } from "../types";
+import type { SpotifyAlbum, SpotifyPlaybackState } from "../types";
 
 type PlayPrams =
     | {

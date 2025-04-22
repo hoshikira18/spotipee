@@ -18,7 +18,7 @@ function RightSideBar() {
     return (
         <aside
             className={`${
-                state !== "off" ? "w-1/4" : "w-0"
+                state !== "off" ? "min-w-1/4 w-1/4" : "w-0"
             } bg-zinc-800/60 h-full rounded-md transition-all`}
         >
             {state === "current-track" && (
