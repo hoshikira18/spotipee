@@ -1,15 +1,19 @@
 import type { ReactNode } from "react";
+import { cn } from "../../utils";
 
 interface HomeSectionProps {
     title: string;
     children: ReactNode;
+    className?: string;
 }
 
-function HomeSection({ title, children }: HomeSectionProps) {
+function HomeSection({ title, children, className }: HomeSectionProps) {
     return (
-        <div className="w-full">
-            <h2 className="text-xl font-semibold hover:underline px-3">{title}</h2>
-            <div className="flex pb-2 overflow-x-scroll">{children}</div>
+        <div className={cn("relative bg-zinc-900 h-60 rounded-md font-spotify", className)}>
+            <div className="overflow-x-auto flex absolute left-0 right-0 flex-col bg-zinc-900/60 rounded-md p-3">
+                <h2 className="text-xl font-semibold hover:underline px-3">{title}</h2>
+                <div className="flex pb-2 overflow-x-scroll">{children}</div>
+            </div>
         </div>
     );
 }

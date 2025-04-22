@@ -21,6 +21,7 @@ const CommonServices = {
                 },
             })
             .then(({ data }) => data);
+
         return data;
     },
     async search({

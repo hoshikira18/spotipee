@@ -19,6 +19,12 @@ const ArtistServices = {
             .then(({ data }) => data.items);
         return data;
     },
+    async getTopArtists(limit = 10): Promise<SpotifyArtist[]> {
+        const data = await instance
+            .get(`/me/top/artists?limit=${limit}`)
+            .then(({ data }) => data.items);
+        return data;
+    },
 };
 
 export default ArtistServices;

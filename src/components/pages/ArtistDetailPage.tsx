@@ -12,6 +12,7 @@ import SeeAllButton from "../atoms/SeeAllButton";
 import DetailPageTemplate from "../templates/DetailPageTemplate";
 import TopTracksTable from "../organisms/TopTrackTable";
 import PlayButton from "../atoms/PlayButton";
+import { useRecentlyPlayed } from "../../hooks/useMedia";
 
 export const ArtistDetailContext = createContext<{
     artistId: string | undefined;
@@ -27,6 +28,15 @@ function ArtistDetailPage() {
     const playButtonRef = useRef<HTMLDivElement>(null);
 
     const trackContext = useContext(TrackContext);
+    const {
+        data: { items: recentlyPlayed } = { recentlyPlayed: [] },
+        isFetching: isRecentlyPlayedLoading,
+    } = useRecentlyPlayed();
+
+    console.log(recentlyPlayed);
+
+    if (!recentlyPlayed) return null;
+
     if (!trackContext) throw new Error("TrackContext is not available");
     if (!artist) return null;
 
