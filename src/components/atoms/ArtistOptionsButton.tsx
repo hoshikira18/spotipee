@@ -17,6 +17,7 @@ const ArtistOptions = () => {
     if (!artistContext) {
         throw new Error("FollowArtistButton must be used within ArtistDetailContext");
     }
+
     const { isFollowing, handleChangeStatus } = artistContext;
     return (
         <Menu width={200} position="bottom-start">

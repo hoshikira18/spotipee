@@ -7,6 +7,7 @@ interface CurrentTrackTitleProps {
     id: string;
     name: string;
     artists: SpotifyArtist[];
+    isPlaying?: boolean;
 }
 
 const variants = {
@@ -24,12 +25,22 @@ const variants = {
     },
 };
 
-function CurrentTrackTitle({ size = "sm", id, name, artists }: CurrentTrackTitleProps) {
+function CurrentTrackTitle({
+    size = "sm",
+    id,
+    name,
+    artists,
+    isPlaying = false,
+}: CurrentTrackTitleProps) {
     return (
         <div>
             <Link
                 to={`/track/${id}`}
-                className={cn("line-clamp-1 hover:underline", variants[size].track)}
+                className={cn(
+                    "line-clamp-1 hover:underline",
+                    isPlaying ? "text-green-500" : "",
+                    variants[size].track,
+                )}
             >
                 {name}
             </Link>

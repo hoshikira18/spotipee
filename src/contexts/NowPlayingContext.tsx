@@ -1,5 +1,5 @@
 import { createContext, useEffect, useState } from "react";
-import type { SpotifyArtist, SpotifyPlaybackState } from "../types";
+import type { SpotifyArtist, SpotifyPlaybackState, SpotifyTrack } from "../types";
 import CommonServices from "../services/CommonServices";
 import PlaylistServices from "../services/PlaylistServices";
 import AlbumServices from "../services/AlbumServices";
@@ -14,6 +14,7 @@ type NowPlayingContextType = {
     id: string | null;
     albumImage: string | null;
     artists: SpotifyArtist[];
+    track: any | null;
 };
 
 interface NowPlayingProviderProps {
@@ -30,7 +31,7 @@ function NowPlayingProvider({ children }: NowPlayingProviderProps) {
     const [id, setId] = useState<string | null>(null);
     const [albumImage, setAlbumImage] = useState<string | null>(null);
     const [artists, setArtists] = useState<SpotifyArtist[]>([]);
-    console.log(data);
+    const [track, setTrack] = useState<any | null>(null);
 
     useEffect(() => {
         const fetchNowPlaying = async () => {
@@ -40,6 +41,7 @@ function NowPlayingProvider({ children }: NowPlayingProviderProps) {
                 if (!data) return;
 
                 setArtists(data?.item?.artists as SpotifyArtist[]);
+                setTrack(data?.item);
 
                 if (data?.context === null) {
                     setType("track");
@@ -86,6 +88,7 @@ function NowPlayingProvider({ children }: NowPlayingProviderProps) {
         id,
         albumImage,
         artists,
+        track,
     };
 
     return (
