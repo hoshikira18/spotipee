@@ -61,6 +61,10 @@ const CommonServices = {
             uris,
         });
     },
+    async getQueue() {
+        const data = await instance.get("/me/player/queue").then(({ data }) => data);
+        return data;
+    },
 };
 
 export default CommonServices;

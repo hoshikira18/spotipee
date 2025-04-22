@@ -8,6 +8,7 @@ import ShareButton from "../atoms/ShareButton";
 import { REDIRECT_URI } from "../../constants/auth";
 import { PlayerContext } from "../../contexts/PlayerContext";
 import QueueCard from "../atoms/QueueCard";
+import { useRightSidebarStore } from "../../store/rightSidebarStore";
 
 function NowPlayingView() {
     const nowPlayingContext = useContext(NowPlayingContext);
@@ -15,7 +16,8 @@ function NowPlayingView() {
         throw new Error("NowPlayingView must be used within a NowPlayingProvider");
     }
 
-    const { type, id, name, albumImage, artists, data, setKey } = nowPlayingContext;
+    const { type, id, name, albumImage, artists, track, setKey } = nowPlayingContext;
+    const setRightSidebarContentState = useRightSidebarStore((state) => state.setState);
 
     useEffect(() => {
         setKey((prev) => !prev);
@@ -29,6 +31,7 @@ function NowPlayingView() {
                     <button
                         type="button"
                         className="-translate-x-6 scale-0 group-hover:translate-x-0 group-hover:scale-100 transition-all text-zinc-300"
+                        onClick={() => setRightSidebarContentState("off")}
                     >
                         <HideIcon size={20} />
                     </button>
@@ -58,13 +61,13 @@ function NowPlayingView() {
             <div className="px-4 py-4 flex items-center justify-between space-x-2">
                 <CurrentTrackTitle
                     id={id as string}
-                    name={data?.item?.name as string}
+                    name={track?.name}
                     size="lg"
                     artists={artists}
                 />
                 <div className="flex items-center space-x-3">
                     <ShareButton
-                        content={`${REDIRECT_URI}/${type}/${id}`}
+                        content={`${REDIRECT_URI}/${type}/${track?.id}`}
                         className="group-hover:scale-100 group-hover:translate-x-0 scale-0 translate-x-10 transition-all"
                     />
                     <SaveTrackButton className="visible" size="lg" trackId={id as string} />
@@ -97,7 +100,7 @@ const NextInQueue = () => {
                 </button>
             </div>
             <div>
-                {nextTrack?.map((track) => (
+                {nextTrack?.slice(0, 1).map((track) => (
                     <QueueCard key={track.id} track={track} />
                 ))}
             </div>

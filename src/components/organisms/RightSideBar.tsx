@@ -2,6 +2,7 @@ import { useViewportSize } from "@mantine/hooks";
 import { useEffect } from "react";
 import { useRightSidebarStore } from "../../store/rightSidebarStore";
 import NowPlayingView from "../molecules/NowPlayingView";
+import QueueView from "../molecules/QueueView";
 
 function RightSideBar() {
     const { width } = useViewportSize();
@@ -31,8 +32,8 @@ function RightSideBar() {
                 </div>
             )}
             {state === "queue" && (
-                <div className="h-full overflow-hidden flex items-center justify-center">
-                    Display Queue
+                <div className="h-full">
+                    <QueueView />
                 </div>
             )}
         </aside>
