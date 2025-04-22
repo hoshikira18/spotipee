@@ -6,7 +6,7 @@ interface CurrentTrackTitleProps {
     size?: "sm" | "md" | "lg";
     id: string;
     name: string;
-    artists: SpotifyArtist[];
+    artists?: SpotifyArtist[];
     isPlaying?: boolean;
 }
 
@@ -44,19 +44,21 @@ function CurrentTrackTitle({
             >
                 {name}
             </Link>
-            <p className={cn("text-zinc-400 line-clamp-1", variants[size].artist)}>
-                {artists.map((artist, index) => (
-                    <span key={artist.id}>
-                        <Link
-                            to={`/artist/${artist.uri.split(":")[2]}`}
-                            className="hover:underline"
-                        >
-                            {artist.name}
-                        </Link>
-                        {index < artists.length - 1 && ", "}
-                    </span>
-                ))}
-            </p>
+            {artists && (
+                <p className={cn("text-zinc-400 line-clamp-1", variants[size].artist)}>
+                    {artists?.map((artist, index) => (
+                        <span key={artist.id}>
+                            <Link
+                                to={`/artist/${artist.uri.split(":")[2]}`}
+                                className="hover:underline"
+                            >
+                                {artist.name}
+                            </Link>
+                            {index < artists.length - 1 && ", "}
+                        </span>
+                    ))}
+                </p>
+            )}
         </div>
     );
 }

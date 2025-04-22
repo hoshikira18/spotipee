@@ -6,7 +6,6 @@ import MediaCard from "../molecules/MediaCard";
 import { TrackContext } from "../../contexts/TrackContext";
 import VerifiedBadgeIcon from "../atoms/icons/VerifyBadgeIcon";
 import FollowArtistButton from "../atoms/FollowArtistButton";
-import ArtistOptions from "../atoms/ArtistOptionsButton";
 import { Button } from "@mantine/core";
 import CommonServices from "../../services/CommonServices";
 import SeeAllButton from "../atoms/SeeAllButton";
@@ -61,9 +60,7 @@ function ArtistDetailPage() {
                     </div>
                     <div className="flex items-center space-x-5 p-5" ref={playButtonRef}>
                         <PlayButton context_uri={artist?.uri} />
-
                         <FollowArtistButton artist={artist} />
-                        <ArtistOptions />
                     </div>
 
                     {/* Top Tracks table */}

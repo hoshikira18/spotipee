@@ -6,10 +6,10 @@ interface UserImageProps {
     alt: string;
     onClick?: () => void;
     className?: string;
-    isEdit?: boolean;
+    showEditOverlay?: boolean;
 }
 
-function AvtImage({ isEdit = false, className, imageUrl, alt, onClick }: UserImageProps) {
+function AvtImage({ showEditOverlay = false, className, imageUrl, alt, onClick }: UserImageProps) {
     return (
         <div className={cn("group relative h-full overflow-hidden", className)}>
             <img
@@ -22,7 +22,7 @@ function AvtImage({ isEdit = false, className, imageUrl, alt, onClick }: UserIma
                 onClick={onClick}
                 className={cn(
                     "absolute inset-0 invisible flex items-center justify-center bg-black/50 transition-all duration-150 rounded-md",
-                    isEdit ? "group-hover:visible" : "",
+                    showEditOverlay ? "group-hover:visible" : "",
                 )}
             >
                 <Edit2 size={60} />

@@ -1,4 +1,4 @@
-import { useContext } from "react";
+import { useCallback, useContext } from "react";
 import CommonServices from "../../services/CommonServices";
 import type { SpotifyTrack } from "../../types";
 import CurrentTrackTitle from "../molecules/CurrentTrackTitle";
@@ -20,7 +20,8 @@ function QueueCard({ track, isPlaying = false }: QueueCardProps) {
     if (!nowPlayingContext) {
         console.log("no now playing context");
     }
-    const handlePlay = async () => {
+
+    const handlePlay = useCallback(async () => {
         const relatedTracks = await CommonServices.search({
             q: `artist:${track.artists[0].name}`,
             type: "track",
@@ -39,7 +40,11 @@ function QueueCard({ track, isPlaying = false }: QueueCardProps) {
         if (nowPlayingContext) {
             nowPlayingContext.setKey((prev) => !prev);
         }
-    };
+    }, [track, queueContext, nowPlayingContext]);
+
+    if (!track) {
+        return null;
+    }
 
     return (
         <div className="group flex items-center space-x-3 hover:bg-zinc-700/80 p-2.5 rounded-md group/card">

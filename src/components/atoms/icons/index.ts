@@ -7,6 +7,8 @@ export { default as Lyrics } from "./Lyrics";
 export { default as Queue } from "./Queue";
 export { default as Devices } from "./Devices";
 export { default as Pause } from "./Pause";
+export { default as CloseIcon } from "./CloseIcon";
+export { default as ShareIcon } from "./ShareIcon";
 export { default as HideIcon } from "./HideIcon";
 export { default as MoreIcon } from "./MoreIcon";
 export { default as ExpandIcon } from "./ExpandIcon";

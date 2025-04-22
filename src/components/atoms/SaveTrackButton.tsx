@@ -1,8 +1,7 @@
 import { AddCircle, TickCircle } from "iconsax-react";
-import type { SpotifyTrack } from "../../types";
 import { nprogress } from "@mantine/nprogress";
 import UserServices from "../../services/UserServices";
-import { useContext, useState } from "react";
+import { useContext } from "react";
 import { TrackContext } from "../../contexts/TrackContext";
 import { notifications } from "@mantine/notifications";
 import { cn } from "../../utils";
