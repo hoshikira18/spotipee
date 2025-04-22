@@ -62,7 +62,7 @@ function NowPlayingView() {
             </div>
             <div className="px-4 py-4 flex items-center justify-between space-x-2">
                 <CurrentTrackTitle
-                    id={id as string}
+                    id={track?.id as string}
                     name={track?.name}
                     size="lg"
                     artists={artists}
