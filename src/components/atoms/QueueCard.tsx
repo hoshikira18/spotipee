@@ -4,6 +4,7 @@ import type { SpotifyTrack } from "../../types";
 import CurrentTrackTitle from "../molecules/CurrentTrackTitle";
 import { Play } from "./icons";
 import { QueueContext } from "../molecules/QueueView";
+import { NowPlayingContext } from "../../contexts/NowPlayingContext";
 
 interface QueueCardProps {
     track: SpotifyTrack;
@@ -12,8 +13,12 @@ interface QueueCardProps {
 
 function QueueCard({ track, isPlaying = false }: QueueCardProps) {
     const queueContext = useContext(QueueContext);
+    const nowPlayingContext = useContext(NowPlayingContext);
     if (!queueContext) {
         console.log("no queue context");
+    }
+    if (!nowPlayingContext) {
+        console.log("no now playing context");
     }
     const handlePlay = async () => {
         const relatedTracks = await CommonServices.search({
@@ -26,8 +31,13 @@ function QueueCard({ track, isPlaying = false }: QueueCardProps) {
         await CommonServices.play({
             uris: [track.uri, ...trackUris],
         });
+        // Update the queue context
         if (queueContext) {
             queueContext.setKey((prev) => !prev);
+        }
+        // Update the now playing context
+        if (nowPlayingContext) {
+            nowPlayingContext.setKey((prev) => !prev);
         }
     };
 

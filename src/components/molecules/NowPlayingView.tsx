@@ -9,6 +9,8 @@ import { REDIRECT_URI } from "../../constants/auth";
 import { PlayerContext } from "../../contexts/PlayerContext";
 import QueueCard from "../atoms/QueueCard";
 import { useRightSidebarStore } from "../../store/rightSidebarStore";
+import type { SpotifyArtist } from "../../types";
+import FollowArtistButton from "../atoms/FollowArtistButton";
 
 function NowPlayingView() {
     const nowPlayingContext = useContext(NowPlayingContext);
@@ -74,6 +76,9 @@ function NowPlayingView() {
                 </div>
             </div>
             <div className="px-4 py-2">
+                <Artists artists={track.artists} />
+            </div>
+            <div className="px-4 py-2">
                 <NextInQueue />
             </div>
         </div>
@@ -102,6 +107,25 @@ const NextInQueue = () => {
             <div>
                 {nextTrack?.slice(0, 1).map((track) => (
                     <QueueCard key={track.id} track={track} />
+                ))}
+            </div>
+        </div>
+    );
+};
+
+const Artists = ({ artists }: { artists: SpotifyArtist[] }) => {
+    console.log(artists);
+    return (
+        <div className="bg-zinc-800 p-4 rounded-md space-y-3">
+            <div className="flex items-center justify-between">
+                <h4 className="text-base font-semibold">Credits</h4>
+            </div>
+            <div className="space-y-5">
+                {artists.map((artist) => (
+                    <div key={artist.id} className="flex items-center justify-between">
+                        <p>{artist.name}</p>
+                        <FollowArtistButton artist={artist} />
+                    </div>
                 ))}
             </div>
         </div>

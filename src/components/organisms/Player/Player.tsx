@@ -185,9 +185,6 @@ const PlayerFunction = () => {
             >
                 <NowPlayingView />
             </button>
-            <button type="button" className="hover:text-white text-zinc-200">
-                <Lyrics />
-            </button>
             <button
                 type="button"
                 className="hover:text-white text-zinc-200"
