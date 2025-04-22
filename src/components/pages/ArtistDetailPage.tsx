@@ -1,17 +1,11 @@
 import { useParams } from "react-router-dom";
 import { useArtist, useArtistTopTracks } from "../../hooks/useArtist";
-import { Play } from "../atoms/icons";
 import type { SpotifyArtist } from "../../types";
 import { createContext, useContext, useEffect, useRef, useState } from "react";
-import TrackServices from "../../services/TrackServices";
 import MediaCard from "../molecules/MediaCard";
-import UserServices from "../../services/UserServices";
 import { TrackContext } from "../../contexts/TrackContext";
 import VerifiedBadgeIcon from "../atoms/icons/VerifyBadgeIcon";
 import FollowArtistButton from "../atoms/FollowArtistButton";
-import { useFollowedArtists } from "../../hooks/useCurrentUser";
-import { useQueryClient } from "@tanstack/react-query";
-import { useDebouncedCallback } from "@mantine/hooks";
 import ArtistOptions from "../atoms/ArtistOptionsButton";
 import { Button } from "@mantine/core";
 import CommonServices from "../../services/CommonServices";
@@ -22,9 +16,6 @@ import PlayButton from "../atoms/PlayButton";
 
 export const ArtistDetailContext = createContext<{
     artistId: string | undefined;
-    isFollowing: boolean;
-    setIsFollowing: React.Dispatch<React.SetStateAction<boolean>>;
-    handleChangeStatus: () => void;
     isShowMore: boolean;
 } | null>(null);
 
@@ -32,55 +23,18 @@ function ArtistDetailPage() {
     const { artistId } = useParams();
     const { data: artist } = useArtist(artistId as string);
     const { data: topTracks } = useArtistTopTracks(artistId as string);
-    const { data: followedArtists } = useFollowedArtists();
-    const [isFollowing, setIsFollowing] = useState(false);
     const [isShowMore, setIsShowMore] = useState(false);
 
     const playButtonRef = useRef<HTMLDivElement>(null);
 
-    useEffect(() => {
-        const isArtistFollowed = followedArtists?.some(
-            (artist: { id: string }) => artist.id === artistId,
-        );
-        setIsFollowing(isArtistFollowed || false);
-    }, [followedArtists]);
-
-    const queryClient = useQueryClient();
-    const handleChangeStatus = useDebouncedCallback(async () => {
-        if (!artistId) return;
-        if (isFollowing) {
-            // Unfollow the artist
-            await UserServices.unfollowArtist(artistId, "artist")
-                .then(() => {
-                    setIsFollowing(false);
-                    queryClient.invalidateQueries(["followed-artists"]);
-                })
-                .catch((error) => {
-                    console.error("Error unfollowing artist:", error);
-                });
-        } else {
-            // Follow the artist
-            await UserServices.followArtist(artistId, "artist")
-                .then(() => {
-                    setIsFollowing(true);
-                    queryClient.invalidateQueries(["followed-artists"]);
-                })
-                .catch((error) => {
-                    console.error("Error following artist:", error);
-                });
-        }
-    }, 200);
-
     const trackContext = useContext(TrackContext);
     if (!trackContext) throw new Error("TrackContext is not available");
+    if (!artist) return null;
 
     return (
         <ArtistDetailContext.Provider
             value={{
                 artistId,
-                isFollowing,
-                setIsFollowing,
-                handleChangeStatus,
                 isShowMore,
             }}
         >
@@ -108,7 +62,7 @@ function ArtistDetailPage() {
                     <div className="flex items-center space-x-5 p-5" ref={playButtonRef}>
                         <PlayButton context_uri={artist?.uri} />
 
-                        <FollowArtistButton />
+                        <FollowArtistButton artist={artist} />
                         <ArtistOptions />
                     </div>
 
