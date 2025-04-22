@@ -24,6 +24,12 @@ const TrackServices = {
         });
         return response;
     },
+    async getTopTracks(limit = 10): Promise<SpotifyTrack[]> {
+        const data = await instance
+            .get(`/me/top/tracks?limit=${limit}`)
+            .then(({ data }) => data.items);
+        return data;
+    },
 };
 
 export default TrackServices;

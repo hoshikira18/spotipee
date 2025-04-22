@@ -1,5 +1,6 @@
 import { instance } from "../lib/axios";
 import type { SpotifyArtist, SpotifyTrack, User } from "../types";
+import CommonServices from "./CommonServices";
 
 const UserServices = {
     async getCurrentUser(): Promise<User> {
@@ -82,6 +83,14 @@ const UserServices = {
     },
     async unfollowArtist(artistId: string, type: "artist" | "user"): Promise<void> {
         await instance.delete(`/me/following?ids=${artistId}&type=${type}`);
+    },
+    async getMadeForYouPlaylists(): Promise<SpotifyTrack[]> {
+        const data = CommonServices.search({
+            q: "vietnamese music",
+            type: "track",
+            limit: 10,
+        }).then((item) => item.tracks.items);
+        return data;
     },
 };
 

@@ -22,3 +22,10 @@ export const useArtistAlbums = (id: string, limit = 4) => {
         queryFn: () => ArtistServices.getAlbums(id, limit),
     });
 };
+
+export const useTopArtists = (limit = 10) => {
+    return useQuery({
+        queryKey: ["topArtists", limit],
+        queryFn: () => ArtistServices.getTopArtists(limit),
+    });
+};

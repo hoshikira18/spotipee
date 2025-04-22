@@ -72,7 +72,7 @@ export default function MediaCard({
                 </button>
             </div>
             <div>
-                <h3 className={sizeClasses[size].title}>{title}</h3>
+                <h3 className={cn("line-clamp-2", sizeClasses[size].title)}>{title}</h3>
                 {subtitle && (
                     <span className={cn("text-zinc-400", sizeClasses[size].subtitle)}>
                         {subtitle}
