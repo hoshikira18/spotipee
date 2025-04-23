@@ -1,19 +1,26 @@
 import { useRef } from "react";
-import TrackServices from "../../services/TrackServices";
 import { cn } from "../../utils";
-import { Play } from "../atoms/icons";
 import { useElementScroll } from "../../hooks/useElementScroll";
 import AuthWrapper from "./AuthWrapper";
+import PlayButton from "../atoms/PlayButton";
+import type { SpotifyTrack } from "../../types";
 
 interface DetailPageTemplateProps {
     children?: React.ReactNode;
     className?: string;
     playButtonRef: React.RefObject<HTMLDivElement>;
-    uris?: string[];
+    tracks?: SpotifyTrack[];
     title?: string;
+    context_uri?: string;
 }
 
-function DetailPageTemplate({ children, playButtonRef, uris, title }: DetailPageTemplateProps) {
+function DetailPageTemplate({
+    children,
+    playButtonRef,
+    tracks,
+    context_uri,
+    title,
+}: DetailPageTemplateProps) {
     const ref = useRef<HTMLDivElement>(null);
     const { top: currentScrollTop } = useElementScroll(ref);
 
@@ -60,18 +67,11 @@ function DetailPageTemplate({ children, playButtonRef, uris, title }: DetailPage
                             isPlayButtonVisible() ? "opacity-100" : "opacity-0",
                         )}
                     >
-                        <button
-                            type="button"
-                            className={cn(
-                                "min-w-12 h-12 flex items-center justify-center bg-green-500 rounded-full hover:bg-green-400 hover:scale-105 text-black",
-                            )}
-                            onClick={() => {
-                                if (!uris) return;
-                                TrackServices.play(uris);
-                            }}
-                        >
-                            <Play />
-                        </button>
+                        {tracks ? (
+                            <PlayButton tracks={tracks} />
+                        ) : (
+                            <PlayButton context_uri={context_uri} />
+                        )}
                         <span className={"text-3xl font-bold text-zinc-200 px-4"}>{title}</span>
                     </div>
                 </div>

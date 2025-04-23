@@ -1,7 +1,7 @@
 import { useParams } from "react-router-dom";
 import { useArtist, useArtistTopTracks } from "../../hooks/useArtist";
 import type { SpotifyArtist } from "../../types";
-import { createContext, useContext, useEffect, useRef, useState } from "react";
+import { createContext, useContext, useEffect, useMemo, useRef, useState } from "react";
 import MediaCard from "../molecules/MediaCard";
 import { TrackContext } from "../../contexts/TrackContext";
 import VerifiedBadgeIcon from "../atoms/icons/VerifyBadgeIcon";
@@ -46,7 +46,7 @@ function ArtistDetailPage() {
         >
             <DetailPageTemplate
                 playButtonRef={playButtonRef}
-                uris={topTracks?.map((track) => track.uri || "")}
+                context_uri={artist?.uri}
                 title={artist?.name}
             >
                 <div className="h-full absolute inset-0">
@@ -119,8 +119,9 @@ const ArtistAlbums = () => {
         setFilter(newFilter);
     };
 
-    const filteredData = topTracks?.filter(
-        (track) => filter === "all" || track.album.album_type === filter,
+    const filteredData = useMemo(
+        () => topTracks?.filter((track) => filter === "all" || track.album.album_type === filter),
+        [topTracks, filter],
     );
 
     if (!topTracks) return null;

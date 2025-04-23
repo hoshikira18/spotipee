@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useMemo, useRef, useState } from "react";
 import DetailPageTemplate from "../templates/DetailPageTemplate";
 import { Link, useParams } from "react-router-dom";
 import { calDurationTime } from "../../utils";
@@ -18,11 +18,7 @@ function TrackDetailPage() {
 
     if (!track) return null;
     return (
-        <DetailPageTemplate
-            playButtonRef={playButtonRef}
-            uris={[track?.uri] as string[]}
-            title="Playlist Detail"
-        >
+        <DetailPageTemplate playButtonRef={playButtonRef} tracks={[track]} title="Playlist Detail">
             <div className="h-full absolute inset-0 rounded-md">
                 <div className="relative h-1/3 overflow-hidden p-5 bg-gradient-to-b from-[#b24242] to-[#602020] flex items-end space-x-5 pt-12 xl:pt-8">
                     <TrackImage imageUrl={track?.album.images[0].url} alt="playlist-image" />
@@ -144,7 +140,12 @@ const PopularTracks = ({ artistId, artistName }: DetailSectionProps) => {
 };
 
 const ArtistAlbums = ({ artistId, artistName }: DetailSectionProps) => {
-    const { data: albums } = useArtistTopTracks(artistId as string);
+    const { data } = useArtistTopTracks(artistId as string);
+
+    const albums = useMemo(
+        () => data?.filter((track) => track.album.album_type === "album"),
+        [data],
+    );
 
     if (!albums) return null;
 
@@ -153,15 +154,20 @@ const ArtistAlbums = ({ artistId, artistName }: DetailSectionProps) => {
             title={`Popular Albums by ${artistName}`}
             seeAllLink={`/artist/${artistId}/discography/album`}
             type="album"
-            data={albums.filter((album) => album.album.album_type === "album")}
+            data={albums}
         />
     );
 };
 
 const ArtistSingles = ({ artistId, artistName }: DetailSectionProps) => {
     const { data: topTracks } = useArtistTopTracks(artistId as string);
-    if (!topTracks) return null;
-    const singles = topTracks?.filter((track) => track.album.album_type === "single");
+
+    const singles = useMemo(
+        () => topTracks?.filter((track) => track.album.album_type === "single"),
+        [topTracks],
+    );
+
+    if (!singles) return null;
 
     return (
         <DetailSection

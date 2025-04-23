@@ -24,6 +24,7 @@ function RelatedArtistPage() {
         };
         fetchRelatedArtists();
     }, [artist]);
+
     const ref = useRef<HTMLDivElement>(null);
     const { top } = useElementScroll(ref);
 

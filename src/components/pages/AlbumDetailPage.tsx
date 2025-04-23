@@ -24,7 +24,7 @@ function AlbumDetailPage() {
     return (
         <DetailPageTemplate
             playButtonRef={playButtonRef}
-            uris={album.tracks.items.map((track) => track.uri) as string[]}
+            context_uri={album?.uri}
             title="Playlist Detail"
         >
             <div className="h-full absolute inset-0 rounded-md">

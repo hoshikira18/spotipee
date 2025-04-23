@@ -3,6 +3,7 @@ import { cn } from "../../utils";
 import { Play } from "../atoms/icons";
 import { Skeleton } from "@mantine/core";
 import CommonServices from "../../services/CommonServices";
+import { useNowPlayingKey } from "../../store/NowPlayingKey";
 
 export interface MediaCardProps {
     type?: "artist" | "album" | "playlist" | "track";
@@ -45,6 +46,7 @@ export default function MediaCard({
             subtitle: "text-sm",
         },
     };
+    const { state: key, setState: updateData } = useNowPlayingKey();
 
     const handlePlay = async () => {
         if (!uri) return;
@@ -55,6 +57,8 @@ export default function MediaCard({
         } else {
             await CommonServices.play({ context_uri: uri });
         }
+
+        updateData(!key);
     };
 
     if (isLoading) {
