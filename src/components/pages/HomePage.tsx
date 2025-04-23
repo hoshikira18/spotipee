@@ -48,6 +48,8 @@ const RecentlyPlayed = () => {
 const TopArtists = () => {
     const { data: topArtists } = useTopArtists();
 
+    if (!topArtists) return null;
+
     return (
         <HomeSection title="Top Artists" className="h-72">
             {topArtists?.map((artist, index) => (
@@ -67,6 +69,8 @@ const TopArtists = () => {
 const TopTracks = () => {
     const { data: topTracks } = useTopTracks();
 
+    if (!topTracks) return null;
+
     return (
         <HomeSection title="Top Tracks" className="h-72">
             {topTracks?.map((track, index) => (
@@ -85,6 +89,7 @@ const TopTracks = () => {
 
 const PopularInVietnam = () => {
     const { data } = useMadeForYou();
+    if (!data) return null;
     return (
         <HomeSection title="Popular in Vietnam" className="h-72">
             {data?.map((track, index) => (

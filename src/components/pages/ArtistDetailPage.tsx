@@ -30,7 +30,6 @@ function ArtistDetailPage() {
     const trackContext = useContext(TrackContext);
     const {
         data: { items: recentlyPlayed } = { recentlyPlayed: [] },
-        isFetching: isRecentlyPlayedLoading,
     } = useRecentlyPlayed();
 
     if (!recentlyPlayed) return null;
@@ -61,7 +60,10 @@ function ArtistDetailPage() {
                             <p className="px-4">1,692,463 monthly listeners</p>
                         </div>
                         <img
-                            src={artist?.images[0].url}
+                            src={
+                                artist?.images[0]?.url ||
+                                "https://i.pcmag.com/imagery/articles/041L4VORmgsmWfphGUK5Lr9-1.fit_lim.size_1600x900.v1733326163.jpg"
+                            }
                             alt={artist?.name}
                             className="w-full h-full object-cover rounded-t-md"
                         />
@@ -121,6 +123,8 @@ const ArtistAlbums = () => {
         (track) => filter === "all" || track.album.album_type === filter,
     );
 
+    if (!topTracks) return null;
+
     return (
         <div className="px-5 my-10">
             <span className="text-2xl font-bold">Discography</span>
@@ -153,12 +157,12 @@ const ArtistAlbums = () => {
             <div className="flex overflow-x-scroll pb-5">
                 {filteredData?.map((item) => (
                     <MediaCard
-                        type={item.album.album_type === "album" ? "album" : "track"}
+                        type={item.album.album_type === "track" ? "track" : "album"}
                         id={item.album.id}
                         uri={item.album.album_type === "album" ? item.album.uri : item.uri || ""}
                         key={item.id}
                         title={item.name}
-                        imageSrc={item.album.images[1].url}
+                        imageSrc={item.album.images[0].url}
                     />
                 ))}
             </div>
@@ -169,7 +173,7 @@ const ArtistAlbums = () => {
 const RelatedArtists = () => {
     const { artistId } = useParams();
     const { data: artist } = useArtist(artistId as string);
-    const [relatedArtist, setRelatedArtist] = useState<SpotifyArtist[]>([]);
+    const [relatedArtist, setRelatedArtist] = useState<SpotifyArtist[] | null>(null);
 
     const ARTIST_PER_PAGE = 10;
     useEffect(() => {
@@ -200,7 +204,7 @@ const RelatedArtists = () => {
                         uri={artist.uri}
                         key={artist.id}
                         title={artist.name}
-                        imageSrc={artist.images[1].url}
+                        imageSrc={artist.images[0]?.url}
                     />
                 ))}
             </div>
