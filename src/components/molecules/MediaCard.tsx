@@ -1,12 +1,18 @@
+import { Link } from "react-router-dom";
 import { cn } from "../../utils";
 import { Play } from "../atoms/icons";
 import { Skeleton } from "@mantine/core";
+import CommonServices from "../../services/CommonServices";
+import { useContext } from "react";
+import { QueueContext } from "./QueueView";
 
 export interface MediaCardProps {
-    type?: "singer" | "album" | "playlists";
+    type?: "artist" | "album" | "playlist" | "track";
     size?: "sm" | "md" | "lg";
     imageSrc?: string;
     title: string;
+    id: string;
+    uri: string;
     subtitle?: string;
     onClick?: () => void;
     isLoading?: boolean;
@@ -14,10 +20,12 @@ export interface MediaCardProps {
 }
 
 export default function MediaCard({
-    type = "playlists",
+    type = "playlist",
+    id,
     size = "md",
     imageSrc,
     title,
+    uri,
     subtitle,
     className = "",
     isLoading = false,
@@ -40,6 +48,17 @@ export default function MediaCard({
         },
     };
 
+    const handlePlay = async () => {
+        if (!uri) return;
+
+        if (type === "track") {
+            // Handle track play logic
+            await CommonServices.play({ uris: [uri] });
+        } else {
+            await CommonServices.play({ context_uri: uri });
+        }
+    };
+
     if (isLoading) {
         return <MediaCardSkeleton />;
     }
@@ -60,19 +79,25 @@ export default function MediaCard({
                     }
                     alt={title}
                     className={cn(
-                        type === "singer" ? "rounded-full" : "rounded-md",
+                        type === "artist" ? "rounded-full" : "rounded-md",
                         "w-full aspect-square object-cover",
                     )}
                 />
                 <button
                     type="button"
+                    onClick={handlePlay}
                     className="invisible absolute w-10 aspect-square -bottom-0 right-3 group-hover:bottom-3 group-hover:visible transition-all duration-75 ease-in-out bg-green-600 p-2 rounded-full flex items-center justify-center text-black shadow-md hover:scale-110 hover:shadow-lg active:scale-95"
                 >
                     <Play />
                 </button>
             </div>
             <div>
-                <h3 className={cn("line-clamp-2", sizeClasses[size].title)}>{title}</h3>
+                <Link
+                    to={`/${type}/${id}`}
+                    className={cn("line-clamp-2 hover:underline", sizeClasses[size].title)}
+                >
+                    {title}
+                </Link>
                 {subtitle && (
                     <span className={cn("text-zinc-400", sizeClasses[size].subtitle)}>
                         {subtitle}
