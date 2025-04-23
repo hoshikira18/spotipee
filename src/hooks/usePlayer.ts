@@ -1,8 +1,7 @@
 import { useDebouncedCallback } from "@mantine/hooks";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { instance } from "../lib/axios";
 import type { SpotifyTrack } from "../types";
-import { useRightSidebarStore } from "../store/rightSidebarStore";
 
 declare global {
     interface Window {
@@ -21,9 +20,11 @@ export const usePlayer = (token: string) => {
         isPaused: true,
         isShuffle: false,
         repeatMode: 0,
+        volume: 0,
+    });
+    const progressRef = useRef({
         currentTime: 0,
         duration: 0,
-        volume: 0,
     });
 
     const loadScript = () => {
@@ -71,10 +72,12 @@ export const usePlayer = (token: string) => {
                     ...state,
                     isPaused: paused,
                     isShuffle: shuffle,
-                    currentTime: position,
-                    duration: duration,
                     repeatMode: repeat_mode,
                 }));
+                progressRef.current = {
+                    currentTime: position,
+                    duration: duration,
+                };
             } catch (error) {
                 console.log(error);
             }
@@ -124,10 +127,10 @@ export const usePlayer = (token: string) => {
 
         if (!playbackState.isPaused) {
             interval = setInterval(() => {
-                setPlaybackState((prevState) => ({
-                    ...prevState,
-                    currentTime: Math.min(prevState.currentTime + 1000, prevState.duration),
-                }));
+                progressRef.current.currentTime = Math.min(
+                    progressRef.current.currentTime + 1000,
+                    progressRef.current.duration,
+                );
             }, 1000);
         } else if (interval) {
             clearInterval(interval);
@@ -136,7 +139,7 @@ export const usePlayer = (token: string) => {
         return () => {
             if (interval) clearInterval(interval);
         };
-    }, [playbackState.isPaused, playbackState.duration]);
+    }, [playbackState.isPaused]);
 
     const togglePlay = async () => {
         await player?.togglePlay();
@@ -199,6 +202,7 @@ export const usePlayer = (token: string) => {
         togglePlay,
         skipToNext,
         skipToPrevious,
+        progress: progressRef.current,
         seek,
         handleToggleShuffle,
         handleToggleRepeat,

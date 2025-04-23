@@ -28,6 +28,8 @@ import PLaylistDetailPage from "./components/pages/PLaylistDetailPage";
 import AlbumDetailPage from "./components/pages/AlbumDetailPage";
 import TrackDetailPage from "./components/pages/TrackDetailPage";
 import NowPlayingProvider from "./contexts/NowPlayingContext";
+import UserTopTracksPage from "./components/pages/UserTopTracksPage";
+import UserTopArtistsPage from "./components/pages/UserTopArtistsPage";
 
 const theme = createTheme({
     colors: {
@@ -88,6 +90,14 @@ const router = createBrowserRouter([
             {
                 path: "/",
                 element: <HomePage />,
+            },
+            {
+                path: "/top-tracks",
+                element: <UserTopTracksPage />,
+            },
+            {
+                path: "/top-artists",
+                element: <UserTopArtistsPage />,
             },
             {
                 path: "/playlist/:playlistId",

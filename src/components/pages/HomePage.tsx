@@ -49,9 +49,8 @@ const TopArtists = () => {
     const { data: topArtists } = useTopArtists();
 
     if (!topArtists) return null;
-
     return (
-        <HomeSection title="Top Artists" className="h-72">
+        <HomeSection title="Top Artists" className="h-72" seeAllLink="/top-artists">
             {topArtists?.map((artist, index) => (
                 <MediaCard
                     key={index}
@@ -72,7 +71,7 @@ const TopTracks = () => {
     if (!topTracks) return null;
 
     return (
-        <HomeSection title="Top Tracks" className="h-72">
+        <HomeSection title="Top Tracks" className="h-72" seeAllLink="/top-tracks">
             {topTracks?.map((track, index) => (
                 <MediaCard
                     key={index}

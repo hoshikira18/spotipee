@@ -45,6 +45,7 @@ function PlayerProvider({ children }: PlayerProviderProps) {
         handleToggleShuffle,
         handleToggleRepeat,
         handleVolumeChange,
+        progress,
     } = usePlayer(token);
 
     const contextValues = {
@@ -58,6 +59,7 @@ function PlayerProvider({ children }: PlayerProviderProps) {
         handleToggleShuffle,
         handleToggleRepeat,
         handleVolumeChange,
+        progress,
     };
 
     return <PlayerContext.Provider value={contextValues}>{children}</PlayerContext.Provider>;
