@@ -3,8 +3,6 @@ import { cn } from "../../utils";
 import { Play } from "../atoms/icons";
 import { Skeleton } from "@mantine/core";
 import CommonServices from "../../services/CommonServices";
-import { useContext } from "react";
-import { QueueContext } from "./QueueView";
 
 export interface MediaCardProps {
     type?: "artist" | "album" | "playlist" | "track";
@@ -75,7 +73,7 @@ export default function MediaCard({
                 <img
                     src={
                         imageSrc ||
-                        "https://seed-mix-image.spotifycdn.com/v6/img/artist/7lq25uVNvzRoAJgr4CYr8e/en/default"
+                        "https://storage.googleapis.com/pr-newsroom-wp/1/2022/03/Spotify_Logo_RGB_White-1.png"
                     }
                     alt={title}
                     className={cn(
