@@ -16,6 +16,7 @@ function ArtistDiscographyPage() {
     const filteredData = topTracks?.filter(
         (track) => filter === "all" || track.album_type === filter,
     );
+    console.log(filteredData);
 
     const combobox = useCombobox({
         onDropdownClose: () => combobox.resetSelectedOption(),
@@ -82,6 +83,9 @@ function ArtistDiscographyPage() {
             <div className="grid grid-cols-12 gap-2 px-7">
                 {filteredData?.map((item) => (
                     <MediaCard
+                        type="album"
+                        id={item.id}
+                        uri={item.uri}
                         key={item.id}
                         title={item.name}
                         imageSrc={item.images[1].url}

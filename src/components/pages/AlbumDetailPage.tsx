@@ -158,6 +158,9 @@ const ArtistAlbums = ({ artistId, artistName }: ArtistAlbumsProps) => {
                 {topTracks?.map((item) => (
                     <MediaCard
                         key={item.id}
+                        id={item.id}
+                        uri={item.uri || ""}
+                        type="track"
                         title={item.name}
                         imageSrc={item.album.images[1].url}
                     />

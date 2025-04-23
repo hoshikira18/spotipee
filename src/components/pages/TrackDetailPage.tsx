@@ -146,34 +146,29 @@ const PopularTracks = ({ artistId, artistName }: DetailSectionProps) => {
 const ArtistAlbums = ({ artistId, artistName }: DetailSectionProps) => {
     const { data: albums } = useArtistTopTracks(artistId as string);
 
+    if (!albums) return null;
+
     return (
         <DetailSection
             title={`Popular Albums by ${artistName}`}
             seeAllLink={`/artist/${artistId}/discography/album`}
-            data={albums
-                ?.filter((item) => item.album.album_type === "album")
-                .map((album) => ({
-                    ...album,
-                    images: album.album.images,
-                }))}
+            type="album"
+            data={albums.filter((album) => album.album.album_type === "album")}
         />
     );
 };
 
 const ArtistSingles = ({ artistId, artistName }: DetailSectionProps) => {
     const { data: topTracks } = useArtistTopTracks(artistId as string);
-    const singles = topTracks
-        ?.filter((track) => track.album.album_type === "single")
-        .map((track) => ({
-            ...track,
-            images: track.album.images,
-        }));
+    if (!topTracks) return null;
+    const singles = topTracks?.filter((track) => track.album.album_type === "single");
 
     return (
         <DetailSection
             title={`Popular Singles by ${artistName}`}
             seeAllLink={`/artist/${artistId}/discography/single`}
             data={singles}
+            type="album"
         />
     );
 };
