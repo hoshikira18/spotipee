@@ -89,7 +89,7 @@ function LeftSideBar() {
 
             {/* Playlist, Artists, Albums, Songs */}
 
-            <div className="overflow-y-scroll h-full pb-24">
+            <div className="overflow-y-scroll h-full pb-32">
                 {currentUserPlaylists?.map((playlist) => (
                     <SidebarItem
                         key={playlist.id}

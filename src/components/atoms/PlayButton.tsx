@@ -29,7 +29,7 @@ const PlayButton = ({
         throw new Error("PlayerContext | NowPlayingContext is not available");
     }
     const { currentTrack, togglePlay, playbackState } = playerContext;
-    const { refreshData } = useRightSidebarStore();
+    const { refreshData, state, setState } = useRightSidebarStore();
 
     const handlePlayTrack = useCallback(async () => {
         try {
@@ -48,6 +48,11 @@ const PlayButton = ({
 
             // Trigger a state update to refresh the NowPlayingContext
             refreshData();
+
+            // open the right sidebar
+            if (state === "off") {
+                setState("current-track");
+            }
         } catch (error) {
             console.error("Error playing track:", error);
         }
