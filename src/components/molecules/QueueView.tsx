@@ -5,12 +5,9 @@ import CloseIcon from "../atoms/icons/CloseIcon";
 import { useRightSidebarStore } from "../../store/rightSidebarStore";
 import QueueCard from "../atoms/QueueCard";
 
-export const QueueContext = createContext<{
-    setKey: React.Dispatch<React.SetStateAction<boolean>>;
-} | null>(null);
-
 function QueueView() {
-    const [key, setKey] = useState<boolean>(false);
+    const { key, setState: setRightSidebarContentState } = useRightSidebarStore();
+
     const [queue, setQueue] = useState<{
         currently_playing: SpotifyTrack;
         queue: SpotifyTrack[];
@@ -25,39 +22,35 @@ function QueueView() {
         fetchQueue();
     }, [key]);
 
-    const setRightSidebarContentState = useRightSidebarStore((state) => state.setState);
-
     if (!queue) return null;
 
     const { currently_playing, queue: queueItems } = queue;
 
     return (
-        <QueueContext.Provider value={{ setKey }}>
-            <div className="px-3 overflow-y-scroll h-full">
-                <div className="flex items-center justify-between px-2 pt-4 pb-3 sticky top-0 z-10 bg-zinc-900">
-                    <div className="flex space-x-3">
-                        <p className="font-semibold">Queue</p>
-                    </div>
-                    <button
-                        type="button"
-                        className="p-2 hover:bg-zinc-700/40 rounded-full"
-                        onClick={() => setRightSidebarContentState("off")}
-                    >
-                        <CloseIcon size={20} />
-                    </button>
+        <div className="px-3 overflow-y-scroll h-full">
+            <div className="flex items-center justify-between px-2 pt-4 pb-3 sticky top-0 z-10 bg-zinc-900">
+                <div className="flex space-x-3">
+                    <p className="font-semibold">Queue</p>
                 </div>
-                <div className="px-2 mt-6">
-                    <p className="font-semibold mb-2">Now playing</p>
-                    <QueueCard track={currently_playing} isPlaying={true} />
-                </div>
-                <div className="px-2 mt-6">
-                    <p className="font-semibold mb-2">Next in Queue</p>
-                    {queueItems.map((item: SpotifyTrack, index: number) => (
-                        <QueueCard key={item.id + index} track={item} />
-                    ))}
-                </div>
+                <button
+                    type="button"
+                    className="p-2 hover:bg-zinc-700/40 rounded-full"
+                    onClick={() => setRightSidebarContentState("off")}
+                >
+                    <CloseIcon size={20} />
+                </button>
             </div>
-        </QueueContext.Provider>
+            <div className="px-2 mt-6">
+                <p className="font-semibold mb-2">Now playing</p>
+                <QueueCard track={currently_playing} isPlaying={true} />
+            </div>
+            <div className="px-2 mt-6">
+                <p className="font-semibold mb-2">Next in Queue</p>
+                {queueItems.map((item: SpotifyTrack, index: number) => (
+                    <QueueCard key={item.id + index} track={item} />
+                ))}
+            </div>
+        </div>
     );
 }
 

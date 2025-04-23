@@ -2,6 +2,7 @@ import { useDebouncedCallback } from "@mantine/hooks";
 import { useEffect, useState } from "react";
 import { instance } from "../lib/axios";
 import type { SpotifyTrack } from "../types";
+import { useRightSidebarStore } from "../store/rightSidebarStore";
 
 declare global {
     interface Window {

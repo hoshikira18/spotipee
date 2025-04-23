@@ -158,11 +158,11 @@ const ArtistAlbums = () => {
             <div className="flex overflow-x-scroll pb-5">
                 {filteredData?.map((item) => (
                     <MediaCard
-                        type={item.album.album_type === "track" ? "track" : "album"}
+                        type="album"
                         id={item.album.id}
-                        uri={item.album.album_type === "album" ? item.album.uri : item.uri || ""}
+                        uri={item.album.uri}
                         key={item.id}
-                        title={item.name}
+                        title={item.album.name}
                         imageSrc={item.album.images[0].url}
                     />
                 ))}
