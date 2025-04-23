@@ -33,8 +33,6 @@ function ArtistDetailPage() {
         isFetching: isRecentlyPlayedLoading,
     } = useRecentlyPlayed();
 
-    console.log(recentlyPlayed);
-
     if (!recentlyPlayed) return null;
 
     if (!trackContext) throw new Error("TrackContext is not available");
@@ -155,6 +153,9 @@ const ArtistAlbums = () => {
             <div className="flex overflow-x-scroll pb-5">
                 {filteredData?.map((item) => (
                     <MediaCard
+                        type={item.album.album_type === "album" ? "album" : "track"}
+                        id={item.album.id}
+                        uri={item.album.album_type === "album" ? item.album.uri : item.uri || ""}
                         key={item.id}
                         title={item.name}
                         imageSrc={item.album.images[1].url}
@@ -194,7 +195,9 @@ const RelatedArtists = () => {
             <div className="flex overflow-x-scroll pb-5 mt-5">
                 {relatedArtist?.map((artist) => (
                     <MediaCard
-                        type="singer"
+                        type="artist"
+                        id={artist.id}
+                        uri={artist.uri}
                         key={artist.id}
                         title={artist.name}
                         imageSrc={artist.images[1].url}

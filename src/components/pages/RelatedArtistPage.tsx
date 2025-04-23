@@ -46,7 +46,9 @@ function RelatedArtistPage() {
                     .map((item) => (
                         <MediaCard
                             key={item.id}
-                            type="singer"
+                            type="artist"
+                            id={item.id}
+                            uri={item.uri}
                             title={item.name}
                             imageSrc={item.images[1].url}
                             className="col-span-6 md:col-span-4 lg:col-span-3 xl:col-span-2 min-w-0 w-auto"
