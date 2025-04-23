@@ -33,6 +33,9 @@ const RecentlyPlayed = () => {
                     <MediaCard
                         size="sm"
                         key={index}
+                        type="track"
+                        uri={item.track.uri}
+                        id={item.track.id}
                         title={item.track.name}
                         imageSrc={item.track.album.images[0].url}
                     />
@@ -50,7 +53,9 @@ const TopArtists = () => {
             {topArtists?.map((artist, index) => (
                 <MediaCard
                     key={index}
-                    type="singer"
+                    type="artist"
+                    id={artist.id}
+                    uri={artist.uri}
                     title={artist.name}
                     imageSrc={artist.images[0].url}
                 />
@@ -67,8 +72,10 @@ const TopTracks = () => {
             {topTracks?.map((track, index) => (
                 <MediaCard
                     key={index}
-                    type="singer"
                     title={track.name}
+                    id={track.id}
+                    uri={track.uri || ""}
+                    type="track"
                     imageSrc={track.album.images[0].url}
                 />
             ))}
@@ -81,7 +88,14 @@ const PopularInVietnam = () => {
     return (
         <HomeSection title="Popular in Vietnam" className="h-72">
             {data?.map((track, index) => (
-                <MediaCard key={index} title={track.name} imageSrc={track.album.images[0].url} />
+                <MediaCard
+                    key={index}
+                    title={track.name}
+                    id={track.id}
+                    uri={track.uri || ""}
+                    type="track"
+                    imageSrc={track.album.images[0].url}
+                />
             ))}
         </HomeSection>
     );
