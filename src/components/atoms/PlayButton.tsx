@@ -56,7 +56,7 @@ const PlayButton = ({
         } catch (error) {
             console.error("Error playing track:", error);
         }
-    }, [context_uri, currentTrack, playbackState.isPaused, tracks, togglePlay]);
+    }, [context_uri, currentTrack, playbackState.isPaused, tracks, togglePlay, state, setState]);
 
     return (
         <button type="button" onClick={handlePlayTrack} className={className}>
