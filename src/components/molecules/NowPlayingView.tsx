@@ -11,7 +11,6 @@ import QueueCard from "../atoms/QueueCard";
 import { useRightSidebarStore } from "../../store/rightSidebarStore";
 import type { SpotifyArtist } from "../../types";
 import FollowArtistButton from "../atoms/FollowArtistButton";
-import { useNowPlayingKey } from "../../store/NowPlayingKey";
 
 function NowPlayingView() {
     const nowPlayingContext = useContext(NowPlayingContext);
@@ -20,12 +19,11 @@ function NowPlayingView() {
     }
 
     const { type, id, name, albumImage, artists, track } = nowPlayingContext;
-    const setRightSidebarContentState = useRightSidebarStore((state) => state.setState);
-    const { state: key, setState: updateData } = useNowPlayingKey();
+    const { setState: setRightSidebarContentState, refreshData } = useRightSidebarStore();
 
     useEffect(() => {
         // Trigger a state update to refresh the NowPlayingContext
-        updateData(!key);
+        refreshData();
     }, []);
 
     return (

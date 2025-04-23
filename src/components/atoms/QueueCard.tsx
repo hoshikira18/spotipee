@@ -3,9 +3,7 @@ import CommonServices from "../../services/CommonServices";
 import type { SpotifyTrack } from "../../types";
 import CurrentTrackTitle from "../molecules/CurrentTrackTitle";
 import { Play } from "./icons";
-import { QueueContext } from "../molecules/QueueView";
-import { NowPlayingContext } from "../../contexts/NowPlayingContext";
-import { useNowPlayingKey } from "../../store/NowPlayingKey";
+import { useRightSidebarStore } from "../../store/rightSidebarStore";
 
 interface QueueCardProps {
     track: SpotifyTrack;
@@ -13,12 +11,7 @@ interface QueueCardProps {
 }
 
 function QueueCard({ track, isPlaying = false }: QueueCardProps) {
-    const queueContext = useContext(QueueContext);
-    if (!queueContext) {
-        console.log("no queue context");
-    }
-
-    const { state: key, setState: updateData } = useNowPlayingKey();
+    const { refreshData } = useRightSidebarStore();
 
     const handlePlay = useCallback(async () => {
         const relatedTracks = await CommonServices.search({
@@ -31,13 +24,10 @@ function QueueCard({ track, isPlaying = false }: QueueCardProps) {
         await CommonServices.play({
             uris: [track.uri, ...trackUris],
         });
-        // Update the queue context
-        if (queueContext) {
-            queueContext.setKey((prev) => !prev);
-        }
+
         // Update the now playing context
-        updateData(!key);
-    }, [track, queueContext]);
+        refreshData();
+    }, [track]);
 
     if (!track) {
         return null;

@@ -5,7 +5,7 @@ import PlaylistServices from "../services/PlaylistServices";
 import AlbumServices from "../services/AlbumServices";
 import ArtistServices from "../services/ArtistServices";
 import TrackServices from "../services/TrackServices";
-import { useNowPlayingKey } from "../store/NowPlayingKey";
+import { useRightSidebarStore } from "../store/rightSidebarStore";
 
 type NowPlayingContextType = {
     type: string;
@@ -32,7 +32,7 @@ function NowPlayingProvider({ children }: NowPlayingProviderProps) {
     const [artists, setArtists] = useState<SpotifyArtist[]>([]);
     const [track, setTrack] = useState<any | null>(null);
 
-    const { state: key } = useNowPlayingKey();
+    const { key } = useRightSidebarStore();
 
     useEffect(() => {
         const fetchNowPlaying = async () => {
