@@ -28,7 +28,7 @@ export default function SidebarItem({
         >
             <button
                 type="button"
-                className="button min-w-12 h-12 flex items-center justify-center transition-all duration-150"
+                className="relative button min-w-12 h-12 flex items-center justify-center transition-all duration-150"
             >
                 <img
                     src={images?.length ? images[0]?.url : ""}

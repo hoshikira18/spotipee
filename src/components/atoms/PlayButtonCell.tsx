@@ -19,7 +19,7 @@ function PlayButtonCell({ track, index }: PlayButtonCellProps) {
         throw new Error("PlayerContext | NowPlayingContext is not available");
     }
     const { currentTrack, togglePlay, playbackState } = playerContext;
-    const { refreshData } = useRightSidebarStore();
+    const { refreshData, state, setState } = useRightSidebarStore();
 
     const isTrackPlaying = useMemo(() => {
         if (!currentTrack) return false;
@@ -35,6 +35,10 @@ function PlayButtonCell({ track, index }: PlayButtonCellProps) {
             }
             // Trigger a state update to refresh the NowPlayingContext
             refreshData();
+            // open the right sidebar
+            if (state === "off") {
+                setState("current-track");
+            }
         },
         [playbackState.isPaused, currentTrack, track.uri, togglePlay],
     );
