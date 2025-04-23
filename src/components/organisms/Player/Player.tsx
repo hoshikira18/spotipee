@@ -12,7 +12,7 @@ import {
 } from "../../atoms/icons";
 import Repeat from "../../atoms/icons/Repeat";
 import { Loader, Slider } from "@mantine/core";
-import { useContext } from "react";
+import { useContext, useEffect, useState } from "react";
 import styles from "./Player.module.css";
 import { VolumeHigh, VolumeLow1, VolumeMute } from "iconsax-react";
 import { useDebouncedCallback } from "@mantine/hooks";
@@ -130,9 +130,14 @@ const SongProgress = () => {
         return null;
     }
     const {
-        playbackState: { currentTime, duration },
+        progress: { currentTime, duration },
         seek,
     } = context;
+
+    const [progress, setProgress] = useState({
+        currentTime: currentTime,
+        duration: duration,
+    });
 
     const formatTime = (time: number) => {
         const minutes = Math.floor(time / 60000);
@@ -144,6 +149,17 @@ const SongProgress = () => {
         const newPosition = (value / 100) * duration;
         seek(newPosition);
     }, 100);
+
+    useEffect(() => {
+        const interval = setInterval(() => {
+            setProgress((prev) => {
+                const newTime = Math.min(prev.currentTime + 1000, duration);
+                return { ...prev, currentTime: newTime };
+            });
+        }, 1000);
+
+        return () => clearInterval(interval);
+    }, [currentTime, duration, handleSeek]);
 
     return (
         <div className="w-full flex items-center justify-between space-x-5">
