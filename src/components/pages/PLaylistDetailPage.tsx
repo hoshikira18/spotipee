@@ -55,7 +55,7 @@ function PLaylistDetailPage() {
             </Modal>
             <DetailPageTemplate
                 playButtonRef={playButtonRef}
-                uris={["spotify:playlist:37i9dQZF1DXcBWIGoYBM5M"]}
+                context_uri={playlist?.uri}
                 title="Playlist Detail"
             >
                 <div className="h-full absolute inset-0 rounded-md">

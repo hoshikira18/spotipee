@@ -4,6 +4,7 @@ import type { SpotifyTrack } from "../../types";
 import { Pause, Play } from "./icons";
 import TrackServices from "../../services/TrackServices";
 import { NowPlayingContext } from "../../contexts/NowPlayingContext";
+import { useNowPlayingKey } from "../../store/NowPlayingKey";
 
 interface PlayButtonCellProps {
     context_uri?: string;
@@ -18,7 +19,7 @@ function PlayButtonCell({ track, index }: PlayButtonCellProps) {
         throw new Error("PlayerContext | NowPlayingContext is not available");
     }
     const { currentTrack, togglePlay, playbackState } = playerContext;
-    const { setKey } = nowPlayingContext;
+    const { state: key, setState: updateData } = useNowPlayingKey();
 
     const isTrackPlaying = useMemo(() => {
         if (!currentTrack) return false;
@@ -32,9 +33,10 @@ function PlayButtonCell({ track, index }: PlayButtonCellProps) {
             } else {
                 await TrackServices.play([track.uri] as string[]);
             }
-            setKey((prev) => !prev);
+            // Trigger a state update to refresh the NowPlayingContext
+            updateData(!key);
         },
-        [playbackState.isPaused, currentTrack, track.uri, togglePlay, setKey],
+        [playbackState.isPaused, currentTrack, track.uri, togglePlay],
     );
 
     return (

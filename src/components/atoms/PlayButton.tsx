@@ -4,6 +4,7 @@ import { PlayerContext } from "../../contexts/PlayerContext";
 import { Play } from "./icons";
 import CommonServices from "../../services/CommonServices";
 import { NowPlayingContext } from "../../contexts/NowPlayingContext";
+import { useNowPlayingKey } from "../../store/NowPlayingKey";
 
 type PlayButtonProps =
     | {
@@ -28,7 +29,7 @@ const PlayButton = ({
         throw new Error("PlayerContext | NowPlayingContext is not available");
     }
     const { currentTrack, togglePlay, playbackState } = playerContext;
-    const { setKey } = nowPlayingContext;
+    const { state: key, setState: updateData } = useNowPlayingKey();
 
     const handlePlayTrack = useCallback(async () => {
         try {
@@ -44,11 +45,13 @@ const PlayButton = ({
             await CommonServices.play({
                 context_uri,
             });
-            setKey((prev) => !prev);
+
+            // Trigger a state update to refresh the NowPlayingContext
+            updateData(!key);
         } catch (error) {
             console.error("Error playing track:", error);
         }
-    }, [context_uri, currentTrack, playbackState.isPaused, tracks, togglePlay, setKey]);
+    }, [context_uri, currentTrack, playbackState.isPaused, tracks, togglePlay]);
 
     return (
         <button type="button" onClick={handlePlayTrack} className={className}>

@@ -1,15 +1,15 @@
 import { createContext, useEffect, useState } from "react";
-import type { SpotifyArtist, SpotifyPlaybackState, SpotifyTrack } from "../types";
+import type { SpotifyArtist, SpotifyPlaybackState } from "../types";
 import CommonServices from "../services/CommonServices";
 import PlaylistServices from "../services/PlaylistServices";
 import AlbumServices from "../services/AlbumServices";
 import ArtistServices from "../services/ArtistServices";
 import TrackServices from "../services/TrackServices";
+import { useNowPlayingKey } from "../store/NowPlayingKey";
 
 type NowPlayingContextType = {
     type: string;
     data: SpotifyPlaybackState | null;
-    setKey: React.Dispatch<React.SetStateAction<boolean>>;
     name: string | null;
     id: string | null;
     albumImage: string | null;
@@ -24,7 +24,6 @@ interface NowPlayingProviderProps {
 export const NowPlayingContext = createContext<NowPlayingContextType | null>(null);
 
 function NowPlayingProvider({ children }: NowPlayingProviderProps) {
-    const [key, setKey] = useState(false);
     const [data, setData] = useState<SpotifyPlaybackState | null>(null);
     const [name, setName] = useState<string | null>(null);
     const [type, setType] = useState<string>("track");
@@ -32,6 +31,8 @@ function NowPlayingProvider({ children }: NowPlayingProviderProps) {
     const [albumImage, setAlbumImage] = useState<string | null>(null);
     const [artists, setArtists] = useState<SpotifyArtist[]>([]);
     const [track, setTrack] = useState<any | null>(null);
+
+    const { state: key } = useNowPlayingKey();
 
     useEffect(() => {
         const fetchNowPlaying = async () => {
@@ -83,7 +84,6 @@ function NowPlayingProvider({ children }: NowPlayingProviderProps) {
     const contextValues: NowPlayingContextType = {
         type,
         data,
-        setKey,
         name,
         id,
         albumImage,

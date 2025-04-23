@@ -18,11 +18,7 @@ function TrackDetailPage() {
 
     if (!track) return null;
     return (
-        <DetailPageTemplate
-            playButtonRef={playButtonRef}
-            uris={[track?.uri] as string[]}
-            title="Playlist Detail"
-        >
+        <DetailPageTemplate playButtonRef={playButtonRef} tracks={[track]} title="Playlist Detail">
             <div className="h-full absolute inset-0 rounded-md">
                 <div className="relative h-1/3 overflow-hidden p-5 bg-gradient-to-b from-[#b24242] to-[#602020] flex items-end space-x-5 pt-12 xl:pt-8">
                     <TrackImage imageUrl={track?.album.images[0].url} alt="playlist-image" />

@@ -46,7 +46,7 @@ function ArtistDetailPage() {
         >
             <DetailPageTemplate
                 playButtonRef={playButtonRef}
-                uris={topTracks?.map((track) => track.uri || "")}
+                context_uri={artist?.uri}
                 title={artist?.name}
             >
                 <div className="h-full absolute inset-0">
