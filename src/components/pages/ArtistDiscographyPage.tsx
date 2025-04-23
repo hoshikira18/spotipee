@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useMemo, useRef, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { useArtist, useArtistAlbums } from "../../hooks/useArtist";
 import MediaCard from "../molecules/MediaCard";
@@ -13,10 +13,10 @@ function ArtistDiscographyPage() {
     const { data: topTracks } = useArtistAlbums(artistId as string, 50);
     const [filter, setFilter] = useState<"single" | "album" | "all">(type ?? "all");
 
-    const filteredData = topTracks?.filter(
-        (track) => filter === "all" || track.album_type === filter,
+    const filteredData = useMemo(
+        () => topTracks?.filter((track) => filter === "all" || track.album_type === filter),
+        [topTracks, filter],
     );
-    console.log(filteredData);
 
     const combobox = useCombobox({
         onDropdownClose: () => combobox.resetSelectedOption(),

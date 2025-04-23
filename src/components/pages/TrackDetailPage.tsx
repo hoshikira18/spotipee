@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useMemo, useRef, useState } from "react";
 import DetailPageTemplate from "../templates/DetailPageTemplate";
 import { Link, useParams } from "react-router-dom";
 import { calDurationTime } from "../../utils";
@@ -140,7 +140,12 @@ const PopularTracks = ({ artistId, artistName }: DetailSectionProps) => {
 };
 
 const ArtistAlbums = ({ artistId, artistName }: DetailSectionProps) => {
-    const { data: albums } = useArtistTopTracks(artistId as string);
+    const { data } = useArtistTopTracks(artistId as string);
+
+    const albums = useMemo(
+        () => data?.filter((track) => track.album.album_type === "album"),
+        [data],
+    );
 
     if (!albums) return null;
 
@@ -149,15 +154,20 @@ const ArtistAlbums = ({ artistId, artistName }: DetailSectionProps) => {
             title={`Popular Albums by ${artistName}`}
             seeAllLink={`/artist/${artistId}/discography/album`}
             type="album"
-            data={albums.filter((album) => album.album.album_type === "album")}
+            data={albums}
         />
     );
 };
 
 const ArtistSingles = ({ artistId, artistName }: DetailSectionProps) => {
     const { data: topTracks } = useArtistTopTracks(artistId as string);
-    if (!topTracks) return null;
-    const singles = topTracks?.filter((track) => track.album.album_type === "single");
+
+    const singles = useMemo(
+        () => topTracks?.filter((track) => track.album.album_type === "single"),
+        [topTracks],
+    );
+
+    if (!singles) return null;
 
     return (
         <DetailSection
