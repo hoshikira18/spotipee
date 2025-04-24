@@ -37,7 +37,7 @@ const RecentlyPlayed = () => {
                         uri={item.track.uri}
                         id={item.track.id}
                         title={item.track.name}
-                        imageSrc={item.track.album.images[0].url}
+                        imageSrc={item.track.album?.images[0]?.url}
                     />
                 ))}
             </HomeSection>
@@ -58,7 +58,7 @@ const TopArtists = () => {
                     id={artist.id}
                     uri={artist.uri}
                     title={artist.name}
-                    imageSrc={artist.images[0].url}
+                    imageSrc={artist?.images[0]?.url}
                 />
             ))}
         </HomeSection>
@@ -79,7 +79,7 @@ const TopTracks = () => {
                     id={track.id}
                     uri={track.uri || ""}
                     type="track"
-                    imageSrc={track.album.images[0].url}
+                    imageSrc={track.album?.images[0]?.url}
                 />
             ))}
         </HomeSection>
@@ -98,7 +98,7 @@ const PopularInVietnam = () => {
                     id={track.id}
                     uri={track.uri || ""}
                     type="track"
-                    imageSrc={track.album.images[0].url}
+                    imageSrc={track.album?.images[0]?.url}
                 />
             ))}
         </HomeSection>

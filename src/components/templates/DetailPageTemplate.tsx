@@ -49,6 +49,8 @@ function DetailPageTemplate({
         return opacity;
     };
 
+    console.log("DetailPageTemplate render");
+
     return (
         <AuthWrapper>
             <div

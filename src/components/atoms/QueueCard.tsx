@@ -37,7 +37,7 @@ function QueueCard({ track, isPlaying = false }: QueueCardProps) {
         <div className="group flex items-center space-x-3 hover:bg-zinc-700/80 p-2.5 rounded-md group/card">
             <div className="relative">
                 <img
-                    src={track.album.images[0].url}
+                    src={track.album.images[0]?.url}
                     alt={track.name}
                     className="min-w-14 w-14 rounded-md"
                 />

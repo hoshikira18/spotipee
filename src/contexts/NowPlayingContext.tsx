@@ -49,7 +49,7 @@ function NowPlayingProvider({ children }: NowPlayingProviderProps) {
                     setId(data?.item?.id as string);
                     const track = await TrackServices.getTrackById(data?.item?.id as string);
                     setName(track.name);
-                    setAlbumImage(track.album.images[0].url);
+                    setAlbumImage(track.album.images[0]?.url);
                 } else {
                     setType(data.context?.type as string);
                     setAlbumImage(data?.item?.album?.images[0]?.url as string);

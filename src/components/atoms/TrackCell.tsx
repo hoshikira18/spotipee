@@ -26,7 +26,7 @@ function TrackCell({ track, displayArtist = false, displayImage = true }: TrackC
         <div className={cn("flex items-center space-x-3", isPlaying && "text-green-400")}>
             {displayImage && (
                 <img
-                    src={track.album.images[0].url}
+                    src={track.album.images[0]?.url}
                     alt="song-img"
                     className="w-11 h-11 rounded-md"
                 />

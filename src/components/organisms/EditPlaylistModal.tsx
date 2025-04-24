@@ -46,7 +46,7 @@ function EditPlaylistModal({ playlist }: ModalProps) {
             <h1 className="font-bold text-2xl">Edit details</h1>
             <div className="grid grid-cols-3 gap-2">
                 <UserImage
-                    imageUrl={playlist?.images[0].url || ""}
+                    imageUrl={playlist?.images[0]?.url || ""}
                     alt="playlist-image"
                     className="col-span-1"
                 />
