@@ -1,4 +1,4 @@
-import { useCallback, useContext } from "react";
+import { useCallback } from "react";
 import CommonServices from "../../services/CommonServices";
 import type { SpotifyTrack } from "../../types";
 import CurrentTrackTitle from "../molecules/CurrentTrackTitle";
@@ -16,7 +16,7 @@ function QueueCard({ track, isPlaying = false }: QueueCardProps) {
     const handlePlay = useCallback(async () => {
         const relatedTracks = await CommonServices.search({
             q: `artist:${track.artists[0].name}`,
-            type: "track",
+            type: ["track"],
             limit: 10,
         });
 

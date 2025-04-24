@@ -30,6 +30,10 @@ import TrackDetailPage from "./components/pages/TrackDetailPage";
 import NowPlayingProvider from "./contexts/NowPlayingContext";
 import UserTopTracksPage from "./components/pages/UserTopTracksPage";
 import UserTopArtistsPage from "./components/pages/UserTopArtistsPage";
+import SearchPage from "./components/pages/SearchPage";
+import SearchDetail from "./components/pages/SearchDetail";
+import SearchDetailWithTypePage from "./components/pages/SearchDetailWithTypePage";
+import SearchPageLayout from "./components/templates/SearchPageLayout";
 
 const theme = createTheme({
     colors: {
@@ -90,6 +94,23 @@ const router = createBrowserRouter([
             {
                 path: "/",
                 element: <HomePage />,
+            },
+            {
+                path: "/search",
+                element: <SearchPage />,
+            },
+            {
+                element: <SearchPageLayout />,
+                children: [
+                    {
+                        path: "/search/:query",
+                        element: <SearchDetail />,
+                    },
+                    {
+                        path: "/search/:query/:type",
+                        element: <SearchDetailWithTypePage />,
+                    },
+                ],
             },
             {
                 path: "/top-tracks",

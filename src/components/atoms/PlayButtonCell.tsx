@@ -48,10 +48,11 @@ function PlayButtonCell({ track, index }: PlayButtonCellProps) {
             {isTrackPlaying && !playbackState.isPaused ? (
                 <div className="group">
                     <img
-                        width="14"
-                        height="14"
+                        width="20"
+                        height="20"
                         alt=""
-                        src="https://open.spotifycdn.com/cdn/images/equaliser-green.f8937a92.svg"
+                        aria-hidden="true"
+                        src="https://open.spotifycdn.com/cdn/images/device-picker-equaliser-animation.946e7243.webp"
                         className="group-hover:hidden"
                     />
                     <button onClick={togglePlay} type="button" className="hidden group-hover:block">

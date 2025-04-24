@@ -143,7 +143,15 @@ const ArtistAlbums = ({ artistId, artistName }: DetailSectionProps) => {
     const { data } = useArtistTopTracks(artistId as string);
 
     const albums = useMemo(
-        () => data?.filter((track) => track.album.album_type === "album"),
+        () =>
+            data
+                ?.filter((track) => track.album.album_type === "album")
+                .map((track) => ({
+                    id: track.album.id,
+                    uri: track.album.uri,
+                    name: track.album.name,
+                    images: track.album.images,
+                })),
         [data],
     );
 
@@ -163,7 +171,15 @@ const ArtistSingles = ({ artistId, artistName }: DetailSectionProps) => {
     const { data: topTracks } = useArtistTopTracks(artistId as string);
 
     const singles = useMemo(
-        () => topTracks?.filter((track) => track.album.album_type === "single"),
+        () =>
+            topTracks
+                ?.filter((track) => track.album.album_type === "single")
+                .map((track) => ({
+                    id: track.album.id,
+                    uri: track.album.uri,
+                    name: track.album.name,
+                    images: track.album.images,
+                })),
         [topTracks],
     );
 

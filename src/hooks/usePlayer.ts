@@ -2,6 +2,7 @@ import { useDebouncedCallback } from "@mantine/hooks";
 import { useEffect, useRef, useState } from "react";
 import { instance } from "../lib/axios";
 import type { SpotifyTrack } from "../types";
+import TrackServices from "../services/TrackServices";
 
 declare global {
     interface Window {
@@ -120,6 +121,18 @@ export const usePlayer = (token: string) => {
                 });
         }
     }, [deviceId]);
+
+    useEffect(() => {
+        const fetchCurrentTrack = async () => {
+            await TrackServices.getCurrentPlayingTrack().then((res) => {
+                setTrack(res);
+            });
+        };
+
+        if (!currentTrack) {
+            fetchCurrentTrack();
+        }
+    }, [currentTrack]);
 
     // Timer to update currentTime
     useEffect(() => {
