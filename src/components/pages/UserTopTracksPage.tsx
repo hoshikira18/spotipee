@@ -28,7 +28,7 @@ function UserTopTracksPage() {
                         uri={item.uri || ""}
                         key={item.id}
                         title={item.name}
-                        imageSrc={item.album.images[1].url}
+                        imageSrc={item.album.images[1]?.url}
                         className="col-span-6 md:col-span-4 lg:col-span-3 xl:col-span-2 min-w-0 w-auto"
                     />
                 ))}

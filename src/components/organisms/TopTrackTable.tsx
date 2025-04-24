@@ -1,17 +1,11 @@
 import { useContext } from "react";
-import TrackServices from "../../services/TrackServices";
 import type { SpotifyTrack } from "../../types";
 import { TrackContext } from "../../contexts/TrackContext";
 import { PlayerContext } from "../../contexts/PlayerContext";
-import { nprogress } from "@mantine/nprogress";
-import UserServices from "../../services/UserServices";
-import { notifications } from "@mantine/notifications";
 import CustomTable from "./CustomTable";
-import { Pause, Play } from "../atoms/icons";
 import TrackCell from "../atoms/TrackCell";
 import { convertMillisecondsToMinutes } from "../../utils";
 import TrackOptions from "../atoms/TrackOptionsButton";
-import { AddCircle, TickCircle } from "iconsax-react";
 import PlayButtonCell from "../atoms/PlayButtonCell";
 import SaveTrackButton from "../atoms/SaveTrackButton";
 
@@ -26,6 +20,8 @@ const TopTracksTable = ({ isShowMore, tracks }: TopTracksTableProps) => {
     if (!trackContext || !playerContext) {
         throw new Error("TrackContext or PlayerContext is not available");
     }
+
+    console.log("render top tracks table");
 
     return (
         <CustomTable>

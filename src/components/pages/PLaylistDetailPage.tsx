@@ -62,7 +62,7 @@ function PLaylistDetailPage() {
                     <div className="relative h-1/3 overflow-hidden p-5 bg-gradient-to-b from-[#b24242] to-[#602020] flex items-end space-x-5 pt-12 xl:pt-8">
                         <AvtImage
                             showEditOverlay={true}
-                            imageUrl={playlist?.images[0].url}
+                            imageUrl={playlist?.images[0]?.url}
                             alt="playlist-image"
                             onClick={open}
                         />
@@ -86,7 +86,7 @@ function PLaylistDetailPage() {
                                 <div className="flex items-center space-x-3 text-sm text-zinc-200">
                                     <div className="flex items-center space-x-1">
                                         <img
-                                            src={playlist?.owner.images[0].url}
+                                            src={playlist?.owner.images[0]?.url}
                                             alt="owner-image"
                                             className="w-7 rounded-full"
                                         />

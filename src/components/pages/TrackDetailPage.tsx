@@ -21,7 +21,7 @@ function TrackDetailPage() {
         <DetailPageTemplate playButtonRef={playButtonRef} tracks={[track]} title="Playlist Detail">
             <div className="h-full absolute inset-0 rounded-md">
                 <div className="relative h-1/3 overflow-hidden p-5 bg-gradient-to-b from-[#b24242] to-[#602020] flex items-end space-x-5 pt-12 xl:pt-8">
-                    <TrackImage imageUrl={track?.album.images[0].url} alt="playlist-image" />
+                    <TrackImage imageUrl={track?.album.images[0]?.url} alt="playlist-image" />
                     <div className="space-y-4">
                         <span className="text-sm">Song</span>
                         <p
@@ -40,7 +40,7 @@ function TrackDetailPage() {
                                 {track?.artists.map((artist) => (
                                     <div key={artist.id} className="flex items-center space-x-1">
                                         <img
-                                            src={artist.images[0].url}
+                                            src={artist.images[0]?.url}
                                             alt="owner-image"
                                             className="w-7 aspect-square object-cover rounded-full"
                                         />

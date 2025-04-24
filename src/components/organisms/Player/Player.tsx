@@ -129,6 +129,7 @@ const SongProgress = () => {
     }
     const {
         progress: { currentTime, duration },
+        playbackState: { isPaused },
         seek,
     } = context;
     const [_, setKey] = useState(false);
@@ -146,12 +147,13 @@ const SongProgress = () => {
 
     // Update the key to force re-render every second
     useEffect(() => {
+        if (isPaused) return;
         const interval = setInterval(() => {
             setKey((prev) => !prev);
         }, 1000);
 
         return () => clearInterval(interval);
-    }, [currentTime, duration, handleSeek]);
+    }, [isPaused]);
 
     return (
         <div className="w-full flex items-center justify-between space-x-5">

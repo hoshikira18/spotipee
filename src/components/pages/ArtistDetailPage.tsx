@@ -37,6 +37,8 @@ function ArtistDetailPage() {
     if (!trackContext) throw new Error("TrackContext is not available");
     if (!artist) return null;
 
+    console.log("render artist detail page");
+
     return (
         <ArtistDetailContext.Provider
             value={{
@@ -163,7 +165,7 @@ const ArtistAlbums = () => {
                         uri={item.album.uri}
                         key={item.id}
                         title={item.album.name}
-                        imageSrc={item.album.images[0].url}
+                        imageSrc={item.album?.images[0]?.url}
                     />
                 ))}
             </div>

@@ -51,7 +51,7 @@ function RelatedArtistPage() {
                             id={item.id}
                             uri={item.uri}
                             title={item.name}
-                            imageSrc={item.images[1].url}
+                            imageSrc={item.images[1]?.url}
                             className="col-span-6 md:col-span-4 lg:col-span-3 xl:col-span-2 min-w-0 w-auto"
                         />
                     ))}
