@@ -8,6 +8,10 @@ interface PlayerProviderProps {
 }
 
 export const PlayerContext = createContext<{
+    progress: {
+        currentTime: number;
+        duration: number;
+    };
     playbackState: {
         isPaused: boolean;
         isShuffle: boolean;
