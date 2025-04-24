@@ -12,14 +12,12 @@ import {
 } from "../../atoms/icons";
 import Repeat from "../../atoms/icons/Repeat";
 import { Loader, Slider } from "@mantine/core";
-import { useContext, useEffect, useState } from "react";
+import { useCallback, useContext, useEffect, useState } from "react";
 import styles from "./Player.module.css";
 import { VolumeHigh, VolumeLow1, VolumeMute } from "iconsax-react";
 import { useDebouncedCallback } from "@mantine/hooks";
 import { useRightSidebarStore } from "../../../store/rightSidebarStore";
 import { PlayerContext } from "../../../contexts/PlayerContext";
-import { Link } from "react-router-dom";
-import type { SpotifyArtist } from "../../../types";
 import CurrentTrackTitle from "../../molecules/CurrentTrackTitle";
 
 function Player() {
@@ -133,11 +131,7 @@ const SongProgress = () => {
         progress: { currentTime, duration },
         seek,
     } = context;
-
-    const [progress, setProgress] = useState({
-        currentTime: currentTime,
-        duration: duration,
-    });
+    const [_, setKey] = useState(false);
 
     const formatTime = (time: number) => {
         const minutes = Math.floor(time / 60000);
@@ -150,12 +144,10 @@ const SongProgress = () => {
         seek(newPosition);
     }, 100);
 
+    // Update the key to force re-render every second
     useEffect(() => {
         const interval = setInterval(() => {
-            setProgress((prev) => {
-                const newTime = Math.min(prev.currentTime + 1000, duration);
-                return { ...prev, currentTime: newTime };
-            });
+            setKey((prev) => !prev);
         }, 1000);
 
         return () => clearInterval(interval);
