@@ -1,8 +1,6 @@
 import { useParams } from "react-router-dom";
 import { useSearch } from "../../hooks/useSearch";
-import { useMemo, useRef } from "react";
-import { useElementScroll } from "../../hooks/useElementScroll";
-import { cn } from "../../utils";
+import { useMemo } from "react";
 import MediaCard from "../molecules/MediaCard";
 
 function SearchDetailWithTypePage() {
@@ -10,7 +8,7 @@ function SearchDetailWithTypePage() {
 
     const { data } = useSearch({
         q: query || "",
-        limit: 10,
+        limit: 50,
         type: [type as "album" | "artist" | "playlist" | "track"],
     });
 
