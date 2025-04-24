@@ -3,6 +3,7 @@ import { useEffect } from "react";
 import { useRightSidebarStore } from "../../store/rightSidebarStore";
 import NowPlayingView from "../molecules/NowPlayingView";
 import QueueView from "../molecules/QueueView";
+import DevicesView from "../molecules/DevicesView";
 
 function RightSideBar() {
     const { width } = useViewportSize();
@@ -27,8 +28,8 @@ function RightSideBar() {
                 </div>
             )}
             {state === "devices" && (
-                <div className="h-full overflow-hidden flex items-center justify-center group">
-                    Devices
+                <div className="h-full overflow-hidden">
+                    <DevicesView />
                 </div>
             )}
             {state === "queue" && (

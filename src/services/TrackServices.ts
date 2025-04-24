@@ -30,6 +30,12 @@ const TrackServices = {
             .then(({ data }) => data.items);
         return data;
     },
+    async getCurrentPlayingTrack(): Promise<SpotifyTrack> {
+        const data = await instance
+            .get("/me/player/currently-playing")
+            .then(({ data }) => data.item);
+        return data;
+    },
 };
 
 export default TrackServices;

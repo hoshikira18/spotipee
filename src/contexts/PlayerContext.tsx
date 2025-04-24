@@ -1,4 +1,4 @@
-import { createContext } from "react";
+import { createContext, useEffect } from "react";
 import { usePlayer } from "../hooks/usePlayer";
 import Cookies from "js-cookie";
 import type { SpotifyTrack } from "../types";

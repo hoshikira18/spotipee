@@ -183,7 +183,7 @@ const RelatedArtists = () => {
         const fetchRelatedArtists = async () => {
             const data = await CommonServices.search({
                 q: artist?.genres.join(","),
-                type: "artist",
+                type: ["artist"],
                 limit: ARTIST_PER_PAGE,
             }).then((res) => res.artists.items);
             setRelatedArtist(data);

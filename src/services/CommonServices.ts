@@ -1,5 +1,5 @@
 import { instance } from "../lib/axios";
-import type { SpotifyAlbum, SpotifyPlaybackState } from "../types";
+import type { SpotifyPlaybackState } from "../types";
 
 type PlayPrams =
     | {
@@ -26,12 +26,12 @@ const CommonServices = {
     },
     async search({
         q = "",
-        type = "artist",
+        type = ["artist"],
         limit = 20,
         offset = 0,
     }: {
         q?: string;
-        type: "album" | "artist" | "playlist" | "track" | "show" | "episode" | "audiobook";
+        type: Array<"album" | "artist" | "playlist" | "track" | "show" | "episode" | "audiobook">;
         limit?: number;
         offset?: number;
     }) {
@@ -39,7 +39,7 @@ const CommonServices = {
             .get("/search", {
                 params: {
                     q,
-                    type,
+                    type: type.join(","),
                     limit,
                     offset,
                 },

@@ -87,7 +87,7 @@ const UserServices = {
     async getMadeForYouPlaylists(): Promise<SpotifyTrack[]> {
         const data = CommonServices.search({
             q: "vietnamese music",
-            type: "track",
+            type: ["track"],
             limit: 10,
         }).then((item) => item.tracks.items);
         return data;
