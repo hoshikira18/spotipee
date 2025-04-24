@@ -1,15 +1,18 @@
-import { useDisclosure, useViewportSize } from "@mantine/hooks";
+import { useDebouncedCallback, useDisclosure, useViewportSize } from "@mantine/hooks";
 import { SearchNormal } from "iconsax-react";
-import { useEffect, useRef } from "react";
-import { Link } from "react-router-dom";
+import { useEffect, useRef, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import { twMerge } from "tailwind-merge";
 
 interface SearchBarProps {
     className?: string;
+    displayHomeButton?: boolean;
 }
 
-function SearchBar({ className = "" }: SearchBarProps) {
+function SearchBar({ className = "", displayHomeButton = true }: SearchBarProps) {
     const ref = useRef<HTMLInputElement>(null);
+    const navigate = useNavigate();
+    const [q, setQ] = useState("");
     const [isSearchOpen, { open, close, toggle }] = useDisclosure(true);
     const { width } = useViewportSize();
 
@@ -34,22 +37,32 @@ function SearchBar({ className = "" }: SearchBarProps) {
         }
     }, [width]);
 
+    const handleSearch = useDebouncedCallback(() => {
+        navigate(`/search/${encodeURIComponent(q.trim())}`);
+    }, 200);
+
+    useEffect(() => {
+        handleSearch();
+    }, [q]);
+
     return (
         <div className={twMerge("h-full flex items-center space-x-2", className)}>
-            <Link
-                to={"/"}
-                className="p-3 bg-zinc-800 h-full aspect-square flex items-center justify-center rounded-full"
-            >
-                <svg
-                    fill="white"
-                    data-encore-id="icon"
-                    role="img"
-                    aria-hidden="true"
-                    viewBox="0 0 24 24"
+            {displayHomeButton && (
+                <Link
+                    to={"/"}
+                    className="p-3 bg-zinc-800 h-full aspect-square flex items-center justify-center rounded-full"
                 >
-                    <path d="M13.5 1.515a3 3 0 0 0-3 0L3 5.845a2 2 0 0 0-1 1.732V21a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1v-6h4v6a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V7.577a2 2 0 0 0-1-1.732l-7.5-4.33z" />
-                </svg>
-            </Link>
+                    <svg
+                        fill="white"
+                        data-encore-id="icon"
+                        role="img"
+                        aria-hidden="true"
+                        viewBox="0 0 24 24"
+                    >
+                        <path d="M13.5 1.515a3 3 0 0 0-3 0L3 5.845a2 2 0 0 0-1 1.732V21a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1v-6h4v6a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V7.577a2 2 0 0 0-1-1.732l-7.5-4.33z" />
+                    </svg>
+                </Link>
+            )}
 
             <div
                 className={
@@ -61,8 +74,10 @@ function SearchBar({ className = "" }: SearchBarProps) {
                 </button>
                 <input
                     ref={ref}
+                    value={q}
                     className={`${isSearchOpen ? "w-full" : "hidden"} min-w-24 truncate bg-transparent px-3 outline-none font-medium text-gray-100 placeholder-gray-300`}
                     placeholder="What do you want to play?"
+                    onChange={(e) => setQ(e.target.value)}
                 />
             </div>
         </div>

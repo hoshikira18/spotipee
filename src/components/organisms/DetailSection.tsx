@@ -1,32 +1,37 @@
-import type { SpotifyTrack } from "../../types";
+import type { Image } from "../../types";
+import { cn } from "../../utils";
 import SeeAllButton from "../atoms/SeeAllButton";
 import MediaCard from "../molecules/MediaCard";
 
 interface DetailSectionProps {
     title: string;
     seeAllLink: string;
-    data: SpotifyTrack[];
+    data: {
+        id: string;
+        uri: string;
+        name: string;
+        images: Image[];
+    }[];
     type: "album" | "playlist" | "artist" | "track";
+    className?: string;
 }
 
-function DetailSection({ title, type, seeAllLink, data }: DetailSectionProps) {
-    const uniqueAlbums = Array.from(new Map(data.map((item) => [item.album.id, item])).values());
-
+function DetailSection({ title, type, seeAllLink, data, className = "" }: DetailSectionProps) {
     return (
-        <div className="px-5 mb-10">
+        <div className={cn("px-5 mb-10", className)}>
             <div className="flex items-center justify-between">
                 <span className="text-2xl font-bold">{title}</span>
                 <SeeAllButton link={seeAllLink} title="Show all" />
             </div>
             <div className="flex overflow-x-scroll pb-5 mt-5">
-                {uniqueAlbums.map((item) => (
+                {data?.map((item) => (
                     <MediaCard
-                        key={item.album.id}
-                        id={item.album.id}
-                        uri={item.album.uri}
+                        key={item.id}
+                        id={item.id}
+                        uri={item.uri}
                         type={type}
-                        title={item.album.name}
-                        imageSrc={item.album.images[1]?.url}
+                        title={item.name}
+                        imageSrc={item?.images ? item?.images[0]?.url : ""}
                     />
                 ))}
             </div>

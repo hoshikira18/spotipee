@@ -107,7 +107,7 @@ function PLaylistDetailPage() {
                         <PlayButton context_uri={playlist.uri} />
                     </div>
                     <div className="pb-20">
-                        <CustomTable stickyHeader stickyHeaderOffset={64}>
+                        <CustomTable stickyHeader stickyHeaderOffset={72}>
                             <CustomTable.Head
                                 style={{
                                     background: "#27272a",
