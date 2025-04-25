@@ -1,8 +1,17 @@
-import { useDebouncedCallback, useDisclosure, useViewportSize } from "@mantine/hooks";
+import {
+    useClickOutside,
+    useDebouncedCallback,
+    useDisclosure,
+    useViewportSize,
+} from "@mantine/hooks";
 import { SearchNormal } from "iconsax-react";
 import { useEffect, useRef, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { twMerge } from "tailwind-merge";
+import { cn } from "../../utils";
+import { useSearchBarStore } from "../../store/searchBarStore";
+import QueueCard from "../atoms/QueueCard";
+import type { SpotifyArtist } from "../../types";
 
 interface SearchBarProps {
     className?: string;
@@ -15,6 +24,8 @@ function SearchBar({ className = "", displayHomeButton = true }: SearchBarProps)
     const [q, setQ] = useState("");
     const [isSearchOpen, { open, close, toggle }] = useDisclosure(true);
     const { width } = useViewportSize();
+    const [mounted, setMounted] = useState(false);
+    const [isInputFocused, setIsInputFocused] = useState(false);
 
     useEffect(() => {
         const handleKeyDown = (e: KeyboardEvent) => {
@@ -42,11 +53,29 @@ function SearchBar({ className = "", displayHomeButton = true }: SearchBarProps)
     }, 200);
 
     useEffect(() => {
+        if (!mounted) {
+            setMounted(true);
+            return;
+        }
         handleSearch();
     }, [q]);
 
+    const [opened, setOpened] = useState(false);
+    const recentlySearchedBoxRef = useClickOutside(() => setOpened(false));
+
     return (
-        <div className={twMerge("h-full flex items-center space-x-2", className)}>
+        <div className={twMerge("relative h-full flex items-center space-x-2", className)}>
+            <div
+                transition-all
+                duration-200
+                className={cn(
+                    "absolute z-20 top-full translate-y-3 left-0 right-0 pl-16 transition-all duration-200 shadow-md",
+                    opened ? "visible opacity-100" : "invisible opacity-0",
+                )}
+                ref={recentlySearchedBoxRef}
+            >
+                <RecentlySearched />
+            </div>
             {displayHomeButton && (
                 <Link
                     to={"/"}
@@ -75,9 +104,10 @@ function SearchBar({ className = "", displayHomeButton = true }: SearchBarProps)
                 <input
                     ref={ref}
                     value={q}
-                    className={`${isSearchOpen ? "w-full" : "hidden"} min-w-24 truncate bg-transparent px-3 outline-none font-medium text-gray-100 placeholder-gray-300`}
+                    className={`${isSearchOpen ? "w-full" : "lg:w-full lg:block hidden"} min-w-24 truncate bg-transparent px-3 outline-none font-medium text-gray-100 placeholder-gray-300`}
                     placeholder="What do you want to play?"
                     onChange={(e) => setQ(e.target.value)}
+                    onFocus={() => setOpened(true)}
                 />
             </div>
         </div>
@@ -85,3 +115,50 @@ function SearchBar({ className = "", displayHomeButton = true }: SearchBarProps)
 }
 
 export default SearchBar;
+
+const RecentlySearched = () => {
+    const { key } = useSearchBarStore();
+    const [data, setData] = useState<
+        | {
+              id: string;
+              type: "track" | "playlist" | "album" | "artist";
+              name: string;
+              artists?: SpotifyArtist[];
+              image: string;
+              uri: string;
+          }[]
+        | null
+    >(null);
+
+    useEffect(() => {
+        const storedData = localStorage.getItem("recentlySearched");
+        if (storedData) {
+            setData(JSON.parse(storedData));
+        }
+    }, [key]);
+
+    if (!data || data.length === 0) return null;
+
+    return (
+        <div className="bg-zinc-800 rounded-lg max-h-96 overflow-y-scroll shadow-md">
+            <h2 className="font-semibold text-gray-200 sticky top-0 bg-zinc-800 z-20 px-3 pt-3 pb-2">
+                Recently Searched
+            </h2>
+            <ul className="mt-2 space-y-1 px-3 pb-3">
+                {data?.map((item) => (
+                    <QueueCard
+                        key={item.id}
+                        id={item.id}
+                        name={item.name}
+                        image={item.image}
+                        artists={item.artists || []}
+                        type={item.type}
+                        uri={item.uri}
+                        isPlaying={false}
+                        displayDeleteButton={true}
+                    />
+                ))}
+            </ul>
+        </div>
+    );
+};

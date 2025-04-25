@@ -1,9 +1,11 @@
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { cn } from "../../utils";
 import { Play } from "../atoms/icons";
 import { Skeleton } from "@mantine/core";
 import CommonServices from "../../services/CommonServices";
 import { useRightSidebarStore } from "../../store/rightSidebarStore";
+import { useSearchBarStore } from "../../store/searchBarStore";
+import type { SpotifyArtist } from "../../types";
 
 export interface MediaCardProps {
     type?: "artist" | "album" | "playlist" | "track";
@@ -13,6 +15,7 @@ export interface MediaCardProps {
     id: string;
     uri: string;
     subtitle?: string;
+    artists?: SpotifyArtist[];
     onClick?: () => void;
     isLoading?: boolean;
     className?: string;
@@ -26,9 +29,13 @@ export default function MediaCard({
     title,
     uri,
     subtitle,
+    artists,
     className = "",
     isLoading = false,
 }: MediaCardProps) {
+    const location = useLocation();
+    const isSearchPage = location.pathname.includes("/search");
+
     const sizeClasses = {
         sm: {
             container: "p-2 space-y-1 min-w-32 w-32",
@@ -60,6 +67,29 @@ export default function MediaCard({
 
         // Trigger a state update to refresh the NowPlayingContext
         refreshData();
+    };
+
+    const searchBarStore = useSearchBarStore();
+
+    const handleAddToRecentlyPlayed = () => {
+        console.log(type, id);
+        if (isSearchPage) {
+            const recentlyPlayed = JSON.parse(localStorage.getItem("recentlySearched") || "[]");
+
+            const isItemExists = recentlyPlayed.some((item: any) => item.id === id);
+
+            if (!isItemExists) {
+                console.log(isItemExists);
+
+                const newRecentlyPlayed = [
+                    { id, type, name: title, image: imageSrc, uri, artists },
+                    ...recentlyPlayed,
+                ].slice(0, 10);
+                localStorage.setItem("recentlySearched", JSON.stringify(newRecentlyPlayed));
+                // trigger re render of the search bar
+                searchBarStore.refreshData();
+            }
+        }
     };
 
     if (isLoading) {
@@ -97,6 +127,7 @@ export default function MediaCard({
             <div>
                 <Link
                     to={`/${type}/${id}`}
+                    onClick={handleAddToRecentlyPlayed}
                     className={cn("line-clamp-2 hover:underline", sizeClasses[size].title)}
                 >
                     {title}

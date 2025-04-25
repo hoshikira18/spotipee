@@ -1,4 +1,4 @@
-import type { Image } from "../../types";
+import type { Image, SpotifyArtist } from "../../types";
 import { cn } from "../../utils";
 import SeeAllButton from "../atoms/SeeAllButton";
 import MediaCard from "../molecules/MediaCard";
@@ -11,6 +11,7 @@ interface DetailSectionProps {
         uri: string;
         name: string;
         images: Image[];
+        artists?: SpotifyArtist[];
     }[];
     type: "album" | "playlist" | "artist" | "track";
     className?: string;
@@ -30,6 +31,7 @@ function DetailSection({ title, type, seeAllLink, data, className = "" }: Detail
                         id={item.id}
                         uri={item.uri}
                         type={type}
+                        artists={item?.artists}
                         title={item.name}
                         imageSrc={item?.images ? item?.images[0]?.url : ""}
                     />

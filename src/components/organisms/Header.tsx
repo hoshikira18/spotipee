@@ -11,13 +11,13 @@ function Header() {
     const { data: currentUser, isFetching: isLoading } = useCurrentUser();
 
     return (
-        <header className="h-16 flex items-center justify-between space-x-3 p-2">
+        <header className="relative h-16 flex items-center justify-between space-x-3 p-2">
             {/* Left section */}
             <div className="h-full flex items-center 2xl:justify-between w-2/3">
                 <Link to={"/"} className="px-2 flex-none">
                     <Spotify size={40} variant="Bold" />
                 </Link>
-                <SearchBar className="w-auto md:w-2/3 xl:w-4/7 xl:px-5" />
+                <SearchBar className="w-auto md:w-2/3 xl:w-3/7 xl:px-5" />
             </div>
 
             {/* Right section */}

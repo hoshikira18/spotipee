@@ -107,7 +107,15 @@ const NextInQueue = () => {
             </div>
             <div>
                 {nextTrack?.slice(0, 1).map((track) => (
-                    <QueueCard key={track.id} track={track} />
+                    <QueueCard
+                        key={track.id}
+                        id={track.id}
+                        name={track.name}
+                        image={track.album?.images[0]?.url}
+                        artists={track.artists}
+                        uri={track.uri || ""}
+                        isPlaying={false}
+                    />
                 ))}
             </div>
         </div>
