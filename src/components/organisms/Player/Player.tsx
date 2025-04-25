@@ -12,7 +12,7 @@ import {
 } from "../../atoms/icons";
 import Repeat from "../../atoms/icons/Repeat";
 import { Loader, Slider } from "@mantine/core";
-import { useCallback, useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import styles from "./Player.module.css";
 import { VolumeHigh, VolumeLow1, VolumeMute } from "iconsax-react";
 import { useDebouncedCallback } from "@mantine/hooks";
@@ -50,6 +50,7 @@ const CurrentSong = () => {
                         id={currentTrack?.id}
                         name={currentTrack?.name}
                         artists={currentTrack?.artists}
+                        type={"track"}
                     />
                 </>
             ) : (

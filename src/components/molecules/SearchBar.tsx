@@ -12,6 +12,7 @@ import { cn } from "../../utils";
 import { useSearchBarStore } from "../../store/searchBarStore";
 import QueueCard from "../atoms/QueueCard";
 import type { SpotifyArtist } from "../../types";
+import { Button } from "@mantine/core";
 
 interface SearchBarProps {
     className?: string;
@@ -137,6 +138,11 @@ const RecentlySearched = () => {
         }
     }, [key]);
 
+    const handleClearHistory = () => {
+        localStorage.removeItem("recentlySearched");
+        setData([]);
+    };
+
     if (!data || data.length === 0) return null;
 
     return (
@@ -159,6 +165,11 @@ const RecentlySearched = () => {
                     />
                 ))}
             </ul>
+            <div className="px-3 pb-3">
+                <Button variant="outline" color="white" fz={"sm"} onClick={handleClearHistory}>
+                    Clear recently searches
+                </Button>
+            </div>
         </div>
     );
 };
