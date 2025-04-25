@@ -1,4 +1,4 @@
-import { createContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import type { SpotifyTrack } from "../../types";
 import CommonServices from "../../services/CommonServices";
 import CloseIcon from "../atoms/icons/CloseIcon";
@@ -42,12 +42,29 @@ function QueueView() {
             </div>
             <div className="px-2 mt-6">
                 <p className="font-semibold mb-2">Now playing</p>
-                <QueueCard track={currently_playing} isPlaying={true} />
+                <QueueCard
+                    type="track"
+                    id={currently_playing?.id}
+                    name={currently_playing?.name}
+                    image={currently_playing?.album?.images[0]?.url}
+                    artists={currently_playing?.artists}
+                    uri={currently_playing?.uri || ""}
+                    isPlaying={true}
+                />
             </div>
             <div className="px-2 mt-6">
                 <p className="font-semibold mb-2">Next in Queue</p>
                 {queueItems.map((item: SpotifyTrack, index: number) => (
-                    <QueueCard key={item.id + index} track={item} />
+                    <QueueCard
+                        key={item.id + index}
+                        type="track"
+                        id={item.id}
+                        name={item.name}
+                        image={item.album?.images[0]?.url}
+                        artists={item.artists}
+                        uri={item.uri || ""}
+                        isPlaying={false}
+                    />
                 ))}
             </div>
         </div>

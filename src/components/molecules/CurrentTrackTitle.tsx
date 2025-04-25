@@ -7,6 +7,7 @@ interface CurrentTrackTitleProps {
     id: string;
     name: string;
     artists?: SpotifyArtist[];
+    type?: "track" | "album" | "playlist" | "artist";
     isPlaying?: boolean;
 }
 
@@ -30,12 +31,13 @@ function CurrentTrackTitle({
     id,
     name,
     artists,
+    type,
     isPlaying = false,
 }: CurrentTrackTitleProps) {
     return (
         <div>
             <Link
-                to={`/track/${id}`}
+                to={`/${type}/${id}`}
                 className={cn(
                     "line-clamp-1 hover:underline",
                     isPlaying ? "text-green-500" : "",
@@ -44,7 +46,18 @@ function CurrentTrackTitle({
             >
                 {name}
             </Link>
-            {artists && (
+            {type !== "track" && (
+                <p className={cn("text-zinc-400 line-clamp-1", variants[size].artist)}>
+                    {type === "playlist"
+                        ? "Playlist"
+                        : type === "album"
+                          ? "Album"
+                          : type === "artist"
+                            ? "Artist"
+                            : ""}
+                </p>
+            )}
+            {type === "track" && (
                 <p className={cn("text-zinc-400 line-clamp-1", variants[size].artist)}>
                     {artists?.map((artist, index) => (
                         <span key={artist.id}>

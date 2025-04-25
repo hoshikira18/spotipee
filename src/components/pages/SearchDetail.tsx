@@ -19,6 +19,7 @@ function SearchDetail() {
                 uri: item?.uri,
                 name: item?.name,
                 images: item?.album?.images,
+                artists: item?.artists,
             })),
         [data],
     );
