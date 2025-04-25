@@ -33,13 +33,14 @@ function TrackCell({ track, displayArtist = false, displayImage = true }: TrackC
             )}
             {displayArtist ? (
                 <CurrentTrackTitle
+                    type="track"
                     size="md"
                     id={track?.id}
                     name={track?.name}
                     artists={track?.artists}
                 />
             ) : (
-                <CurrentTrackTitle size="md" id={track?.id} name={track?.name} />
+                <CurrentTrackTitle size="md" id={track?.id} name={track?.name} type="track" />
             )}
         </div>
     );

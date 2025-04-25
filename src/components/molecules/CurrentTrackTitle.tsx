@@ -7,7 +7,7 @@ interface CurrentTrackTitleProps {
     id: string;
     name: string;
     artists?: SpotifyArtist[];
-    type?: "track" | "album" | "playlist" | "artist";
+    type: "track" | "album" | "playlist" | "artist";
     isPlaying?: boolean;
 }
 
