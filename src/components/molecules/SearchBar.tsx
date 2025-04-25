@@ -15,6 +15,7 @@ function SearchBar({ className = "", displayHomeButton = true }: SearchBarProps)
     const [q, setQ] = useState("");
     const [isSearchOpen, { open, close, toggle }] = useDisclosure(true);
     const { width } = useViewportSize();
+    const [mounted, setMounted] = useState(false);
 
     useEffect(() => {
         const handleKeyDown = (e: KeyboardEvent) => {
@@ -42,6 +43,10 @@ function SearchBar({ className = "", displayHomeButton = true }: SearchBarProps)
     }, 200);
 
     useEffect(() => {
+        if (!mounted) {
+            setMounted(true);
+            return;
+        }
         handleSearch();
     }, [q]);
 
