@@ -63,6 +63,7 @@ function NowPlayingView() {
             </div>
             <div className="px-4 py-4 flex items-center justify-between space-x-2">
                 <CurrentTrackTitle
+                    type="track"
                     id={track?.id as string}
                     name={track?.name}
                     size="lg"
@@ -108,6 +109,7 @@ const NextInQueue = () => {
             <div>
                 {nextTrack?.slice(0, 1).map((track) => (
                     <QueueCard
+                        type="track"
                         key={track.id}
                         id={track.id}
                         name={track.name}
