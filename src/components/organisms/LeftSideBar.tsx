@@ -135,7 +135,7 @@ function LeftSideBar() {
             )}
 
             {/* Sidebar items */}
-            <SearchBox onChange={handleSearchInputChange} />
+            {leftSideBarOpened && <SearchBox onChange={handleSearchInputChange} />}
             {/* Playlist, Artists, Albums, Songs */}
 
             <div className="overflow-y-scroll h-full pb-32">
@@ -175,7 +175,7 @@ const SearchBox = ({ onChange }: { onChange: (input: string) => void }) => {
     return (
         <div
             className={cn(
-                "inline-flex w-1/2 hover:bg-zinc-700/60 px-2 py-1 rounded items-center transition-all duration-150 focus-within:bg-zinc-700/60",
+                "ml-1 inline-flex w-1/2 hover:bg-zinc-700/60 px-2 py-1 rounded items-center transition-all duration-150 focus-within:bg-zinc-700/60",
                 !opened && "rounded-full w-auto",
             )}
         >
