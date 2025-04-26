@@ -1,7 +1,7 @@
 # 🎵 Spotify Clone with Vite
 
 This project is a **Spotify Clone** built using **Vite.js**, **Mantine UI**, **TailwindCSS**, and **TanStack Query**. The application is deployed on **Vercel**.
-![image](https://github.com/user-attachments/assets/f92fa2dc-dbba-4be1-82e7-4c4b8e86398d)
+![image](https://github.com/user-attachments/assets/2bc0edb8-d007-4255-a440-3182062c78d8)
 
 
 ## 🚀 Features
