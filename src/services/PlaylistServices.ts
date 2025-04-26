@@ -38,7 +38,7 @@ const PlaylistServices = {
         const data = await instance.post(`/playlists/${playlistId}/tracks`, {
             uris: tracks.map((track) => track.uri),
         });
-        console.log(data);
+        return data;
     },
     async changePlaylistInfo(id: string, name?: string, description?: string) {
         const data = await instance.put(`/playlists/${id}`, {
