@@ -8,9 +8,9 @@ export const useCurrentUserPlaylist = () => {
     });
 };
 
-export const usePlaylist = (playlistId: string) => {
+export const usePlaylist = (playlistId: string, withGenres: boolean) => {
     return useQuery({
-        queryKey: ["playlist", playlistId],
-        queryFn: () => PlaylistServices.getPlaylist(playlistId),
+        queryKey: ["playlist", playlistId, withGenres],
+        queryFn: () => PlaylistServices.getPlaylist({ playlistId, withGenres }),
     });
 };

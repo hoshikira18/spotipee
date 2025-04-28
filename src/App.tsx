@@ -34,6 +34,7 @@ import SearchPage from "./components/pages/SearchPage";
 import SearchDetail from "./components/pages/SearchDetail";
 import SearchDetailWithTypePage from "./components/pages/SearchDetailWithTypePage";
 import SearchPageLayout from "./components/templates/SearchPageLayout";
+import Dashboard from "./components/pages/Dashboard";
 
 const theme = createTheme({
     colors: {
@@ -94,6 +95,10 @@ const router = createBrowserRouter([
             {
                 path: "/",
                 element: <HomePage />,
+            },
+            {
+                path: "/dashboard",
+                element: <Dashboard />,
             },
             {
                 path: "/search",
