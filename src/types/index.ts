@@ -119,6 +119,10 @@ type SpotifyAlbum = {
     }[];
 };
 
+type PlaylistGenres = {
+    [key: string]: number;
+};
+
 type SpotifyPlaylist = {
     collaborative: boolean;
     description: string;
@@ -160,6 +164,7 @@ type SpotifyPlaylist = {
     };
     type: string;
     uri: string;
+    genres?: PlaylistGenres;
 };
 
 type SpotifyPlaybackState = {
@@ -289,6 +294,7 @@ export type {
     SpotifyTrack,
     SpotifyAlbum,
     SpotifyPlaylist,
+    PlaylistGenres,
     SpotifyDevice,
     Image,
     SpotifyPlaybackState,
