@@ -2,22 +2,21 @@ import { instance } from "../lib/axios";
 import type { SpotifyArtist, SpotifyPlaylist, SpotifyTrack } from "../types";
 import UserServices from "./UserServices";
 
+type GetPlaylistParams = {
+    playlistId: string;
+    withGenres?: boolean;
+};
 const PlaylistServices = {
     async getPlaylist({
         playlistId,
         withGenres = false,
-    }: {
-        playlistId: string;
-        withGenres?: boolean;
-    }): Promise<SpotifyPlaylist> {
-        console.log("withGenres", withGenres);
+    }: GetPlaylistParams): Promise<SpotifyPlaylist> {
         const data = await instance.get(`/playlists/${playlistId}`).then(async ({ data }) => {
             const ownerImages = await UserServices.getUser(data.owner.id).then(
                 ({ images }) => images,
             );
 
             if (!withGenres) {
-                console.log(withGenres);
                 return {
                     ...data,
                     owner: {
@@ -32,6 +31,7 @@ const PlaylistServices = {
             for (const item of data.tracks.items) {
                 for (const artist of item.track.artists) {
                     if (!artistIds.includes(artist.id)) {
+                        if (artistIds.length >= 50) break;
                         artistIds.push(artist.id);
                     }
                 }

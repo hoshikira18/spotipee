@@ -287,6 +287,44 @@ type SpotifyDevice = {
     type: string;
     volume_percent: number;
 };
+type ChartOptions = {
+    series: number[] | { data: number[] }[];
+    options: {
+        chart: {
+            id: string;
+            width?: number;
+            height?: number;
+            type:
+                | "pie"
+                | "bar"
+                | "line"
+                | "area"
+                | "radar"
+                | "scatter"
+                | "heatmap"
+                | "candlestick"
+                | "boxPlot"
+                | "bubble"
+                | "radialBar";
+        };
+        labels?: string[];
+        plotOptions?: {
+            bar: {
+                columnWidth: string;
+                distributed: boolean;
+            };
+        };
+        dataLabels?: {
+            enabled: boolean;
+        };
+        legend?: {
+            show: boolean;
+        };
+        xaxis?: {
+            categories: (string | string[])[];
+        };
+    };
+};
 
 export type {
     User,
@@ -298,4 +336,5 @@ export type {
     SpotifyDevice,
     Image,
     SpotifyPlaybackState,
+    ChartOptions,
 };

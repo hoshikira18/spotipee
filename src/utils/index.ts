@@ -51,3 +51,17 @@ export const getUSDate = (date: string) => {
 
     return formattedDate;
 };
+
+export function countBins(arr: number[], step: number) {
+    const binCount = Math.ceil(100 / step);
+    const result = new Array(binCount).fill(0);
+
+    arr.forEach((value) => {
+        if (value >= 0 && value <= 100) {
+            const index = Math.min(Math.floor(value / step), binCount - 1);
+            result[index]++;
+        }
+    });
+
+    return result;
+}
