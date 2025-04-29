@@ -6,15 +6,18 @@ import {
     type SetStateAction,
     Suspense,
     useMemo,
+    useRef,
     useState,
 } from "react";
 import { useCurrentUserPlaylist, usePlaylist } from "../../hooks/usePlaylist";
 import { convertMillisecondsToMinutes } from "../../utils";
+import { useIntersection } from "@mantine/hooks";
 const TrackGenreChart = lazy(() => import("../organisms/DashboardCharts/TrackGenreChart"));
 const TrackPopularityChart = lazy(
     () => import("../organisms/DashboardCharts/TrackPopularityChart"),
 );
 const ArtistsChart = lazy(() => import("../organisms/DashboardCharts/ArtistChart"));
+const ReleaseYearChart = lazy(() => import("../organisms/DashboardCharts/ReleaseYearChart"));
 
 type Context = {
     totalArtists: number;
@@ -139,12 +142,14 @@ function Dashboard() {
                         <TrackPopularityChart playlistId={chosenPlaylist} />
                     </Suspense>
                 </div>
-                {/* <div className="col-span-6 px-20 mt-20">
+                <div className="col-span-12 px-20 mt-20">
                     <p className="font-semibold mb-10 text-center">
-                        Chart 4: Track Popularity Distribution in Playlist
+                        Chart 3: Track Popularity Distribution in Playlist
                     </p>
-                    <TrackPopularityChart playlistId={chosenPlaylist} />
-                </div> */}
+                    <Suspense fallback={<div>Loading...</div>}>
+                        <ReleaseYearChart playlistId={chosenPlaylist} />
+                    </Suspense>
+                </div>
             </div>
         </DashboardContext.Provider>
     );
