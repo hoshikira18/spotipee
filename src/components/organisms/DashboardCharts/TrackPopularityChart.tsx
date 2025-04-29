@@ -4,7 +4,7 @@ import type { ChartOptions } from "../../../types";
 import ReactApexChart from "react-apexcharts";
 import ApexCharts from "apexcharts";
 import { countBins } from "../../../utils";
-import { InputLabel, NumberInput, Select, Slider } from "@mantine/core";
+import { Slider } from "@mantine/core";
 import { useDebouncedCallback } from "@mantine/hooks";
 
 interface TrackPopularityChartProps {
@@ -13,12 +13,12 @@ interface TrackPopularityChartProps {
 
 const TrackPopularityChart = ({ playlistId }: TrackPopularityChartProps) => {
     const { data: playlist } = usePlaylist(playlistId, true);
-    const [step, setStep] = useState<number>(50);
+    const [step, setStep] = useState<number>(20);
 
     const [state, setState] = useState<ChartOptions>({
         series: [
             {
-                data: [21, 22, 10, 28, 16, 21, 13, 30],
+                data: [],
             },
         ],
         options: {
@@ -47,10 +47,11 @@ const TrackPopularityChart = ({ playlistId }: TrackPopularityChartProps) => {
 
     useEffect(() => {
         const labels: string[] = [];
+        // generate labels for the x-axis base on step
         for (let i = 0; i < 100; i += step) {
             labels.push(`${i} - ${i + step}`);
         }
-
+        // update labels in the chart
         ApexCharts.exec("popularity-chart", "updateOptions", { labels: labels });
     }, [step]);
 
@@ -69,6 +70,7 @@ const TrackPopularityChart = ({ playlistId }: TrackPopularityChartProps) => {
                 ...state.options,
             },
         });
+        // update series in the chart
         ApexCharts.exec("popularity-chart", "updateSeries", {
             data: series,
         });

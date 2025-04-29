@@ -52,6 +52,7 @@ const ArtistsChart = ({
         setLabels(labels);
         setTotalArtists(series.length);
 
+        // if the playlist has a huge number of artist then merge the rest into "others"
         merge(series, labels);
     };
 
