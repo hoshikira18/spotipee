@@ -3,9 +3,9 @@ import { usePlaylist } from "../../../hooks/usePlaylist";
 import type { ChartOptions } from "../../../types";
 import ReactApexChart from "react-apexcharts";
 import ApexCharts from "apexcharts";
-import { countBins } from "../../../utils";
 import { Slider } from "@mantine/core";
 import { useDebouncedCallback } from "@mantine/hooks";
+import { countBins } from "../../../utils";
 
 interface ReleaseYearChartProps {
     playlistId: string;
@@ -13,7 +13,7 @@ interface ReleaseYearChartProps {
 
 const ReleaseYearChart = ({ playlistId }: ReleaseYearChartProps) => {
     const { data: playlist } = usePlaylist(playlistId, true);
-    const [step, setStep] = useState<number>(20);
+    const [step, setStep] = useState<number>(2);
 
     const [state, setState] = useState<ChartOptions>({
         series: [
@@ -23,7 +23,7 @@ const ReleaseYearChart = ({ playlistId }: ReleaseYearChartProps) => {
         ],
         options: {
             chart: {
-                id: "popularity-chart",
+                id: "release-year-chart",
                 height: 350,
                 type: "bar",
             },
@@ -31,6 +31,7 @@ const ReleaseYearChart = ({ playlistId }: ReleaseYearChartProps) => {
                 bar: {
                     columnWidth: "45%",
                     distributed: true,
+                    horizontal: true,
                 },
             },
             dataLabels: {
@@ -40,7 +41,15 @@ const ReleaseYearChart = ({ playlistId }: ReleaseYearChartProps) => {
                 show: false,
             },
             xaxis: {
+                title: {
+                    text: "Number of Tracks",
+                },
                 categories: [],
+            },
+            yaxis: {
+                title: {
+                    text: "Release Year",
+                },
             },
         },
     });
@@ -51,25 +60,31 @@ const ReleaseYearChart = ({ playlistId }: ReleaseYearChartProps) => {
             ),
         [playlist],
     );
+    const maxYear = useMemo(() => Math.max(...(releaseYears || [])), [releaseYears]);
+    const minYear = useMemo(() => Math.min(...(releaseYears || [])), [releaseYears]);
 
-    console.log(releaseYears);
-
-    // generate labels for the x-axis base on step
+    // update chart labels when step changes
     useEffect(() => {
         if (!releaseYears) return;
-        const labels: string[] = [];
-        for (let i = 0; i < releaseYears?.length; i += step) {
-            labels.push(`${i} - ${i + step}`);
-        }
-        // update labels in the chart
-        ApexCharts.exec("popularity-chart", "updateOptions", { labels: labels });
+        // generate labels for the x-axis base on step
+        const labels: string[] = getLabels(step, maxYear, minYear);
+        setState((prev) => ({
+            ...prev,
+            options: {
+                ...prev.options,
+                xaxis: {
+                    ...prev.options.xaxis,
+                    categories: labels,
+                },
+            },
+        }));
+        ApexCharts.exec("release-year-chart", "updateOptions", { labels: labels });
     }, [step]);
 
-    // update series in the chart
+    // update chart series when playlist changes
     useEffect(() => {
-        if (!playlist) return;
-        const series: number[] = countBins(releaseYears || [], step);
-
+        if (!playlist || !releaseYears) return;
+        const series: number[] = countBins(releaseYears || [], step, maxYear, minYear);
         setState({
             series: [
                 {
@@ -80,7 +95,7 @@ const ReleaseYearChart = ({ playlistId }: ReleaseYearChartProps) => {
                 ...state.options,
             },
         });
-        ApexCharts.exec("popularity-chart", "updateSeries", {
+        ApexCharts.exec("release-year-chart", "updateSeries", {
             data: series,
         });
     }, [playlist, step]);
@@ -91,22 +106,32 @@ const ReleaseYearChart = ({ playlistId }: ReleaseYearChartProps) => {
         setStep(stepValue);
     }, 200);
 
+    const getLabels = (step: number, maxYear: number, minYear: number) => {
+        const labels: string[] = [];
+        for (let i = minYear; i <= maxYear; i += step) {
+            labels.push(`${i} - ${i + step}`);
+        }
+
+        return labels;
+    };
+
     return (
         <div>
-            <div className="w-96 mb-10">
+            <div className="w-60 mx-auto mb-10">
                 <span>Step:</span>
                 <Slider
                     label="Step"
                     value={step}
                     onChange={(value) => handleChangeStep(value.toString())}
                     min={1}
-                    max={100}
+                    max={10}
                     step={1}
                     marks={[
-                        { value: 20, label: "20" },
-                        { value: 50, label: "50" },
-                        { value: 80, label: "80" },
+                        { value: 2, label: "2" },
+                        { value: 5, label: "5" },
+                        { value: 8, label: "8" },
                     ]}
+                    size={"sm"}
                 />
             </div>
             <ReactApexChart options={state.options} series={state.series} type="bar" height={350} />

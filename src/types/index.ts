@@ -322,7 +322,15 @@ type ChartOptions = {
             show: boolean;
         };
         xaxis?: {
+            title?: {
+                text: string;
+            };
             categories: (string | string[])[];
+        };
+        yaxis?: {
+            title?: {
+                text: string;
+            };
         };
     };
 };
