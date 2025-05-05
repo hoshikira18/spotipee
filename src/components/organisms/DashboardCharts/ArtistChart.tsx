@@ -1,5 +1,5 @@
 import { ScrollArea, Badge } from "@mantine/core";
-import { useContext, useState, useEffect } from "react";
+import { useContext, useState, useEffect, useMemo } from "react";
 import ReactApexChart from "react-apexcharts";
 import { usePlaylistTracks } from "../../../hooks/usePlaylist";
 import { DashboardContext } from "../../pages/Dashboard";
