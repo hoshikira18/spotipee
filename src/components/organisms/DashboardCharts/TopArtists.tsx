@@ -1,8 +1,8 @@
-import { useTopTracks } from "../../../hooks/useTrack";
+import { useTopArtists } from "../../../hooks/useArtist";
 import CustomTable from "../CustomTable";
 
-function TopTracks() {
-    const { data: topTracks } = useTopTracks();
+function TopArtists() {
+    const { data: topArtists } = useTopArtists();
     return (
         <CustomTable>
             <CustomTable.Head
@@ -13,29 +13,29 @@ function TopTracks() {
                 }}
             >
                 <CustomTable.HeaderCell>STT</CustomTable.HeaderCell>
-                <CustomTable.HeaderCell>Track</CustomTable.HeaderCell>
-                <CustomTable.HeaderCell>Duration</CustomTable.HeaderCell>
+                <CustomTable.HeaderCell>Artist</CustomTable.HeaderCell>
                 <CustomTable.HeaderCell>Popularity</CustomTable.HeaderCell>
             </CustomTable.Head>
             <CustomTable.Body>
-                {topTracks?.map((track, index) => (
-                    <CustomTable.Row key={track.id}>
+                {topArtists?.map((artist, index) => (
+                    <CustomTable.Row key={artist.id}>
                         <CustomTable.Cell>{index + 1}</CustomTable.Cell>
                         <CustomTable.Cell>
                             <div className="flex items-center gap-2">
                                 <img
-                                    src={track.album.images[0].url}
-                                    alt={track.name}
-                                    className="w-10 h-10 rounded-lg"
+                                    src={artist.images[0].url}
+                                    alt={artist.name}
+                                    className="w-10 h-10 rounded-lg object-cover"
                                 />
                                 <div>
-                                    <p className="text-sm font-semibold">{track.name}</p>
-                                    <p className="text-xs text-gray-500">{track.artists[0].name}</p>
+                                    <p className="text-sm font-semibold">{artist.name}</p>
+                                    <p className="text-xs text-gray-500 line-clamp-1">
+                                        {artist.genres.join(", ")}
+                                    </p>
                                 </div>
                             </div>
                         </CustomTable.Cell>
-                        <CustomTable.Cell>{track.duration_ms}</CustomTable.Cell>
-                        <CustomTable.Cell>{track.popularity}</CustomTable.Cell>
+                        <CustomTable.Cell>{artist.popularity}</CustomTable.Cell>
                     </CustomTable.Row>
                 ))}
             </CustomTable.Body>
@@ -43,4 +43,4 @@ function TopTracks() {
     );
 }
 
-export default TopTracks;
+export default TopArtists;
