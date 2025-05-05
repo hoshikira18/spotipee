@@ -1,4 +1,5 @@
 import { Loader } from "@mantine/core";
+import { nprogress } from "@mantine/nprogress";
 import { useEffect, useRef, useState } from "react";
 
 const LazyChart = ({
@@ -30,9 +31,17 @@ const LazyChart = ({
         setIsVisible(false);
     }, [playlistId]);
 
+    useEffect(() => {
+        if (isVisible) {
+            nprogress.complete();
+        } else {
+            nprogress.start();
+        }
+    }, [isVisible]);
+
     if (!isVisible)
         return (
-            <div ref={ref} className="h-screen flex items-center justify-center">
+            <div ref={ref} className="h-96 flex items-center justify-center">
                 <Loader />
             </div>
         );
