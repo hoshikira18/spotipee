@@ -1,7 +1,7 @@
 import { ScrollArea, Badge } from "@mantine/core";
 import { useContext, useState, useEffect } from "react";
 import ReactApexChart from "react-apexcharts";
-import { usePlaylist } from "../../../hooks/usePlaylist";
+import { usePlaylistTracks } from "../../../hooks/usePlaylist";
 import { DashboardContext } from "../../pages/Dashboard";
 import type { ChartOptions } from "../../../types";
 import ApexCharts from "apexcharts";
@@ -12,7 +12,8 @@ const ArtistsChart = ({
     playlistId: string;
 }) => {
     const { setTotalArtists } = useContext(DashboardContext);
-    const { data: playlist, isFetching } = usePlaylist(playlistId, true);
+    // const { data: playlist, isFetching } = usePlaylist(playlistId, true);
+    const { data: playlist, isFetching } = usePlaylistTracks(playlistId);
     const [series, setSeries] = useState<number[]>([]);
     const [labels, setLabels] = useState<string[]>([]);
     const [otherArtists, setOtherArtists] = useState<string[]>([]);
@@ -42,8 +43,8 @@ const ArtistsChart = ({
         const obj: { [key: string]: number } = {};
 
         // loop through the playlist tracks and count the number of times each artist appears
-        for (const item of playlist.tracks.items) {
-            for (const artist of item.track.artists) {
+        for (const item of playlist.items) {
+            for (const artist of item.track?.artists) {
                 if (artist) {
                     obj[artist.name] = (obj[artist.name] || 0) + 1;
                 }
@@ -61,47 +62,48 @@ const ArtistsChart = ({
     };
 
     const merge = (series: number[], labels: string[]) => {
-        // if the playlist has a huge of artist (> 20) then merge the rest into "others"
-        if (series.length > 20) {
-            const newSeries: number[] = [];
-            const newLabels: string[] = [];
+        const MAX_LABELS = 20;
+        const THRESHOLD_ADJUSTMENT = series.length > 100 ? 5 : 0;
 
-            // calculate mean(avg) of series
-            const totalSeries = series.reduce((a, b) => a + b, 0);
-            const mean = totalSeries / series.length;
-
-            // group series that has value <= mean
-            let totalOthers = 0;
-            const otherArtistsName: string[] = [];
-            series.forEach((item, index) => {
-                if (item <= mean) {
-                    totalOthers += item;
-                    otherArtistsName.push(labels[index]);
-                } else {
-                    newSeries.push(item);
-                    newLabels.push(labels[index]);
-                }
-            });
-
-            // append label to other artists
-            const finalSeries = totalOthers > 0 ? [...newSeries, totalOthers] : series;
-            const finalLabels =
-                otherArtistsName.length > 0
-                    ? [...newLabels, `Appear <= ${Math.floor(mean)}. Listed below`]
-                    : labels;
-            setSeries(finalSeries);
-            setLabels(finalLabels);
-            setOtherArtists(otherArtistsName.length > 0 ? otherArtistsName : []);
-
-            ApexCharts.exec("pie-chart", "updateOptions", {
-                labels: finalLabels,
-            });
-            ApexCharts.exec("pie-chart", "updateSeries", finalSeries);
-        } else {
-            ApexCharts.exec("pie-chart", "updateOptions", { labels: labels });
+        if (series.length <= MAX_LABELS) {
+            // No need to merge; just update chart directly
+            ApexCharts.exec("pie-chart", "updateOptions", { labels });
             ApexCharts.exec("pie-chart", "updateSeries", series);
             setOtherArtists([]);
+            return;
         }
+
+        const total = series.reduce((sum, value) => sum + value, 0);
+        const mean = total / series.length;
+        const mergeThreshold = mean + THRESHOLD_ADJUSTMENT;
+
+        const mergedSeries: number[] = [];
+        const mergedLabels: string[] = [];
+        let othersTotal = 0;
+        const otherArtists: string[] = [];
+
+        series.forEach((value, index) => {
+            if (value <= mergeThreshold) {
+                othersTotal += value;
+                otherArtists.push(labels[index]);
+            } else {
+                mergedSeries.push(value);
+                mergedLabels.push(labels[index]);
+            }
+        });
+
+        const finalSeries = othersTotal > 0 ? [...mergedSeries, othersTotal] : [...series];
+        const finalLabels =
+            othersTotal > 0
+                ? [...mergedLabels, `Appear <= ${Math.floor(mergeThreshold)}. Listed below`]
+                : [...labels];
+
+        setSeries(finalSeries);
+        setLabels(finalLabels);
+        setOtherArtists(otherArtists.length > 0 ? otherArtists : []);
+
+        ApexCharts.exec("pie-chart", "updateOptions", { labels: finalLabels });
+        ApexCharts.exec("pie-chart", "updateSeries", finalSeries);
     };
 
     return (

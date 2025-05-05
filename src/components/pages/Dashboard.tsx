@@ -1,6 +1,6 @@
 import { Badge, Button, Select } from "@mantine/core";
 import { createContext, type Dispatch, type SetStateAction, useMemo, useState } from "react";
-import { useCurrentUserPlaylist, usePlaylist } from "../../hooks/usePlaylist";
+import { useCurrentUserPlaylist, usePlaylistTracks } from "../../hooks/usePlaylist";
 import { convertMillisecondsToMinutes } from "../../utils";
 import ArtistsChart from "../organisms/DashboardCharts/ArtistChart";
 import ReleaseYearChart from "../organisms/DashboardCharts/ReleaseYearChart";
@@ -25,7 +25,7 @@ function Dashboard() {
     const { data: playlists } = useCurrentUserPlaylist();
     const [chosenPlaylist, setChosenPlaylist] = useState<string>(playlists?.[0]?.id || "");
     const [totalArtists, setTotalArtists] = useState<number>(0);
-    const { data: playlist } = usePlaylist(chosenPlaylist, true);
+    const { data: playlist } = usePlaylistTracks(chosenPlaylist, true);
 
     const currentPlaylist = useMemo(
         () => playlists?.find((playlist) => playlist.id === chosenPlaylist),
@@ -34,14 +34,14 @@ function Dashboard() {
     const totalTracks = useMemo(() => currentPlaylist?.tracks.total, [chosenPlaylist, playlists]);
     const totalTime = useMemo(
         () =>
-            playlist?.tracks.items.reduce((acc, item) => {
-                return acc + item.track.duration_ms;
+            playlist?.items?.reduce((acc, item) => {
+                return acc + (item?.track?.duration_ms || 0);
             }, 0),
-        [playlist],
+        [chosenPlaylist, playlist],
     );
     const totalAlbums = useMemo(() => {
         if (!playlist) return 0;
-        const albums = new Set(playlist.tracks.items.map((item) => item.track.album.name));
+        const albums = new Set(playlist?.items?.map((item) => item.track?.album?.name));
         return albums.size;
     }, [playlist]);
 

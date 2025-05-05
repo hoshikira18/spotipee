@@ -1,3 +1,5 @@
+import type { PlaylistTrack, PlaylistTracksReference } from "spotify-types";
+
 type Image = {
     url: string;
     height: number;
@@ -299,6 +301,10 @@ type ChartOptions = {
         yaxis?: ApexYAxis;
     };
 };
+
+export interface PlaylistTracks extends PlaylistTracksReference {
+    items: PlaylistTrack[];
+}
 
 export type {
     User,

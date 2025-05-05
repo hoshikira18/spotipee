@@ -57,8 +57,6 @@ function SearchDetail() {
         [data],
     );
 
-    console.log(playlists);
-
     return (
         <div className="space-y-8">
             <div className="relative h-80">
