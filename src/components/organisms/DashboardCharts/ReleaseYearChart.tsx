@@ -26,9 +26,6 @@ const ReleaseYearChart = ({ playlistId }: ReleaseYearChartProps) => {
                 id: "release-year-chart",
                 height: 350,
                 type: "bar",
-                animations: {
-                    enabled: false,
-                },
             },
             dataLabels: {
                 enabled: false,

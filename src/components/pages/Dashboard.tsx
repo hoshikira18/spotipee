@@ -7,6 +7,9 @@ import ReleaseYearChart from "../organisms/DashboardCharts/ReleaseYearChart";
 import TrackPopularityChart from "../organisms/DashboardCharts/TrackPopularityChart";
 import TrackGenreChart from "../organisms/DashboardCharts/TrackGenreChart";
 import LazyChart from "../organisms/DashboardCharts/LazyChart";
+import type { PlaylistTrack } from "spotify-types";
+import TopTracks from "../organisms/DashboardCharts/TopTracks";
+import TopArtists from "../organisms/DashboardCharts/TopArtists";
 
 type Context = {
     totalArtists: number;
@@ -35,14 +38,16 @@ function Dashboard() {
     const totalTracks = useMemo(() => currentPlaylist?.tracks.total, [chosenPlaylist, playlists]);
     const totalTime = useMemo(
         () =>
-            playlist?.items?.reduce((acc, item) => {
+            playlist?.items?.reduce((acc: number, item: PlaylistTrack) => {
                 return acc + (item?.track?.duration_ms || 0);
             }, 0),
         [chosenPlaylist, playlist],
     );
     const totalAlbums = useMemo(() => {
         if (!playlist) return 0;
-        const albums = new Set(playlist?.items?.map((item) => item.track?.album?.name));
+        const albums = new Set(
+            playlist?.items?.map((item: PlaylistTrack) => item.track?.album?.name),
+        );
         return albums.size;
     }, [playlist]);
 
@@ -57,6 +62,16 @@ function Dashboard() {
     return (
         <DashboardContext.Provider value={contextValues}>
             <div className="grid grid-cols-12 gap-3 bg-zinc-800">
+                <div className="col-span-6 px-20">
+                    <div className="border shadow-sm">
+                        <TopTracks />
+                    </div>
+                </div>
+                <div className="col-span-6 px-20">
+                    <div className="border shadow-sm h-full">
+                        <TopArtists />
+                    </div>
+                </div>
                 <div className="col-span-12 mb-20 flex items-end space-x-2 sticky top-15 p-3 bg-zinc-800 z-20">
                     <Select
                         label="Playlist"

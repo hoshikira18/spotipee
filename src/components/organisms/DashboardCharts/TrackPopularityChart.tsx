@@ -26,9 +26,6 @@ const TrackPopularityChart = ({ playlistId }: TrackPopularityChartProps) => {
                 id: "popularity-chart",
                 height: 350,
                 type: "bar",
-                animations: {
-                    enabled: false,
-                },
             },
             plotOptions: {
                 bar: {
