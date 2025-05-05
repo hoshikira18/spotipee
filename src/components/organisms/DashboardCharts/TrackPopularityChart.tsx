@@ -29,8 +29,7 @@ const TrackPopularityChart = ({ playlistId }: TrackPopularityChartProps) => {
             },
             plotOptions: {
                 bar: {
-                    columnWidth: "45%",
-                    distributed: true,
+                    horizontal: true,
                 },
             },
             dataLabels: {
