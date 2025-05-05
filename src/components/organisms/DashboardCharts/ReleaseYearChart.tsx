@@ -53,10 +53,11 @@ const ReleaseYearChart = ({ playlistId }: ReleaseYearChartProps) => {
     );
 
     console.log(releaseYears);
+
+    // generate labels for the x-axis base on step
     useEffect(() => {
         if (!releaseYears) return;
         const labels: string[] = [];
-        // generate labels for the x-axis base on step
         for (let i = 0; i < releaseYears?.length; i += step) {
             labels.push(`${i} - ${i + step}`);
         }
@@ -64,10 +65,10 @@ const ReleaseYearChart = ({ playlistId }: ReleaseYearChartProps) => {
         ApexCharts.exec("popularity-chart", "updateOptions", { labels: labels });
     }, [step]);
 
+    // update series in the chart
     useEffect(() => {
         if (!playlist) return;
         const series: number[] = countBins(releaseYears || [], step);
-        console.log(series);
 
         setState({
             series: [
@@ -79,7 +80,6 @@ const ReleaseYearChart = ({ playlistId }: ReleaseYearChartProps) => {
                 ...state.options,
             },
         });
-        // update series in the chart
         ApexCharts.exec("popularity-chart", "updateSeries", {
             data: series,
         });

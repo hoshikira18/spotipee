@@ -6,12 +6,10 @@ import {
     type SetStateAction,
     Suspense,
     useMemo,
-    useRef,
     useState,
 } from "react";
 import { useCurrentUserPlaylist, usePlaylist } from "../../hooks/usePlaylist";
 import { convertMillisecondsToMinutes } from "../../utils";
-import { useIntersection } from "@mantine/hooks";
 const TrackGenreChart = lazy(() => import("../organisms/DashboardCharts/TrackGenreChart"));
 const TrackPopularityChart = lazy(
     () => import("../organisms/DashboardCharts/TrackPopularityChart"),
@@ -35,7 +33,7 @@ export const DashboardContext = createContext<Context>({
 
 function Dashboard() {
     const { data: playlists } = useCurrentUserPlaylist();
-    const [chosenPlaylist, setChosenPlaylist] = useState<string>(playlists?.[1]?.id || "");
+    const [chosenPlaylist, setChosenPlaylist] = useState<string>(playlists?.[0]?.id || "");
     const [totalArtists, setTotalArtists] = useState<number>(0);
     const { data: playlist } = usePlaylist(chosenPlaylist, true);
 

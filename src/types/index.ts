@@ -310,8 +310,9 @@ type ChartOptions = {
         labels?: string[];
         plotOptions?: {
             bar: {
-                columnWidth: string;
-                distributed: boolean;
+                columnWidth?: string;
+                distributed?: boolean;
+                horizontal?: boolean;
             };
         };
         dataLabels?: {
