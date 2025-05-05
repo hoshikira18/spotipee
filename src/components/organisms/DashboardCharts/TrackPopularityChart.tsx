@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { usePlaylist } from "../../../hooks/usePlaylist";
+import { usePlaylist, usePlaylistTracks } from "../../../hooks/usePlaylist";
 import type { ChartOptions } from "../../../types";
 import ReactApexChart from "react-apexcharts";
 import ApexCharts from "apexcharts";
@@ -12,7 +12,7 @@ interface TrackPopularityChartProps {
 }
 
 const TrackPopularityChart = ({ playlistId }: TrackPopularityChartProps) => {
-    const { data: playlist } = usePlaylist(playlistId, true);
+    const { data: playlist } = usePlaylistTracks(playlistId, true);
     const [step, setStep] = useState<number>(20);
 
     const [state, setState] = useState<ChartOptions>({
@@ -67,7 +67,7 @@ const TrackPopularityChart = ({ playlistId }: TrackPopularityChartProps) => {
     // update chart series when playlist changes
     useEffect(() => {
         if (!playlist) return;
-        const popularity = playlist.tracks.items.map((item) => item.track.popularity);
+        const popularity = playlist?.items?.map((item) => item.track.popularity);
         const series: number[] = countBins(popularity, step, 100, 0);
 
         setState({

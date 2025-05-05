@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-import { usePlaylist } from "../../../hooks/usePlaylist";
+import { usePlaylist, usePlaylistTracks } from "../../../hooks/usePlaylist";
 import type { ChartOptions } from "../../../types";
 import ReactApexChart from "react-apexcharts";
 import ApexCharts from "apexcharts";
@@ -12,7 +12,7 @@ interface ReleaseYearChartProps {
 }
 
 const ReleaseYearChart = ({ playlistId }: ReleaseYearChartProps) => {
-    const { data: playlist } = usePlaylist(playlistId, true);
+    const { data: playlist } = usePlaylistTracks(playlistId, true);
     const [step, setStep] = useState<number>(2);
 
     const [state, setState] = useState<ChartOptions>({
@@ -31,7 +31,7 @@ const ReleaseYearChart = ({ playlistId }: ReleaseYearChartProps) => {
                 bar: {
                     columnWidth: "45%",
                     distributed: true,
-                    horizontal: true,
+                    // horizontal: true,
                 },
             },
             dataLabels: {
@@ -42,23 +42,22 @@ const ReleaseYearChart = ({ playlistId }: ReleaseYearChartProps) => {
             },
             xaxis: {
                 title: {
-                    text: "Number of Tracks",
+                    text: "Release Year",
                 },
                 categories: [],
                 stepSize: step,
             },
             yaxis: {
                 title: {
-                    text: "Release Year",
+                    text: "Number of Tracks",
                 },
             },
         },
     });
+
+    console.log(state.series);
     const releaseYears = useMemo(
-        () =>
-            playlist?.tracks.items.map((item) =>
-                new Date(item.track.album.release_date).getFullYear(),
-            ),
+        () => playlist?.items.map((item) => new Date(item.track.album.release_date).getFullYear()),
         [playlist],
     );
     const maxYear = useMemo(() => Math.max(...(releaseYears || [])), [releaseYears]);
