@@ -79,7 +79,7 @@ const ReleaseYearChart = ({ playlistId }: ReleaseYearChartProps) => {
             },
         }));
         ApexCharts.exec("release-year-chart", "updateOptions", { labels: labels });
-    }, [step]);
+    }, [step, releaseYears]);
 
     // update chart series when playlist changes
     useEffect(() => {
