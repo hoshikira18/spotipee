@@ -29,6 +29,7 @@ const TrackPopularityChart = ({ playlistId }: TrackPopularityChartProps) => {
             },
             plotOptions: {
                 bar: {
+                    distributed: true,
                     horizontal: true,
                 },
             },
@@ -39,25 +40,34 @@ const TrackPopularityChart = ({ playlistId }: TrackPopularityChartProps) => {
                 show: false,
             },
             xaxis: {
+                title: {
+                    text: "Number of Tracks",
+                },
                 categories: [],
+            },
+            yaxis: {
+                title: {
+                    text: "Popularity",
+                },
             },
         },
     });
 
+    // update chart labels when step changes
     useEffect(() => {
         const labels: string[] = [];
         // generate labels for the x-axis base on step
         for (let i = 0; i < 100; i += step) {
             labels.push(`${i} - ${i + step}`);
         }
-        // update labels in the chart
         ApexCharts.exec("popularity-chart", "updateOptions", { labels: labels });
     }, [step]);
 
+    // update chart series when playlist changes
     useEffect(() => {
         if (!playlist) return;
         const popularity = playlist.tracks.items.map((item) => item.track.popularity);
-        const series: number[] = countBins(popularity, step);
+        const series: number[] = countBins(popularity, step, 100, 0);
 
         setState({
             series: [
@@ -69,7 +79,6 @@ const TrackPopularityChart = ({ playlistId }: TrackPopularityChartProps) => {
                 ...state.options,
             },
         });
-        // update series in the chart
         ApexCharts.exec("popularity-chart", "updateSeries", {
             data: series,
         });
@@ -83,7 +92,7 @@ const TrackPopularityChart = ({ playlistId }: TrackPopularityChartProps) => {
 
     return (
         <div>
-            <div className="w-96 mb-10">
+            <div className="w-60 mx-auto mb-10">
                 <span>Step:</span>
                 <Slider
                     label="Step"
@@ -97,6 +106,7 @@ const TrackPopularityChart = ({ playlistId }: TrackPopularityChartProps) => {
                         { value: 50, label: "50" },
                         { value: 80, label: "80" },
                     ]}
+                    size={"sm"}
                 />
             </div>
             <ReactApexChart options={state.options} series={state.series} type="bar" height={350} />

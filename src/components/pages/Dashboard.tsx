@@ -132,21 +132,21 @@ function Dashboard() {
                         <TrackGenreChart playlistId={chosenPlaylist} />
                     </Suspense>
                 </div>
-                <div className="col-span-12 px-20 mt-20">
-                    <p className="font-semibold mb-10 text-center">
-                        Chart 3: Track Popularity Distribution in Playlist
-                    </p>
+                <div className="col-span-6 px-20 mt-20">
                     <Suspense fallback={<div>Loading...</div>}>
                         <TrackPopularityChart playlistId={chosenPlaylist} />
                     </Suspense>
-                </div>
-                <div className="col-span-12 px-20 mt-20">
                     <p className="font-semibold mb-10 text-center">
                         Chart 3: Track Popularity Distribution in Playlist
                     </p>
+                </div>
+                <div className="col-span-6 px-20 mt-20">
                     <Suspense fallback={<div>Loading...</div>}>
                         <ReleaseYearChart playlistId={chosenPlaylist} />
                     </Suspense>
+                    <p className="font-semibold mb-10 text-center">
+                        Chart 4: Track Release year Distribution in Playlist
+                    </p>
                 </div>
             </div>
         </DashboardContext.Provider>

@@ -52,13 +52,13 @@ export const getUSDate = (date: string) => {
     return formattedDate;
 };
 
-export function countBins(arr: number[], step: number) {
-    const binCount = Math.ceil(100 / step);
+export function countBins(arr: number[], step: number, maxValue: number, minValue: number) {
+    const binCount = Math.ceil((maxValue - minValue) / step);
     const result = new Array(binCount).fill(0);
 
     arr.forEach((value) => {
-        if (value >= 0 && value <= 100) {
-            const index = Math.min(Math.floor(value / step), binCount - 1);
+        if (value >= minValue && value <= maxValue) {
+            const index = Math.min(Math.floor((value - minValue) / step), binCount - 1);
             result[index]++;
         }
     });
