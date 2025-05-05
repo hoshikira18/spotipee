@@ -14,6 +14,9 @@ const TrackGenreChart = ({ playlistId }: { playlistId: string }) => {
             type: "pie",
             width: 400,
         },
+        legend: {
+            position: "bottom",
+        },
         labels: labels,
     };
 

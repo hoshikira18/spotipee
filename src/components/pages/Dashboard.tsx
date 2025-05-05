@@ -1,21 +1,11 @@
 import { Badge, Button, Select } from "@mantine/core";
-import {
-    createContext,
-    type Dispatch,
-    lazy,
-    type SetStateAction,
-    Suspense,
-    useMemo,
-    useState,
-} from "react";
+import { createContext, type Dispatch, type SetStateAction, useMemo, useState } from "react";
 import { useCurrentUserPlaylist, usePlaylist } from "../../hooks/usePlaylist";
 import { convertMillisecondsToMinutes } from "../../utils";
-const TrackGenreChart = lazy(() => import("../organisms/DashboardCharts/TrackGenreChart"));
-const TrackPopularityChart = lazy(
-    () => import("../organisms/DashboardCharts/TrackPopularityChart"),
-);
-const ArtistsChart = lazy(() => import("../organisms/DashboardCharts/ArtistChart"));
-const ReleaseYearChart = lazy(() => import("../organisms/DashboardCharts/ReleaseYearChart"));
+import ArtistsChart from "../organisms/DashboardCharts/ArtistChart";
+import ReleaseYearChart from "../organisms/DashboardCharts/ReleaseYearChart";
+import TrackPopularityChart from "../organisms/DashboardCharts/TrackPopularityChart";
+import TrackGenreChart from "../organisms/DashboardCharts/TrackGenreChart";
 
 type Context = {
     totalArtists: number;
@@ -116,34 +106,26 @@ function Dashboard() {
                         </div>
                     </div>
                 </div>
-                <div className="col-span-6 px-20 xl:px-20">
+                <div className="col-span-12 lg:col-span-6 px-20 xl:px-32">
                     <p className="font-semibold mb-10 text-center">
                         Chart 1: Artist Percentage Distribution in Playlist
                     </p>
-                    <Suspense fallback={<div>Loading...</div>}>
-                        <ArtistsChart playlistId={chosenPlaylist} />
-                    </Suspense>
+                    <ArtistsChart playlistId={chosenPlaylist} />
                 </div>
-                <div className="col-span-6 px-20 xl:px-20">
+                <div className="col-span-12 lg:col-span-6 px-20 xl:px-32">
                     <p className="font-semibold mb-10 text-center">
                         Chart 2: Genre Percentage Distribution in Playlist
                     </p>
-                    <Suspense fallback={<div>Loading...</div>}>
-                        <TrackGenreChart playlistId={chosenPlaylist} />
-                    </Suspense>
+                    <TrackGenreChart playlistId={chosenPlaylist} />
                 </div>
-                <div className="col-span-6 px-20 mt-20">
-                    <Suspense fallback={<div>Loading...</div>}>
-                        <TrackPopularityChart playlistId={chosenPlaylist} />
-                    </Suspense>
+                <div className="col-span-12 lg:col-span-6 px-20 mt-20">
+                    <TrackPopularityChart playlistId={chosenPlaylist} />
                     <p className="font-semibold mb-10 text-center">
                         Chart 3: Track Popularity Distribution in Playlist
                     </p>
                 </div>
-                <div className="col-span-6 px-20 mt-20">
-                    <Suspense fallback={<div>Loading...</div>}>
-                        <ReleaseYearChart playlistId={chosenPlaylist} />
-                    </Suspense>
+                <div className="col-span-12 lg:col-span-6 px-20 mt-20">
+                    <ReleaseYearChart playlistId={chosenPlaylist} />
                     <p className="font-semibold mb-10 text-center">
                         Chart 4: Track Release year Distribution in Playlist
                     </p>

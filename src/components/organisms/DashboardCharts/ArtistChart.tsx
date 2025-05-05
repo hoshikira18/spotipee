@@ -23,6 +23,10 @@ const ArtistsChart = ({
             type: "pie",
             width: 400,
         },
+        legend: {
+            show: true,
+            position: "bottom",
+        },
         labels: labels,
     };
 
