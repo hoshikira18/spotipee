@@ -88,7 +88,7 @@ const TrackGenreChart = ({ playlistId }: { playlistId: string }) => {
             <div className="col-span-12">
                 {otherGenres.length > 0 && (
                     <ScrollArea h={250}>
-                        <h2 className="mb-10">Other artists: </h2>
+                        <h2 className="mb-10">Other genres: </h2>
                         <div className="grid grid-cols-4 gap-4">
                             {otherGenres?.map((genre) => (
                                 <Badge variant="light" key={genre}>
