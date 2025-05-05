@@ -62,12 +62,14 @@ function Dashboard() {
     return (
         <DashboardContext.Provider value={contextValues}>
             <div className="grid grid-cols-12 gap-3 bg-zinc-800">
-                <div className="col-span-6 px-20">
-                    <div className="border shadow-sm">
+                <div className="col-span-6 px-20 mb-20">
+                    <p className="font-semibold mb-5 text-center">Table 1: Your Top Tracks</p>
+                    <div className="border shadow-sm h-full">
                         <TopTracks />
                     </div>
                 </div>
-                <div className="col-span-6 px-20">
+                <div className="col-span-6 px-20 mb-20">
+                    <p className="font-semibold mb-5 text-center">Table 2: Your Top Artists</p>
                     <div className="border shadow-sm h-full">
                         <TopArtists />
                     </div>
