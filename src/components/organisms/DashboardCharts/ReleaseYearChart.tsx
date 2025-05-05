@@ -1,9 +1,9 @@
 import { useEffect, useMemo, useState } from "react";
-import { usePlaylist, usePlaylistTracks } from "../../../hooks/usePlaylist";
+import { usePlaylistTracks } from "../../../hooks/usePlaylist";
 import type { ChartOptions } from "../../../types";
 import ReactApexChart from "react-apexcharts";
 import ApexCharts from "apexcharts";
-import { Select, Slider } from "@mantine/core";
+import { Select } from "@mantine/core";
 import { useDebouncedCallback } from "@mantine/hooks";
 import { countBins } from "../../../utils";
 
@@ -55,7 +55,6 @@ const ReleaseYearChart = ({ playlistId }: ReleaseYearChartProps) => {
         },
     });
 
-    console.log(state.series);
     const releaseYears = useMemo(
         () => playlist?.items.map((item) => new Date(item.track.album.release_date).getFullYear()),
         [playlist],

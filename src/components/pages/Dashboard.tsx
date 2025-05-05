@@ -6,6 +6,7 @@ import ArtistsChart from "../organisms/DashboardCharts/ArtistChart";
 import ReleaseYearChart from "../organisms/DashboardCharts/ReleaseYearChart";
 import TrackPopularityChart from "../organisms/DashboardCharts/TrackPopularityChart";
 import TrackGenreChart from "../organisms/DashboardCharts/TrackGenreChart";
+import LazyChart from "../organisms/DashboardCharts/LazyChart";
 
 type Context = {
     totalArtists: number;
@@ -110,22 +111,22 @@ function Dashboard() {
                     <p className="font-semibold mb-10 text-center">
                         Chart 1: Artist Percentage Distribution in Playlist
                     </p>
-                    <ArtistsChart playlistId={chosenPlaylist} />
+                    <LazyChart Component={ArtistsChart} playlistId={chosenPlaylist} />
                 </div>
                 <div className="col-span-12 lg:col-span-6 px-20 xl:px-32">
                     <p className="font-semibold mb-10 text-center">
                         Chart 2: Genre Percentage Distribution in Playlist
                     </p>
-                    <TrackGenreChart playlistId={chosenPlaylist} />
+                    <LazyChart Component={TrackGenreChart} playlistId={chosenPlaylist} />
                 </div>
                 <div className="col-span-12 lg:col-span-6 px-20 mt-20">
-                    <TrackPopularityChart playlistId={chosenPlaylist} />
+                    <LazyChart Component={TrackPopularityChart} playlistId={chosenPlaylist} />
                     <p className="font-semibold mb-10 text-center">
                         Chart 3: Track Popularity Distribution in Playlist
                     </p>
                 </div>
                 <div className="col-span-12 lg:col-span-6 px-20 mt-20">
-                    <ReleaseYearChart playlistId={chosenPlaylist} />
+                    <LazyChart Component={ReleaseYearChart} playlistId={chosenPlaylist} />
                     <p className="font-semibold mb-10 text-center">
                         Chart 4: Track Release year Distribution in Playlist
                     </p>
