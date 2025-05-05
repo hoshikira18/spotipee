@@ -1,4 +1,4 @@
-import { Menu } from "@mantine/core";
+import { Loader, Menu } from "@mantine/core";
 import { Logout, MusicDashboard } from "iconsax-react";
 import { useAuth } from "../../hooks/useAuth";
 import type { User } from "../../types";
@@ -20,7 +20,9 @@ function ProfileButton({ currentUser }: ProfileButton) {
             children: (
                 <Suspense
                     fallback={
-                        <div className="flex items-center justify-center h-full">Loading...</div>
+                        <div className="flex items-center justify-center h-full">
+                            <Loader />
+                        </div>
                     }
                 >
                     <Dashboard />

@@ -1,5 +1,6 @@
+import type { PlaylistTrack } from "spotify-types";
 import { instance } from "../lib/axios";
-import type { SpotifyArtist, SpotifyPlaylist, SpotifyTrack } from "../types";
+import type { PlaylistTracks, SpotifyArtist, SpotifyPlaylist, SpotifyTrack } from "../types";
 import UserServices from "./UserServices";
 
 type GetPlaylistParams = {
@@ -93,6 +94,73 @@ const PlaylistServices = {
             description,
         });
         return data;
+    },
+    async getPlaylistTracks(playlistId: string, withGenres: boolean): Promise<any> {
+        let total = 0;
+        const tracks: PlaylistTrack[] = [];
+        let offset = 0;
+        const limit = 100;
+
+        // get all the tracks from the playlist
+        do {
+            const response = await instance.get(`/playlists/${playlistId}/tracks`, {
+                params: { offset, limit },
+            });
+            const data = response.data;
+
+            total = data.total;
+            tracks.push(...data.items.map((item: any) => item));
+            offset += limit;
+        } while (tracks.length < total);
+
+        // if request dont require genres, return without genres
+        if (!withGenres) {
+            return { total, href: "", items: tracks };
+        }
+
+        // get all the artist ids from the tracks (unique)
+        const artistIds = Array.from(
+            new Set(
+                tracks.flatMap(
+                    (item) =>
+                        item.track?.artists
+                            ?.map((artist: SpotifyArtist) => artist.id)
+                            .filter((item: string) => item !== null) ?? [],
+                ),
+            ),
+        );
+
+        // helper to split array into chunks of 50
+        function chunkArray<T>(array: T[], size: number): T[][] {
+            const result: T[][] = [];
+            for (let i = 0; i < array.length; i += size) {
+                result.push(array.slice(i, i + size));
+            }
+            return result;
+        }
+
+        // fetch artists in batches of 50 (parallel requests)
+        const artistChunks = chunkArray(artistIds, 50);
+        const artistResponses = await Promise.all(
+            artistChunks.map((chunk) =>
+                instance.get("/artists", { params: { ids: chunk.join(",") } }),
+            ),
+        );
+        const artists: SpotifyArtist[] = artistResponses.flatMap((res) => res.data.artists);
+
+        // count genres
+        const genres = artists.flatMap((artist) => artist.genres);
+        const genresCount: { [key: string]: number } = {};
+        genres.forEach((genre) => {
+            genresCount[genre] = (genresCount[genre] || 0) + 1;
+        });
+
+        return {
+            total,
+            href: "",
+            items: tracks,
+            genres: genresCount,
+        };
     },
 };
 

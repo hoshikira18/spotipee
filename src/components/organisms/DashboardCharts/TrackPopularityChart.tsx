@@ -4,7 +4,7 @@ import type { ChartOptions } from "../../../types";
 import ReactApexChart from "react-apexcharts";
 import ApexCharts from "apexcharts";
 import { countBins } from "../../../utils";
-import { Slider } from "@mantine/core";
+import { Select } from "@mantine/core";
 import { useDebouncedCallback } from "@mantine/hooks";
 
 interface TrackPopularityChartProps {
@@ -44,6 +44,7 @@ const TrackPopularityChart = ({ playlistId }: TrackPopularityChartProps) => {
                     text: "Number of Tracks",
                 },
                 categories: [],
+                stepSize: step,
             },
             yaxis: {
                 title: {
@@ -92,19 +93,18 @@ const TrackPopularityChart = ({ playlistId }: TrackPopularityChartProps) => {
 
     return (
         <div>
-            <div className="w-60 mx-auto mb-10">
-                <span>Step:</span>
-                <Slider
+            <div className="flex items-center justify-end mb-10">
+                <Select
+                    w={"100"}
                     label="Step"
-                    value={step}
-                    onChange={(value) => handleChangeStep(value.toString())}
-                    min={1}
-                    max={100}
-                    step={1}
-                    marks={[
-                        { value: 20, label: "20" },
-                        { value: 50, label: "50" },
-                        { value: 80, label: "80" },
+                    value={step.toString()}
+                    onChange={(value) => handleChangeStep(value as string)}
+                    data={[
+                        { value: "5", label: "5" },
+                        { value: "10", label: "10" },
+                        { value: "20", label: "20" },
+                        { value: "50", label: "50" },
+                        { value: "100", label: "100" },
                     ]}
                     size={"sm"}
                 />

@@ -3,7 +3,7 @@ import { usePlaylist } from "../../../hooks/usePlaylist";
 import type { ChartOptions } from "../../../types";
 import ReactApexChart from "react-apexcharts";
 import ApexCharts from "apexcharts";
-import { Slider } from "@mantine/core";
+import { Select, Slider } from "@mantine/core";
 import { useDebouncedCallback } from "@mantine/hooks";
 import { countBins } from "../../../utils";
 
@@ -45,6 +45,7 @@ const ReleaseYearChart = ({ playlistId }: ReleaseYearChartProps) => {
                     text: "Number of Tracks",
                 },
                 categories: [],
+                stepSize: step,
             },
             yaxis: {
                 title: {
@@ -79,7 +80,7 @@ const ReleaseYearChart = ({ playlistId }: ReleaseYearChartProps) => {
             },
         }));
         ApexCharts.exec("release-year-chart", "updateOptions", { labels: labels });
-    }, [step]);
+    }, [step, releaseYears]);
 
     // update chart series when playlist changes
     useEffect(() => {
@@ -117,19 +118,23 @@ const ReleaseYearChart = ({ playlistId }: ReleaseYearChartProps) => {
 
     return (
         <div>
-            <div className="w-60 mx-auto mb-10">
-                <span>Step:</span>
-                <Slider
+            <div className="flex items-center justify-end mb-10">
+                <Select
+                    w={"100"}
                     label="Step"
-                    value={step}
-                    onChange={(value) => handleChangeStep(value.toString())}
-                    min={1}
-                    max={10}
-                    step={1}
-                    marks={[
-                        { value: 2, label: "2" },
-                        { value: 5, label: "5" },
-                        { value: 8, label: "8" },
+                    value={step.toString()}
+                    onChange={(value) => handleChangeStep(value as string)}
+                    data={[
+                        { value: "1", label: "1" },
+                        { value: "2", label: "2" },
+                        { value: "3", label: "3" },
+                        { value: "4", label: "4" },
+                        { value: "5", label: "5" },
+                        { value: "6", label: "6" },
+                        { value: "7", label: "7" },
+                        { value: "8", label: "8" },
+                        { value: "9", label: "9" },
+                        { value: "10", label: "10" },
                     ]}
                     size={"sm"}
                 />

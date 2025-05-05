@@ -72,15 +72,12 @@ export default function MediaCard({
     const searchBarStore = useSearchBarStore();
 
     const handleAddToRecentlyPlayed = () => {
-        console.log(type, id);
         if (isSearchPage) {
             const recentlyPlayed = JSON.parse(localStorage.getItem("recentlySearched") || "[]");
 
             const isItemExists = recentlyPlayed.some((item: any) => item.id === id);
 
             if (!isItemExists) {
-                console.log(isItemExists);
-
                 const newRecentlyPlayed = [
                     { id, type, name: title, image: imageSrc, uri, artists },
                     ...recentlyPlayed,

@@ -1,3 +1,5 @@
+import type { PlaylistTrack, PlaylistTracksReference } from "spotify-types";
+
 type Image = {
     url: string;
     height: number;
@@ -290,50 +292,19 @@ type SpotifyDevice = {
 type ChartOptions = {
     series: number[] | { data: number[] }[];
     options: {
-        chart: {
-            id: string;
-            width?: number;
-            height?: number;
-            type:
-                | "pie"
-                | "bar"
-                | "line"
-                | "area"
-                | "radar"
-                | "scatter"
-                | "heatmap"
-                | "candlestick"
-                | "boxPlot"
-                | "bubble"
-                | "radialBar";
-        };
+        chart: ApexChart;
         labels?: string[];
-        plotOptions?: {
-            bar: {
-                columnWidth?: string;
-                distributed?: boolean;
-                horizontal?: boolean;
-            };
-        };
-        dataLabels?: {
-            enabled: boolean;
-        };
-        legend?: {
-            show: boolean;
-        };
-        xaxis?: {
-            title?: {
-                text: string;
-            };
-            categories: (string | string[])[];
-        };
-        yaxis?: {
-            title?: {
-                text: string;
-            };
-        };
+        plotOptions?: ApexPlotOptions;
+        dataLabels?: ApexDataLabels;
+        legend?: ApexLegend;
+        xaxis?: ApexXAxis;
+        yaxis?: ApexYAxis;
     };
 };
+
+export interface PlaylistTracks extends PlaylistTracksReference {
+    items: PlaylistTrack[];
+}
 
 export type {
     User,
