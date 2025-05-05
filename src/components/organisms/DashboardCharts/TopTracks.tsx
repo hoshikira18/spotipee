@@ -1,4 +1,5 @@
 import { useTopTracks } from "../../../hooks/useTrack";
+import { convertMillisecondsToMinutes } from "../../../utils";
 import CustomTable from "../CustomTable";
 
 function TopTracks() {
@@ -14,7 +15,7 @@ function TopTracks() {
             >
                 <CustomTable.HeaderCell>STT</CustomTable.HeaderCell>
                 <CustomTable.HeaderCell>Track</CustomTable.HeaderCell>
-                <CustomTable.HeaderCell>Duration</CustomTable.HeaderCell>
+                <CustomTable.HeaderCell>Time</CustomTable.HeaderCell>
                 <CustomTable.HeaderCell>Popularity</CustomTable.HeaderCell>
             </CustomTable.Head>
             <CustomTable.Body>
@@ -34,7 +35,9 @@ function TopTracks() {
                                 </div>
                             </div>
                         </CustomTable.Cell>
-                        <CustomTable.Cell>{track.duration_ms}</CustomTable.Cell>
+                        <CustomTable.Cell>
+                            {convertMillisecondsToMinutes(track.duration_ms)}
+                        </CustomTable.Cell>
                         <CustomTable.Cell>{track.popularity}</CustomTable.Cell>
                     </CustomTable.Row>
                 ))}
