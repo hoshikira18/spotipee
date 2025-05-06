@@ -1,10 +1,11 @@
-import { ScrollArea, Badge } from "@mantine/core";
+import { ScrollArea, Badge, List } from "@mantine/core";
 import { useContext, useState, useEffect, useMemo } from "react";
 import ReactApexChart from "react-apexcharts";
 import { usePlaylistTracks } from "../../../hooks/usePlaylist";
 import { DashboardContext } from "../../pages/Dashboard";
 import type { ChartOptions } from "../../../types";
 import ApexCharts from "apexcharts";
+import ListBadge from "../../molecules/ListBadge";
 
 const ArtistsChart = ({
     playlistId,
@@ -115,13 +116,7 @@ const ArtistsChart = ({
                 {otherArtists.length > 0 && (
                     <ScrollArea h={250}>
                         <h2 className="mb-10">Other artists: </h2>
-                        <div className="grid grid-cols-4 gap-4">
-                            {otherArtists?.map((artist) => (
-                                <Badge variant="light" key={artist}>
-                                    <span className="hover:underline">{artist}</span>
-                                </Badge>
-                            ))}
-                        </div>
+                        <ListBadge items={otherArtists} />
                     </ScrollArea>
                 )}
             </div>
