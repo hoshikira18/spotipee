@@ -37,13 +37,29 @@ const ReleaseYearChart = ({ playlistId }: ReleaseYearChartProps) => {
             xaxis: {
                 title: {
                     text: "Release Year",
+                    style: {
+                        color: "#ccc",
+                    },
                 },
                 categories: [],
+                labels: {
+                    style: {
+                        colors: "#ccc",
+                    },
+                },
                 stepSize: step,
             },
             yaxis: {
                 title: {
                     text: "Number of Tracks",
+                    style: {
+                        color: "#ccc",
+                    },
+                },
+                labels: {
+                    style: {
+                        colors: "#ccc",
+                    },
                 },
             },
         },
@@ -71,7 +87,9 @@ const ReleaseYearChart = ({ playlistId }: ReleaseYearChartProps) => {
                 },
             },
         }));
-        ApexCharts.exec("release-year-chart", "updateOptions", { labels: labels });
+        ApexCharts.exec("release-year-chart", "updateOptions", {
+            labels: labels,
+        });
     }, [step, releaseYears]);
 
     // update chart series when playlist changes

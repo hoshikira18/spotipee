@@ -28,6 +28,9 @@ const ArtistsChart = ({
         legend: {
             show: true,
             position: "bottom",
+            labels: {
+                colors: "#ccc",
+            },
         },
         labels: labels,
     };

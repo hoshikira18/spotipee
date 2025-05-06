@@ -41,13 +41,29 @@ const TrackPopularityChart = ({ playlistId }: TrackPopularityChartProps) => {
             xaxis: {
                 title: {
                     text: "Number of Tracks",
+                    style: {
+                        color: "#ccc",
+                    },
                 },
                 categories: [],
                 stepSize: step,
+                labels: {
+                    style: {
+                        colors: "#ccc",
+                    },
+                },
             },
             yaxis: {
                 title: {
                     text: "Popularity",
+                    style: {
+                        color: "#ccc",
+                    },
+                },
+                labels: {
+                    style: {
+                        colors: "#ccc",
+                    },
                 },
             },
         },
