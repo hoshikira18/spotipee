@@ -1,7 +1,7 @@
-import { Badge, Button, Select } from "@mantine/core";
+import { Button, Select } from "@mantine/core";
 import { createContext, type Dispatch, type SetStateAction, useMemo, useState } from "react";
 import { useCurrentUserPlaylist, usePlaylistTracks } from "../../hooks/usePlaylist";
-import { convertMillisecondsToMinutes } from "../../utils";
+import { convertMillisecondsToHours, convertMillisecondsToMinutes } from "../../utils";
 import ArtistsChart from "../organisms/DashboardCharts/ArtistChart";
 import ReleaseYearChart from "../organisms/DashboardCharts/ReleaseYearChart";
 import TrackPopularityChart from "../organisms/DashboardCharts/TrackPopularityChart";
@@ -10,6 +10,7 @@ import LazyChart from "../organisms/DashboardCharts/LazyChart";
 import type { PlaylistTrack } from "spotify-types";
 import TopTracks from "../organisms/DashboardCharts/TopTracks";
 import TopArtists from "../organisms/DashboardCharts/TopArtists";
+import StatCard from "../molecules/StatCard";
 
 type Context = {
     totalArtists: number;
@@ -74,7 +75,7 @@ function Dashboard() {
                         <TopArtists />
                     </div>
                 </div>
-                <div className="col-span-12 mb-20 flex items-end space-x-2 sticky top-15 p-3 bg-zinc-800 z-20">
+                <div className="col-span-12 flex items-end space-x-2 sticky top-15 p-3 bg-zinc-800 z-20">
                     <Select
                         label="Playlist"
                         placeholder="Pick value"
@@ -97,32 +98,13 @@ function Dashboard() {
                     >
                         Next Playlist
                     </Button>
-                    <div className="grid grid-cols-2 gap-3">
-                        <div className="text-sm text-zinc-400">
-                            <span>Total tracks: </span>
-                            <Badge color="yellow" variant="light">
-                                {totalTracks}
-                            </Badge>
-                        </div>
-                        <div className="text-sm text-zinc-400">
-                            <span>Total albums: </span>
-                            <Badge color="yellow" variant="light">
-                                {totalAlbums}
-                            </Badge>
-                        </div>
-                        <div className="text-sm text-zinc-400">
-                            <span>Total artists: </span>
-                            <Badge color="yellow" variant="light">
-                                {totalArtists}
-                            </Badge>
-                        </div>
-                        <div className="text-sm text-zinc-400">
-                            <span>Total time: </span>
-                            <Badge color="yellow" variant="light">
-                                {convertMillisecondsToMinutes(totalTime || 0)} (M:S)
-                            </Badge>
-                        </div>
-                    </div>
+                </div>
+                <div className="col-span-8 grid grid-cols-6 gap-3 px-3 mb-20">
+                    <StatCard total={`${totalTracks} tracks`} />
+                    <StatCard total={`${totalAlbums} albums`} />
+                    <StatCard total={`${totalArtists} artists`} />
+                    <StatCard total={`${convertMillisecondsToHours(totalTime)}`} />
+                    <StatCard total={`${totalTracks} tracks`} />
                 </div>
                 <div className="col-span-12 lg:col-span-6 px-20 xl:px-32">
                     <p className="font-semibold mb-10 text-center">

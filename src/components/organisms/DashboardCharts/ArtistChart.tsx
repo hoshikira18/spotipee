@@ -1,5 +1,5 @@
-import { ScrollArea, Badge, List } from "@mantine/core";
-import { useContext, useState, useEffect, useMemo } from "react";
+import { ScrollArea } from "@mantine/core";
+import { useContext, useState, useEffect } from "react";
 import ReactApexChart from "react-apexcharts";
 import { usePlaylistTracks } from "../../../hooks/usePlaylist";
 import { DashboardContext } from "../../pages/Dashboard";
@@ -45,7 +45,7 @@ const ArtistsChart = ({
 
         // loop through the playlist tracks and count the number of times each artist appears
         for (const item of playlist.items) {
-            for (const artist of item.track?.artists) {
+            for (const artist of item.track.artists) {
                 if (artist) {
                     obj[artist.name] = (obj[artist.name] || 0) + 1;
                 }
