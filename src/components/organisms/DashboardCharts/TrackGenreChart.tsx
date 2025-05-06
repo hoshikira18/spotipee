@@ -3,7 +3,8 @@ import { usePlaylistTracks } from "../../../hooks/usePlaylist";
 import type { ChartOptions, PlaylistGenres } from "../../../types";
 import Chart from "react-apexcharts";
 import ApexCharts from "apexcharts";
-import { Badge, ScrollArea } from "@mantine/core";
+import { ScrollArea } from "@mantine/core";
+import ListBadge from "../../molecules/ListBadge";
 
 const TrackGenreChart = ({ playlistId }: { playlistId: string }) => {
     const { data: playlist } = usePlaylistTracks(playlistId, true);
@@ -18,6 +19,9 @@ const TrackGenreChart = ({ playlistId }: { playlistId: string }) => {
         },
         legend: {
             position: "bottom",
+            labels: {
+                colors: "#ccc",
+            },
         },
         labels: labels,
     };
@@ -89,13 +93,7 @@ const TrackGenreChart = ({ playlistId }: { playlistId: string }) => {
                 {otherGenres.length > 0 && (
                     <ScrollArea h={250}>
                         <h2 className="mb-10">Other genres: </h2>
-                        <div className="grid grid-cols-4 gap-4">
-                            {otherGenres?.map((genre) => (
-                                <Badge variant="light" key={genre}>
-                                    <span className="hover:underline">{genre}</span>
-                                </Badge>
-                            ))}
-                        </div>
+                        <ListBadge items={otherGenres} />
                     </ScrollArea>
                 )}
             </div>

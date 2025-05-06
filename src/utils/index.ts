@@ -16,6 +16,12 @@ export const convertMillisecondsToMinutes = (milliseconds: number) => {
     return `${minutes}:${seconds < 10 ? "0" : ""}${seconds}`;
 };
 
+export const convertMillisecondsToHours = (milliseconds: number) => {
+    const hours = Math.floor(milliseconds / 3600000);
+    const minutes = Math.floor((milliseconds % 3600000) / 60000);
+    return `${hours}h:${minutes < 10 ? "0" : ""}${minutes}m`;
+};
+
 export const calAddedTime = (added_at: string) => {
     const date = new Date(added_at);
     const currentDate = new Date();
@@ -53,6 +59,7 @@ export const getUSDate = (date: string) => {
 };
 
 export function countBins(arr: number[], step: number, maxValue: number, minValue: number) {
+    if (!arr || arr.length === 0) return [];
     const binCount = Math.ceil((maxValue - minValue) / step);
     const result = new Array(binCount).fill(0);
 

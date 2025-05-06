@@ -1,10 +1,11 @@
-import { ScrollArea, Badge } from "@mantine/core";
-import { useContext, useState, useEffect, useMemo } from "react";
+import { ScrollArea } from "@mantine/core";
+import { useContext, useState, useEffect } from "react";
 import ReactApexChart from "react-apexcharts";
 import { usePlaylistTracks } from "../../../hooks/usePlaylist";
 import { DashboardContext } from "../../pages/Dashboard";
 import type { ChartOptions } from "../../../types";
 import ApexCharts from "apexcharts";
+import ListBadge from "../../molecules/ListBadge";
 
 const ArtistsChart = ({
     playlistId,
@@ -27,6 +28,9 @@ const ArtistsChart = ({
         legend: {
             show: true,
             position: "bottom",
+            labels: {
+                colors: "#ccc",
+            },
         },
         labels: labels,
     };
@@ -44,7 +48,7 @@ const ArtistsChart = ({
 
         // loop through the playlist tracks and count the number of times each artist appears
         for (const item of playlist.items) {
-            for (const artist of item.track?.artists) {
+            for (const artist of item.track.artists) {
                 if (artist) {
                     obj[artist.name] = (obj[artist.name] || 0) + 1;
                 }
@@ -115,13 +119,7 @@ const ArtistsChart = ({
                 {otherArtists.length > 0 && (
                     <ScrollArea h={250}>
                         <h2 className="mb-10">Other artists: </h2>
-                        <div className="grid grid-cols-4 gap-4">
-                            {otherArtists?.map((artist) => (
-                                <Badge variant="light" key={artist}>
-                                    <span className="hover:underline">{artist}</span>
-                                </Badge>
-                            ))}
-                        </div>
+                        <ListBadge items={otherArtists} />
                     </ScrollArea>
                 )}
             </div>

@@ -6,6 +6,7 @@ import ApexCharts from "apexcharts";
 import { Select } from "@mantine/core";
 import { useDebouncedCallback } from "@mantine/hooks";
 import { countBins } from "../../../utils";
+import { notifications } from "@mantine/notifications";
 
 interface ReleaseYearChartProps {
     playlistId: string;
@@ -36,13 +37,29 @@ const ReleaseYearChart = ({ playlistId }: ReleaseYearChartProps) => {
             xaxis: {
                 title: {
                     text: "Release Year",
+                    style: {
+                        color: "#ccc",
+                    },
                 },
                 categories: [],
+                labels: {
+                    style: {
+                        colors: "#ccc",
+                    },
+                },
                 stepSize: step,
             },
             yaxis: {
                 title: {
                     text: "Number of Tracks",
+                    style: {
+                        color: "#ccc",
+                    },
+                },
+                labels: {
+                    style: {
+                        colors: "#ccc",
+                    },
                 },
             },
         },
@@ -70,13 +87,22 @@ const ReleaseYearChart = ({ playlistId }: ReleaseYearChartProps) => {
                 },
             },
         }));
-        ApexCharts.exec("release-year-chart", "updateOptions", { labels: labels });
+        ApexCharts.exec("release-year-chart", "updateOptions", {
+            labels: labels,
+        });
     }, [step, releaseYears]);
 
     // update chart series when playlist changes
     useEffect(() => {
         if (!playlist || !releaseYears) return;
         const series: number[] = countBins(releaseYears || [], step, maxYear, minYear);
+        if (series.length === 0) {
+            notifications.show({
+                title: "No data",
+                message: "No data to display for this playlist",
+                color: "red",
+            });
+        }
         setState({
             series: [
                 {
