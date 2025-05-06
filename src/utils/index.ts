@@ -59,6 +59,7 @@ export const getUSDate = (date: string) => {
 };
 
 export function countBins(arr: number[], step: number, maxValue: number, minValue: number) {
+    if (!arr || arr.length === 0) return [];
     const binCount = Math.ceil((maxValue - minValue) / step);
     const result = new Array(binCount).fill(0);
 

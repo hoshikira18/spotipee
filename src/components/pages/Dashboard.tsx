@@ -1,7 +1,7 @@
 import { Button, Select } from "@mantine/core";
 import { createContext, type Dispatch, type SetStateAction, useMemo, useState } from "react";
 import { useCurrentUserPlaylist, usePlaylistTracks } from "../../hooks/usePlaylist";
-import { convertMillisecondsToHours, convertMillisecondsToMinutes } from "../../utils";
+import { convertMillisecondsToHours } from "../../utils";
 import ArtistsChart from "../organisms/DashboardCharts/ArtistChart";
 import ReleaseYearChart from "../organisms/DashboardCharts/ReleaseYearChart";
 import TrackPopularityChart from "../organisms/DashboardCharts/TrackPopularityChart";
