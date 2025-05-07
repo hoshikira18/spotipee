@@ -62,14 +62,14 @@ function Dashboard() {
     if (!playlists) return;
     return (
         <DashboardContext.Provider value={contextValues}>
-            <div className="grid grid-cols-12 gap-3 bg-zinc-800">
-                <div className="col-span-6 px-20 mb-20">
+            <div className="grid grid-cols-12 gap-3">
+                <div className="col-span-6 xl:px-20 mb-20">
                     <p className="font-semibold mb-5 text-center">Table 1: Your Top Tracks</p>
                     <div className="border shadow-sm h-full">
                         <TopTracks />
                     </div>
                 </div>
-                <div className="col-span-6 px-20 mb-20">
+                <div className="col-span-6 xl:px-20 mb-20">
                     <p className="font-semibold mb-5 text-center">Table 2: Your Top Artists</p>
                     <div className="border shadow-sm h-full">
                         <TopArtists />
@@ -99,32 +99,32 @@ function Dashboard() {
                         Next Playlist
                     </Button>
                 </div>
-                <div className="col-span-8 grid grid-cols-6 gap-3 px-3 mb-20">
+                <div className="col-span-12 grid grid-cols-6 gap-3 px-3 mb-20">
                     <StatCard total={`${totalTracks} tracks`} />
                     <StatCard total={`${totalAlbums} albums`} />
                     <StatCard total={`${totalArtists} artists`} />
                     <StatCard total={`${convertMillisecondsToHours(totalTime)}`} />
                     <StatCard total={`${totalTracks} tracks`} />
                 </div>
-                <div className="col-span-12 lg:col-span-6 px-20 xl:px-32">
+                <div className="col-span-12 lg:col-span-6 xl:px-20">
                     <p className="font-semibold mb-10 text-center">
                         Chart 1: Artist Percentage Distribution in Playlist
                     </p>
                     <LazyChart Component={ArtistsChart} playlistId={chosenPlaylist} />
                 </div>
-                <div className="col-span-12 lg:col-span-6 px-20 xl:px-32">
+                <div className="col-span-12 lg:col-span-6 xl:px-20">
                     <p className="font-semibold mb-10 text-center">
                         Chart 2: Genre Percentage Distribution in Playlist
                     </p>
                     <LazyChart Component={TrackGenreChart} playlistId={chosenPlaylist} />
                 </div>
-                <div className="col-span-12 lg:col-span-6 px-20 mt-20">
+                <div className="col-span-12 lg:col-span-6 mt-20">
                     <LazyChart Component={TrackPopularityChart} playlistId={chosenPlaylist} />
                     <p className="font-semibold mb-10 text-center">
                         Chart 3: Track Popularity Distribution in Playlist
                     </p>
                 </div>
-                <div className="col-span-12 lg:col-span-6 px-20 mt-20">
+                <div className="col-span-12 lg:col-span-6 mt-20">
                     <LazyChart Component={ReleaseYearChart} playlistId={chosenPlaylist} />
                     <p className="font-semibold mb-10 text-center">
                         Chart 4: Track Release year Distribution in Playlist
