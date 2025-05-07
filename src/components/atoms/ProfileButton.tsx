@@ -45,10 +45,10 @@ function ProfileButton({ currentUser }: ProfileButton) {
             </Menu.Target>
             <Menu.Dropdown>
                 <Menu.Item onClick={openDashboard} leftSection={<MusicDashboard size={14} />}>
-                    <p className="font-spotify">Dashboard</p>
+                    <span className="font-spotify">Dashboard</span>
                 </Menu.Item>
                 <Menu.Item onClick={logout} leftSection={<Logout size={14} />}>
-                    <p className="font-spotify">Log out</p>
+                    <span className="font-spotify">Log out</span>
                 </Menu.Item>
             </Menu.Dropdown>
         </Menu>

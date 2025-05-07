@@ -130,7 +130,7 @@ const ArtistAlbums = () => {
 
     return (
         <div className="px-5 my-10">
-            <span className="text-2xl font-bold">Discography</span>
+            <h2 className="text-2xl font-bold">Discography</h2>
             <div>
                 <div className="flex items-center justify-between">
                     <div className="flex space-x-3 my-5">

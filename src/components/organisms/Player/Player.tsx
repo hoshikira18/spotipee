@@ -1,6 +1,5 @@
 import {
     Devices,
-    Lyrics,
     Next,
     NowPlayingView,
     Pause,

@@ -1,4 +1,4 @@
-import { Button, Menu, Text } from "@mantine/core";
+import { Menu } from "@mantine/core";
 import { Setting } from "iconsax-react";
 import { useCurrentUser } from "../../hooks/useCurrentUser";
 import ProfileButton from "../atoms/ProfileButton";

@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { usePlaylist, usePlaylistTracks } from "../../../hooks/usePlaylist";
+import { usePlaylistTracks } from "../../../hooks/usePlaylist";
 import type { ChartOptions } from "../../../types";
 import ReactApexChart from "react-apexcharts";
 import ApexCharts from "apexcharts";

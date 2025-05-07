@@ -151,7 +151,7 @@ const ArtistAlbums = ({ artistId, artistName }: ArtistAlbumsProps) => {
     return (
         <div className="px-5 mb-10">
             <div className="flex items-center justify-between">
-                <span className="text-2xl font-bold">More by {artistName}</span>
+                <h2 className="text-2xl font-bold">More by {artistName}</h2>
                 <SeeAllButton link={`/artist/${artistId}/discography`} title="See discography" />
             </div>
             <div className="flex overflow-x-scroll pb-5 mt-5">

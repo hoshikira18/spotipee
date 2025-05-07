@@ -30,7 +30,7 @@ function QueueView() {
         <div className="px-3 overflow-y-scroll h-full">
             <div className="flex items-center justify-between px-2 pt-4 pb-3 sticky top-0 z-10 bg-zinc-900">
                 <div className="flex space-x-3">
-                    <p className="font-semibold">Queue</p>
+                    <h2 className="font-semibold">Queue</h2>
                 </div>
                 <button
                     type="button"
@@ -41,7 +41,7 @@ function QueueView() {
                 </button>
             </div>
             <div className="px-2 mt-6">
-                <p className="font-semibold mb-2">Now playing</p>
+                <h4 className="font-semibold mb-2">Now playing</h4>
                 <QueueCard
                     type="track"
                     id={currently_playing?.id}
@@ -53,7 +53,7 @@ function QueueView() {
                 />
             </div>
             <div className="px-2 mt-6">
-                <p className="font-semibold mb-2">Next in Queue</p>
+                <h4 className="font-semibold mb-2">Next in Queue</h4>
                 {queueItems.map((item: SpotifyTrack, index: number) => (
                     <QueueCard
                         key={item.id + index}
