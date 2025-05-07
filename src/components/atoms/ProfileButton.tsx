@@ -17,6 +17,7 @@ function ProfileButton({ currentUser }: ProfileButton) {
 
     const openDashboard = () => {
         modals.open({
+            size: "80%",
             children: (
                 <Suspense
                     fallback={
@@ -28,14 +29,13 @@ function ProfileButton({ currentUser }: ProfileButton) {
                     <Dashboard />
                 </Suspense>
             ),
-            fullScreen: true,
         });
     };
 
     return (
         <Menu>
             <Menu.Target>
-                <div className="w-12 rounded-full overflow-hidden bg-zinc-800 p-1.5 cursor-pointer">
+                <div className="w-12 rounded-full overflow-hidden p-1.5 cursor-pointer">
                     {image ? (
                         <img src={image} alt="user-image" className="rounded-full" />
                     ) : (
