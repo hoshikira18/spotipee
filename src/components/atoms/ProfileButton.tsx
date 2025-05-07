@@ -5,6 +5,7 @@ import type { User } from "../../types";
 import { getImage } from "../../utils";
 import { modals } from "@mantine/modals";
 import { lazy, Suspense } from "react";
+import { customModals } from "../organisms/CustomModal/CustomModalProvider";
 const Dashboard = lazy(() => import("../pages/Dashboard"));
 
 type ProfileButton = {
@@ -45,6 +46,28 @@ function ProfileButton({ currentUser }: ProfileButton) {
             </Menu.Target>
             <Menu.Dropdown>
                 <Menu.Item onClick={openDashboard} leftSection={<MusicDashboard size={14} />}>
+                    <span className="font-spotify">Dashboard</span>
+                </Menu.Item>
+                <Menu.Item
+                    onClick={() =>
+                        customModals.open({
+                            title: "Dashboard",
+                            size: "5xl",
+                            children: (
+                                <Suspense
+                                    fallback={
+                                        <div className="flex items-center justify-center h-full">
+                                            <Loader />
+                                        </div>
+                                    }
+                                >
+                                    <Dashboard />
+                                </Suspense>
+                            ),
+                        })
+                    }
+                    leftSection={<MusicDashboard size={14} />}
+                >
                     <span className="font-spotify">Dashboard</span>
                 </Menu.Item>
                 <Menu.Item onClick={logout} leftSection={<Logout size={14} />}>

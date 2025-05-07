@@ -4,7 +4,7 @@ import type { ChartOptions } from "../../../types";
 import ReactApexChart from "react-apexcharts";
 import ApexCharts from "apexcharts";
 import { countBins } from "../../../utils";
-import { Select } from "@mantine/core";
+import { NativeSelect, Select } from "@mantine/core";
 import { useDebouncedCallback } from "@mantine/hooks";
 
 interface TrackPopularityChartProps {
@@ -109,11 +109,11 @@ const TrackPopularityChart = ({ playlistId }: TrackPopularityChartProps) => {
     return (
         <div>
             <div className="flex items-center justify-end mb-10">
-                <Select
+                <NativeSelect
                     w={"100"}
                     label="Step"
                     value={step.toString()}
-                    onChange={(value) => handleChangeStep(value as string)}
+                    onChange={(e) => handleChangeStep(e.target.value as string)}
                     data={[
                         { value: "5", label: "5" },
                         { value: "10", label: "10" },

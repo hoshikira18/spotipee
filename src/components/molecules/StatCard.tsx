@@ -4,8 +4,8 @@ interface StatCardProps {
 function StatCard({ total }: StatCardProps) {
     return (
         <div className="border rounded-md p-3">
-            <span>Total</span>
-            <span className="block font-semibold text-2xl">{total}</span>
+            <span className="text-sm">Total</span>
+            <span className="block font-semibold text-lg">{total}</span>
         </div>
     );
 }

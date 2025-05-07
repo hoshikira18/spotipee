@@ -72,3 +72,7 @@ export function countBins(arr: number[], step: number, maxValue: number, minValu
 
     return result;
 }
+
+export function randomId(prefix = "rand-"): string {
+    return `${prefix}${Math.random().toString(36).slice(2, 11)}`;
+}

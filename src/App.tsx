@@ -35,6 +35,7 @@ import SearchDetail from "./components/pages/SearchDetail";
 import SearchDetailWithTypePage from "./components/pages/SearchDetailWithTypePage";
 import SearchPageLayout from "./components/templates/SearchPageLayout";
 import Dashboard from "./components/pages/Dashboard";
+import CustomModalProvider from "./components/organisms/CustomModal/CustomModalProvider";
 
 const theme = createTheme({
     colors: {
@@ -180,15 +181,17 @@ function App() {
     return (
         <MantineProvider theme={{ ...theme, variantColorResolver }} defaultColorScheme="dark">
             <ModalsProvider>
-                <TrackProvider>
-                    <PlayerProvider>
-                        <NowPlayingProvider>
-                            <Notifications position="top-right" />
-                            <NavigationProgress />
-                            <RouterProvider router={router} />
-                        </NowPlayingProvider>
-                    </PlayerProvider>
-                </TrackProvider>
+                <CustomModalProvider>
+                    <TrackProvider>
+                        <PlayerProvider>
+                            <NowPlayingProvider>
+                                <Notifications position="top-right" />
+                                <NavigationProgress />
+                                <RouterProvider router={router} />
+                            </NowPlayingProvider>
+                        </PlayerProvider>
+                    </TrackProvider>
+                </CustomModalProvider>
             </ModalsProvider>
         </MantineProvider>
     );
