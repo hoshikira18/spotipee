@@ -3,7 +3,7 @@ import { usePlaylistTracks } from "../../../hooks/usePlaylist";
 import type { ChartOptions } from "../../../types";
 import ReactApexChart from "react-apexcharts";
 import ApexCharts from "apexcharts";
-import { Select } from "@mantine/core";
+import { NativeSelect, Select } from "@mantine/core";
 import { useDebouncedCallback } from "@mantine/hooks";
 import { countBins } from "../../../utils";
 import { notifications } from "@mantine/notifications";
@@ -136,11 +136,11 @@ const ReleaseYearChart = ({ playlistId }: ReleaseYearChartProps) => {
     return (
         <div>
             <div className="flex items-center justify-end mb-10">
-                <Select
+                <NativeSelect
                     w={"100"}
                     label="Step"
                     value={step.toString()}
-                    onChange={(value) => handleChangeStep(value as string)}
+                    onChange={(e) => handleChangeStep(e.target.value as string)}
                     data={[
                         { value: "1", label: "1" },
                         { value: "2", label: "2" },
