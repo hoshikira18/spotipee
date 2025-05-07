@@ -64,13 +64,13 @@ function Dashboard() {
         <DashboardContext.Provider value={contextValues}>
             <div className="grid grid-cols-12 gap-3">
                 <div className="col-span-6 xl:px-20 mb-20">
-                    <p className="font-semibold mb-5 text-center">Table 1: Your Top Tracks</p>
+                    <h2 className="font-semibold mb-5 text-center">Table 1: Your Top Tracks</h2>
                     <div className="border shadow-sm h-full">
                         <TopTracks />
                     </div>
                 </div>
                 <div className="col-span-6 xl:px-20 mb-20">
-                    <p className="font-semibold mb-5 text-center">Table 2: Your Top Artists</p>
+                    <h2 className="font-semibold mb-5 text-center">Table 2: Your Top Artists</h2>
                     <div className="border shadow-sm h-full">
                         <TopArtists />
                     </div>
@@ -107,28 +107,28 @@ function Dashboard() {
                     <StatCard total={`${totalTracks} tracks`} />
                 </div>
                 <div className="col-span-12 lg:col-span-6 xl:px-20">
-                    <p className="font-semibold mb-10 text-center">
+                    <h2 className="font-semibold mb-10 text-center">
                         Chart 1: Artist Percentage Distribution in Playlist
-                    </p>
+                    </h2>
                     <LazyChart Component={ArtistsChart} playlistId={chosenPlaylist} />
                 </div>
                 <div className="col-span-12 lg:col-span-6 xl:px-20">
-                    <p className="font-semibold mb-10 text-center">
+                    <h2 className="font-semibold mb-10 text-center">
                         Chart 2: Genre Percentage Distribution in Playlist
-                    </p>
+                    </h2>
                     <LazyChart Component={TrackGenreChart} playlistId={chosenPlaylist} />
                 </div>
                 <div className="col-span-12 lg:col-span-6 mt-20">
                     <LazyChart Component={TrackPopularityChart} playlistId={chosenPlaylist} />
-                    <p className="font-semibold mb-10 text-center">
+                    <h2 className="font-semibold mb-10 text-center">
                         Chart 3: Track Popularity Distribution in Playlist
-                    </p>
+                    </h2>
                 </div>
                 <div className="col-span-12 lg:col-span-6 mt-20">
                     <LazyChart Component={ReleaseYearChart} playlistId={chosenPlaylist} />
-                    <p className="font-semibold mb-10 text-center">
+                    <h2 className="font-semibold mb-10 text-center">
                         Chart 4: Track Release year Distribution in Playlist
-                    </p>
+                    </h2>
                 </div>
             </div>
         </DashboardContext.Provider>

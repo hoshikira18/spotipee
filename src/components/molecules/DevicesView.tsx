@@ -2,24 +2,18 @@ import { useEffect, useMemo, useState } from "react";
 import { useDevices } from "../../hooks/useDevices";
 import { useRightSidebarStore } from "../../store/rightSidebarStore";
 import type { SpotifyDevice } from "../../types";
-import { CloseIcon, ComputerIcon, ExpandIcon, ExternalLinkIcon, PhoneIcon } from "../atoms/icons";
+import { CloseIcon, ComputerIcon, ExternalLinkIcon, PhoneIcon } from "../atoms/icons";
 import { useQueryClient } from "@tanstack/react-query";
-import {
-    ArrowCircleDown,
-    ArrowCircleDown2,
-    Computing,
-    Link,
-    Wifi,
-    WifiSquare,
-} from "iconsax-react";
+import { ArrowCircleDown2, WifiSquare } from "iconsax-react";
 import DeviceServices from "../../services/DeviceServices";
 import DevicesIcon from "../atoms/icons/Devices";
 
 function DevicesView() {
-    const { key, setState: setRightSidebarContentState } = useRightSidebarStore();
+    const { setState: setRightSidebarContentState } = useRightSidebarStore();
 
     const queryClient = useQueryClient();
     useEffect(() => {
+        // refresh the devices list when the component mounts
         queryClient.invalidateQueries(["devices"]);
     }, []);
 

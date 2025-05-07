@@ -47,7 +47,7 @@ function CurrentTrackTitle({
                 {name}
             </Link>
             {type !== "track" && (
-                <p className={cn("text-zinc-400 line-clamp-1", variants[size].artist)}>
+                <span className={cn("text-zinc-400 line-clamp-1", variants[size].artist)}>
                     {type === "playlist"
                         ? "Playlist"
                         : type === "album"
@@ -55,7 +55,7 @@ function CurrentTrackTitle({
                           : type === "artist"
                             ? "Artist"
                             : ""}
-                </p>
+                </span>
             )}
             {type === "track" && (
                 <p className={cn("text-zinc-400 line-clamp-1", variants[size].artist)}>

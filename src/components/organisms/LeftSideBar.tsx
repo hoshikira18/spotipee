@@ -52,7 +52,7 @@ function LeftSideBar() {
     );
 
     return (
-        <div
+        <aside
             className={`${leftSideBarOpened ? "w-80 xl:w-96" : "w-24"} h-full pl-3 py-3 space-y-4 bg-zinc-800/60 rounded-md transition-all duration-300`}
         >
             <div className={cn(leftSideBarOpened && "flex items-center justify-between")}>
@@ -162,7 +162,7 @@ function LeftSideBar() {
                         />
                     ))}
             </div>
-        </div>
+        </aside>
     );
 }
 

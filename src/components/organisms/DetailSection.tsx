@@ -21,7 +21,7 @@ function DetailSection({ title, type, seeAllLink, data, className = "" }: Detail
     return (
         <div className={cn("px-5 mb-10", className)}>
             <div className="flex items-center justify-between">
-                <span className="text-2xl font-bold">{title}</span>
+                <h2 className="text-2xl font-bold">{title}</h2>
                 <SeeAllButton link={seeAllLink} title="Show all" />
             </div>
             <div className="flex overflow-x-scroll pb-5 mt-5">

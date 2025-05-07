@@ -21,8 +21,6 @@ const TopTracksTable = ({ isShowMore, tracks }: TopTracksTableProps) => {
         throw new Error("TrackContext or PlayerContext is not available");
     }
 
-    console.log("render top tracks table");
-
     return (
         <CustomTable>
             <CustomTable.Body>
