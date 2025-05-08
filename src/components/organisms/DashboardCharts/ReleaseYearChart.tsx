@@ -3,10 +3,10 @@ import { usePlaylistTracks } from "../../../hooks/usePlaylist";
 import type { ChartOptions } from "../../../types";
 import ReactApexChart from "react-apexcharts";
 import ApexCharts from "apexcharts";
-import { NativeSelect, Select } from "@mantine/core";
 import { useDebouncedCallback } from "@mantine/hooks";
 import { countBins } from "../../../utils";
 import { notifications } from "@mantine/notifications";
+import CustomSelect from "../../molecules/CustomSelectBox/CustomSelect";
 
 interface ReleaseYearChartProps {
     playlistId: string;
@@ -136,11 +136,9 @@ const ReleaseYearChart = ({ playlistId }: ReleaseYearChartProps) => {
     return (
         <div>
             <div className="flex items-center justify-end mb-10">
-                <NativeSelect
-                    w={"100"}
-                    label="Step"
+                <CustomSelect
                     value={step.toString()}
-                    onChange={(e) => handleChangeStep(e.target.value as string)}
+                    onChange={(value) => handleChangeStep(value)}
                     data={[
                         { value: "1", label: "1" },
                         { value: "2", label: "2" },
@@ -153,7 +151,9 @@ const ReleaseYearChart = ({ playlistId }: ReleaseYearChartProps) => {
                         { value: "9", label: "9" },
                         { value: "10", label: "10" },
                     ]}
-                    size={"sm"}
+                    defaultValue="2"
+                    placeholder="Select step size"
+                    className="w-32"
                 />
             </div>
             <ReactApexChart options={state.options} series={state.series} type="bar" height={350} />

@@ -4,8 +4,8 @@ import type { ChartOptions } from "../../../types";
 import ReactApexChart from "react-apexcharts";
 import ApexCharts from "apexcharts";
 import { countBins } from "../../../utils";
-import { NativeSelect, Select } from "@mantine/core";
 import { useDebouncedCallback } from "@mantine/hooks";
+import CustomSelect from "../../molecules/CustomSelectBox/CustomSelect";
 
 interface TrackPopularityChartProps {
     playlistId: string;
@@ -109,11 +109,7 @@ const TrackPopularityChart = ({ playlistId }: TrackPopularityChartProps) => {
     return (
         <div>
             <div className="flex items-center justify-end mb-10">
-                <NativeSelect
-                    w={"100"}
-                    label="Step"
-                    value={step.toString()}
-                    onChange={(e) => handleChangeStep(e.target.value as string)}
+                <CustomSelect
                     data={[
                         { value: "5", label: "5" },
                         { value: "10", label: "10" },
@@ -121,7 +117,11 @@ const TrackPopularityChart = ({ playlistId }: TrackPopularityChartProps) => {
                         { value: "50", label: "50" },
                         { value: "100", label: "100" },
                     ]}
-                    size={"sm"}
+                    defaultValue="20"
+                    value={step.toString()}
+                    onChange={(value) => handleChangeStep(value)}
+                    placeholder="Select step"
+                    className="w-32"
                 />
             </div>
             <ReactApexChart options={state.options} series={state.series} type="bar" height={350} />

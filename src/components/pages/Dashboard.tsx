@@ -1,4 +1,4 @@
-import { Button, NativeSelect } from "@mantine/core";
+import { Button } from "@mantine/core";
 import { createContext, type Dispatch, type SetStateAction, useMemo, useState } from "react";
 import { useCurrentUserPlaylist, usePlaylistTracks } from "../../hooks/usePlaylist";
 import { convertMillisecondsToHours } from "../../utils";
@@ -11,6 +11,7 @@ import type { PlaylistTrack } from "spotify-types";
 import TopTracks from "../organisms/DashboardCharts/TopTracks";
 import TopArtists from "../organisms/DashboardCharts/TopArtists";
 import StatCard from "../molecules/StatCard";
+import CustomSelect from "../molecules/CustomSelectBox/CustomSelect";
 
 type Context = {
     totalArtists: number;
@@ -65,14 +66,16 @@ function Dashboard() {
             <div>
                 <div className="grid grid-cols-12 gap-3 pb-20">
                     <div className="col-span-12 flex items-end space-x-2 sticky top-0 p-3 bg-zinc-800 z-20">
-                        <NativeSelect
-                            label="Playlist"
+                        <CustomSelect
                             data={playlists?.map((playlist) => ({
                                 value: playlist.id,
                                 label: playlist.name,
                             }))}
+                            defaultValue={playlists?.[0]?.id}
                             value={chosenPlaylist}
-                            onChange={(e) => setChosenPlaylist(e.target.value as string)}
+                            onChange={(e) => setChosenPlaylist(e)}
+                            placeholder="Select a playlist"
+                            className="w-52"
                         />
                         <Button
                             onClick={() => {
