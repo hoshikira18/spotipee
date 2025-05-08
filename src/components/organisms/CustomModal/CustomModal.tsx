@@ -1,4 +1,4 @@
-import { useRef } from "react";
+import { useEffect, useRef } from "react";
 import { cn } from "../../../utils";
 import { customModals } from "./CustomModalProvider";
 import { CloseButton } from "@mantine/core";
@@ -29,6 +29,19 @@ function CustomModal({
             customModals.close(modalId);
         }
     };
+
+    const handleEscapeKey = (event: KeyboardEvent) => {
+        if (event.key === "Escape") {
+            customModals.close(modalId);
+        }
+    };
+
+    useEffect(() => {
+        document.addEventListener("keydown", handleEscapeKey);
+        return () => {
+            document.removeEventListener("keydown", handleEscapeKey);
+        };
+    }, []);
 
     const validSizes = ["sm", "md", "lg", "xl", "2xl", "3xl", "4xl", "5xl", "6xl"];
     const modalSizeClass = validSizes.includes(size) ? `w-${size} max-w-${size}` : size;
