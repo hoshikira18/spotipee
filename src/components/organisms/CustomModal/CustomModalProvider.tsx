@@ -41,8 +41,6 @@ function CustomModalProvider({ children }: CustomModalProviderProps) {
     closeAll = closeAllModals;
     close = closeModal;
 
-    console.log(state);
-
     return (
         <CustomModalContext.Provider
             value={{
