@@ -1,11 +1,12 @@
 import { useRef } from "react";
 import { cn } from "../../../utils";
 import { customModals } from "./CustomModalProvider";
+import { CloseButton, CloseIcon } from "@mantine/core";
 
 export interface CustomModalProps {
     modalId: string;
     title?: string;
-    size?: "sm" | "md" | "lg" | "xl" | "2xl" | "3xl" | "4xl" | "5xl";
+    size?: "sm" | "md" | "lg" | "xl" | "2xl" | "3xl" | "4xl" | "5xl" | "6xl";
     withOverlay?: boolean;
     children?: React.ReactNode;
     center?: boolean;
@@ -40,10 +41,11 @@ function CustomModal({
                     "fade-in",
                     "bg-zinc-800 rounded-lg shadow-lg p-4 min-h-40  overflow-hidden",
                     `w-${size}`,
+                    `max-w-${size}`,
                 )}
                 ref={ref}
             >
-                <ModalTitle title={title} />
+                <ModalTitle title={title} onClose={() => customModals.close(modalId)} />
                 <ModalContent>{children}</ModalContent>
             </div>
         </div>
@@ -52,9 +54,14 @@ function CustomModal({
 
 export default CustomModal;
 
-const ModalTitle = ({ title }: { title?: string }) => {
+const ModalTitle = ({ title, onClose }: { title?: string; onClose: () => void }) => {
     if (!title) return null;
-    return <div className="text-lg font-semibold text-white mb-4">{title}</div>;
+    return (
+        <div className="mb-4 flex justify-between items-center">
+            <h1 className="text-lg font-semibold text-white">{title}</h1>
+            <CloseButton onClick={onClose} />
+        </div>
+    );
 };
 
 const ModalContent = ({ children }: { children: React.ReactNode }) => {

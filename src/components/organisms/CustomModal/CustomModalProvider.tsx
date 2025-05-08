@@ -41,15 +41,15 @@ function CustomModalProvider({ children }: CustomModalProviderProps) {
     closeAll = closeAllModals;
     close = closeModal;
 
-    console.log(state);
-
     return (
         <CustomModalContext.Provider
             value={{
                 modals: state.modals,
             }}
         >
-            {state.current && <CustomModal {...state.current.props} modalId={state.current.id} />}
+            {state.current && (
+                <CustomModal {...state.current.props} modalId={state.current.id} size="6xl" />
+            )}
             {children}
         </CustomModalContext.Provider>
     );
