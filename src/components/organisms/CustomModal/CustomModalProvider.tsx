@@ -47,9 +47,7 @@ function CustomModalProvider({ children }: CustomModalProviderProps) {
                 modals: state.modals,
             }}
         >
-            {state.current && (
-                <CustomModal {...state.current.props} modalId={state.current.id} size="6xl" />
-            )}
+            {state.current && <CustomModal {...state.current.props} modalId={state.current.id} />}
             {children}
         </CustomModalContext.Provider>
     );

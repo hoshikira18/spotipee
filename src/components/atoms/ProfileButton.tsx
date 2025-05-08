@@ -52,7 +52,7 @@ function ProfileButton({ currentUser }: ProfileButton) {
                     onClick={() =>
                         customModals.open({
                             title: "Dashboard",
-                            size: "5xl",
+                            size: "1500px",
                             children: (
                                 <Suspense
                                     fallback={

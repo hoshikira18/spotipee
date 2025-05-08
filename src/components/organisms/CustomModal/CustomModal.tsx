@@ -1,15 +1,16 @@
 import { useRef } from "react";
 import { cn } from "../../../utils";
 import { customModals } from "./CustomModalProvider";
-import { CloseButton, CloseIcon } from "@mantine/core";
+import { CloseButton } from "@mantine/core";
 
 export interface CustomModalProps {
     modalId: string;
     title?: string;
-    size?: "sm" | "md" | "lg" | "xl" | "2xl" | "3xl" | "4xl" | "5xl" | "6xl";
+    size?: "sm" | "md" | "lg" | "xl" | "2xl" | "3xl" | "4xl" | "5xl" | "6xl" | string;
     withOverlay?: boolean;
     children?: React.ReactNode;
     center?: boolean;
+    fullScreen?: boolean;
 }
 
 function CustomModal({
@@ -17,6 +18,7 @@ function CustomModal({
     title,
     size = "xl",
     withOverlay = true,
+    fullScreen = false,
     children,
 }: CustomModalProps) {
     const ref = useRef<HTMLDivElement>(null);
@@ -27,6 +29,11 @@ function CustomModal({
             customModals.close(modalId);
         }
     };
+
+    const validSizes = ["sm", "md", "lg", "xl", "2xl", "3xl", "4xl", "5xl", "6xl"];
+    const modalSizeClass = validSizes.includes(size) ? `w-${size} max-w-${size}` : size;
+    const fullScreenClass =
+        fullScreen && "w-screen h-screen max-w-screen max-h-screen rounded-none shadow-none";
 
     return (
         <div
@@ -39,10 +46,14 @@ function CustomModal({
             <div
                 className={cn(
                     "fade-in",
-                    "bg-zinc-800 rounded-lg shadow-lg p-4 min-h-40  overflow-hidden",
-                    `w-${size}`,
-                    `max-w-${size}`,
+                    "bg-zinc-800 rounded-lg shadow-lg p-4 min-h-40 overflow-hidden",
+                    modalSizeClass,
+                    fullScreenClass,
                 )}
+                style={{
+                    width: size,
+                    maxWidth: size,
+                }}
                 ref={ref}
             >
                 <ModalTitle title={title} onClose={() => customModals.close(modalId)} />
