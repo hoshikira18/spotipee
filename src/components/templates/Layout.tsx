@@ -13,7 +13,7 @@ const Layout = () => {
     const { isAuth, isLoading } = useAuth(code);
 
     return (
-        <div className="bg-black fixed inset-0 h-screen text-white font-spotify px-2 flex flex-col pb-2">
+        <div className="bg-black fixed inset-0 text-white font-spotify px-2 flex flex-col pb-2">
             <Header />
 
             {/* LeftSideBar */}
