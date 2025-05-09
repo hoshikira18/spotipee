@@ -1,19 +1,12 @@
-import { Input, Menu } from "@mantine/core";
-import {
-    Airdrop,
-    Augur,
-    ExportSquare,
-    Spotify,
-    Add,
-    ArrowRight2,
-    SearchNormal,
-} from "iconsax-react";
+import { Input } from "@mantine/core";
+import { SearchNormal } from "iconsax-react";
 import { MoreIcon } from "./icons";
 import { useCurrentUserPlaylist } from "../../hooks/usePlaylist";
 import PlaylistServices from "../../services/PlaylistServices";
 import type { SpotifyTrack } from "../../types";
 import { useQueryClient } from "@tanstack/react-query";
 import { notifications } from "@mantine/notifications";
+import CustomMenu from "../molecules/CustomMenu/components/CustomMenu";
 
 interface TrackOptionsProps {
     track: SpotifyTrack;
@@ -21,41 +14,34 @@ interface TrackOptionsProps {
 
 const TrackOptions = ({ track }: TrackOptionsProps) => {
     return (
-        <Menu
-            width={200}
-            position="left"
-            closeOnItemClick={false}
-            closeOnClickOutside={true}
-            withinPortal={false}
-        >
-            <Menu.Target>
+        <CustomMenu position="top">
+            <CustomMenu.Trigger>
                 <button type="button" className="text-zinc-400">
                     <MoreIcon size={24} />
                 </button>
-            </Menu.Target>
-            <Menu.Dropdown>
+            </CustomMenu.Trigger>
+            <CustomMenu.Dropdown>
                 <AddToPlaylistOption track={track} />
-                <Menu.Item leftSection={<Airdrop size={16} />}>Go to artist radio</Menu.Item>
-                <Menu.Item
-                    component="a"
-                    href="https://support.spotify.com/vn-vi/content-policy-reporting/plain/?uri=spotify%3Aartist%3A3Wj34lTDJnPp70u4YCl4jz&platform=desktop-web"
-                    target="_blank"
-                    rel="noreferrer"
-                    leftSection={<Augur size={16} />}
-                    rightSection={<ExportSquare size={16} />}
+                <CustomMenu.Item>Go to artist radio</CustomMenu.Item>
+                <CustomMenu.Item
+                // component="a"
+                // href="https://support.spotify.com/vn-vi/content-policy-reporting/plain/?uri=spotify%3Aartist%3A3Wj34lTDJnPp70u4YCl4jz&platform=desktop-web"
+                // target="_blank"
+                // rel="noreferrer"
+                // leftSection={<Augur size={16} />}
+                // rightSection={<ExportSquare size={16} />}
                 >
                     Report
-                </Menu.Item>
-                <Menu.Divider />
-                <Menu.Item
-                    component="a"
-                    href="spotify://"
-                    leftSection={<Spotify size={16} variant="Bold" />}
+                </CustomMenu.Item>
+                <CustomMenu.Item
+                // component="a"
+                // href="spotify://"
+                // leftSection={<Spotify size={16} variant="Bold" />}
                 >
                     Open in Desktop app
-                </Menu.Item>
-            </Menu.Dropdown>
-        </Menu>
+                </CustomMenu.Item>
+            </CustomMenu.Dropdown>
+        </CustomMenu>
     );
 };
 
@@ -98,45 +84,42 @@ const AddToPlaylistOption = ({ track }: AddToPlaylistOptionProps) => {
 
     if (!playlists) return null;
     return (
-        <Menu position="left-start" width={200} closeOnItemClick={false} withinPortal={false}>
-            <Menu.Target>
-                <button type="button" className="w-full">
-                    <Menu.Item
-                        leftSection={<Add size={20} />}
-                        rightSection={<ArrowRight2 size={20} />}
-                    >
-                        Add to playlist
-                    </Menu.Item>
-                </button>
-            </Menu.Target>
-            <Menu.Dropdown>
-                <Menu.Item p={0} mb={5}>
+        <CustomMenu>
+            <CustomMenu.Trigger>
+                <CustomMenu.Item
+                // leftSection={<Add size={20} />}
+                // rightSection={<ArrowRight2 size={20} />}
+                >
+                    Add to playlist
+                </CustomMenu.Item>
+            </CustomMenu.Trigger>
+            <CustomMenu.Dropdown>
+                <CustomMenu.Item>
                     <Input leftSection={<SearchNormal size={16} />} placeholder="Find a playlist" />
-                </Menu.Item>
-                <Menu.Item
-                    leftSection={<Add size={20} />}
-                    component="button"
-                    onClick={handleCreatePlaylist}
+                </CustomMenu.Item>
+                <CustomMenu.Item
+                // leftSection={<Add size={20} />}
+                // component="button"
+                // onClick={handleCreatePlaylist}
                 >
                     New playlist
-                </Menu.Item>
-                <Menu.Divider />
+                </CustomMenu.Item>
                 {playlists.map((playlist) => (
-                    <Menu.Item
+                    <CustomMenu.Item
                         key={playlist.id}
-                        component="a"
-                        href={`spotify:playlist:${playlist.id}`}
-                        target="_blank"
-                        rel="noreferrer"
-                        onClick={(e) => {
-                            e.preventDefault();
-                            handleAddToPlaylist(playlist.id);
-                        }}
+                        // component="a"
+                        // href={`spotify:playlist:${playlist.id}`}
+                        // target="_blank"
+                        // rel="noreferrer"
+                        // onClick={(e) => {
+                        //     e.preventDefault();
+                        //     handleAddToPlaylist(playlist.id);
+                        // }}
                     >
                         {playlist.name}
-                    </Menu.Item>
+                    </CustomMenu.Item>
                 ))}
-            </Menu.Dropdown>
-        </Menu>
+            </CustomMenu.Dropdown>
+        </CustomMenu>
     );
 };
