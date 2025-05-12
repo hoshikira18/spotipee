@@ -80,15 +80,9 @@ function CustomMenuProvider({ children }: { children: ReactNode }) {
                 menus: state.menus,
             }}
         >
-            <div
-                style={{
-                    position: "fixed",
-                }}
-            >
-                {state.menus.map((menu) => (
-                    <CustomMenu key={menu.id} menu={menu} />
-                ))}
-            </div>
+            {state.menus.map((menu) => (
+                <CustomMenu key={menu.id} menu={menu} />
+            ))}
             {children}
         </CustomMenuContext.Provider>
     );
