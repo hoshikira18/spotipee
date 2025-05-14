@@ -6,7 +6,7 @@ import PlaylistServices from "../../services/PlaylistServices";
 import type { SpotifyTrack } from "../../types";
 import { useQueryClient } from "@tanstack/react-query";
 import { notifications } from "@mantine/notifications";
-import CustomMenu from "../molecules/CustomMenu/components/CustomMenu";
+import Menu from "../molecules/Menu/Menu";
 
 interface TrackOptionsProps {
     track: SpotifyTrack;
@@ -14,16 +14,16 @@ interface TrackOptionsProps {
 
 const TrackOptions = ({ track }: TrackOptionsProps) => {
     return (
-        <CustomMenu position="top">
-            <CustomMenu.Trigger>
+        <Menu position="left">
+            <Menu.Trigger>
                 <button type="button" className="text-zinc-400">
                     <MoreIcon size={24} />
                 </button>
-            </CustomMenu.Trigger>
-            <CustomMenu.Dropdown>
+            </Menu.Trigger>
+            <Menu.Dropdown>
                 <AddToPlaylistOption track={track} />
-                <CustomMenu.Item>Go to artist radio</CustomMenu.Item>
-                <CustomMenu.Item
+                <Menu.Item>Go to artist radio</Menu.Item>
+                <Menu.Item
                 // component="a"
                 // href="https://support.spotify.com/vn-vi/content-policy-reporting/plain/?uri=spotify%3Aartist%3A3Wj34lTDJnPp70u4YCl4jz&platform=desktop-web"
                 // target="_blank"
@@ -32,16 +32,16 @@ const TrackOptions = ({ track }: TrackOptionsProps) => {
                 // rightSection={<ExportSquare size={16} />}
                 >
                     Report
-                </CustomMenu.Item>
-                <CustomMenu.Item
+                </Menu.Item>
+                <Menu.Item
                 // component="a"
                 // href="spotify://"
                 // leftSection={<Spotify size={16} variant="Bold" />}
                 >
                     Open in Desktop app
-                </CustomMenu.Item>
-            </CustomMenu.Dropdown>
-        </CustomMenu>
+                </Menu.Item>
+            </Menu.Dropdown>
+        </Menu>
     );
 };
 
@@ -84,42 +84,39 @@ const AddToPlaylistOption = ({ track }: AddToPlaylistOptionProps) => {
 
     if (!playlists) return null;
     return (
-        <CustomMenu>
-            <CustomMenu.Trigger>
-                <CustomMenu.Item
-                // leftSection={<Add size={20} />}
-                // rightSection={<ArrowRight2 size={20} />}
-                >
+        <Menu position="left">
+            <Menu.Trigger>
+                <Menu.Item>
                     Add to playlist
-                </CustomMenu.Item>
-            </CustomMenu.Trigger>
-            <CustomMenu.Dropdown>
-                <CustomMenu.Item>
+                </Menu.Item>
+            </Menu.Trigger>
+            <Menu.Dropdown>
+                <Menu.Item>
                     <Input leftSection={<SearchNormal size={16} />} placeholder="Find a playlist" />
-                </CustomMenu.Item>
-                <CustomMenu.Item
+                </Menu.Item>
+                <Menu.Item
                 // leftSection={<Add size={20} />}
                 // component="button"
                 // onClick={handleCreatePlaylist}
                 >
                     New playlist
-                </CustomMenu.Item>
+                </Menu.Item>
                 {playlists.map((playlist) => (
-                    <CustomMenu.Item
+                    <Menu.Item
                         key={playlist.id}
-                        // component="a"
-                        // href={`spotify:playlist:${playlist.id}`}
-                        // target="_blank"
-                        // rel="noreferrer"
-                        // onClick={(e) => {
-                        //     e.preventDefault();
-                        //     handleAddToPlaylist(playlist.id);
-                        // }}
+                    // component="a"
+                    // href={`spotify:playlist:${playlist.id}`}
+                    // target="_blank"
+                    // rel="noreferrer"
+                    // onClick={(e) => {
+                    //     e.preventDefault();
+                    //     handleAddToPlaylist(playlist.id);
+                    // }}
                     >
                         {playlist.name}
-                    </CustomMenu.Item>
+                    </Menu.Item>
                 ))}
-            </CustomMenu.Dropdown>
-        </CustomMenu>
+            </Menu.Dropdown>
+        </Menu >
     );
 };

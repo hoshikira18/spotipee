@@ -38,7 +38,7 @@ const TopTracksTable = ({ isShowMore, tracks }: TopTracksTableProps) => {
                                 <span className="text-[#b3b3b3]">
                                     {convertMillisecondsToMinutes(track.duration_ms)}
                                 </span>
-                                {/* <TrackOptions track={track} /> */}
+                                <TrackOptions track={track} />
                             </div>
                         </CustomTable.Cell>
                     </CustomTable.Row>
