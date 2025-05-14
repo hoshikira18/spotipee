@@ -59,6 +59,9 @@ importers:
       js-cookie:
         specifier: ^3.0.5
         version: 3.0.5
+      kiraui-pro:
+        specifier: ^1.0.0
+        version: 1.0.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       qs:
         specifier: ^6.14.0
         version: 6.14.0
@@ -1848,6 +1851,12 @@ packages:
 
   keyv@4.5.4:
     resolution: {integrity: sha512-oxVHkHR/EJf2CNXnWxRLW6mg7JyCCUcG0DtEGmL2ctUo1PNTin1PUil+r/+4r5MpVgC/fn1kjsx7mjSujKqIpw==}
+
+  kiraui-pro@1.0.0:
+    resolution: {integrity: sha512-FaENVtph6AmZhVtcJ2fuItDjVZQHaBCs9RPt5gl77y9pqs6nIycPxS8ZrlVq3q3nG0fzPAvFRfZthmuYtC/2IQ==}
+    peerDependencies:
+      react: ^17 || ^18 || ^19
+      react-dom: ^17 || ^18 || ^19
 
   klona@2.0.6:
     resolution: {integrity: sha512-dhG34DXATL5hSxJbIexCft8FChFXtmskoZYnoPWjXQuebWYCNkVeV3KkGegCK9CP1oswI/vQibS2GY7Em/sJJA==}
@@ -4347,6 +4356,11 @@ snapshots:
   keyv@4.5.4:
     dependencies:
       json-buffer: 3.0.1
+
+  kiraui-pro@1.0.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1):
+    dependencies:
+      react: 18.3.1
+      react-dom: 18.3.1(react@18.3.1)
 
   klona@2.0.6: {}
 

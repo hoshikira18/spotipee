@@ -9,6 +9,7 @@ import DetailSection from "../organisms/DetailSection";
 import TopTracksTable from "../organisms/TopTrackTable";
 import PlayButton from "../atoms/PlayButton";
 import TrackImage from "../atoms/AvtImage";
+import { Button } from "kiraui-pro"
 
 function TrackDetailPage() {
     const { trackId } = useParams();
@@ -25,13 +26,12 @@ function TrackDetailPage() {
                     <div className="space-y-4">
                         <span className="text-sm">Song</span>
                         <p
-                            className={`font-extrabold line-clamp-1 ${
-                                track.name.length > 20
-                                    ? "text-4xl"
-                                    : track.name.length > 10
-                                      ? "text-6xl"
-                                      : "text-8xl"
-                            }`}
+                            className={`font-extrabold line-clamp-1 ${track.name.length > 20
+                                ? "text-4xl"
+                                : track.name.length > 10
+                                    ? "text-6xl"
+                                    : "text-8xl"
+                                }`}
                         >
                             {track.name}
                         </p>
@@ -67,6 +67,7 @@ function TrackDetailPage() {
                 <div className="flex items-center space-x-5 p-5" ref={playButtonRef}>
                     <PlayButton tracks={[track]} />
                     <SaveTrackButton trackId={track.id} className="visible" size="lg" />
+                    <Button>Click</Button>
                 </div>
                 <div className="px-5 mb-10">
                     {track?.artists.map((artist) => (
